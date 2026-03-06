@@ -1,0 +1,1919 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Geotab Partner Onboarding</title>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
+    <style>
+        /* ===================== DESIGN SYSTEM ===================== */
+        :root {
+            --geotab-blue: #25477b;
+            --innovation-blue: #0078d3;
+            --dark-grey: #3c5164;
+            --medium-grey: #6b7a8d;
+            --light-grey: #d1d5db;
+            --pale-grey: #eff2f7;
+            --white: #ffffff;
+            --success-green: #16a34a;
+            --accent-teal: #0891b2;
+            --accent-orange: #ea580c;
+            --font-main: 'Roboto', Arial, sans-serif;
+            --shadow-sm: 0 1px 3px rgba(0,0,0,0.08);
+            --shadow-md: 0 4px 12px rgba(0,0,0,0.10);
+            --shadow-lg: 0 8px 24px rgba(0,0,0,0.12);
+            --radius: 10px;
+            --max-width: 1100px;
+        }
+
+        /* ===================== RESET & BASE ===================== */
+        *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+        body {
+            font-family: var(--font-main);
+            color: var(--dark-grey);
+            background: var(--pale-grey);
+            line-height: 1.7;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        a { color: var(--innovation-blue); text-decoration: none; }
+        a:hover { text-decoration: underline; }
+
+        /* ===================== TOP BANNER ===================== */
+        .top-banner {
+            background: var(--geotab-blue);
+            color: var(--white);
+            text-align: center;
+            padding: 10px 20px;
+            font-size: 0.92rem;
+            font-weight: 400;
+            letter-spacing: 0.3px;
+        }
+
+        /* ===================== NAVBAR ===================== */
+        .navbar {
+            background: var(--white);
+            box-shadow: var(--shadow-sm);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .navbar-inner {
+            max-width: var(--max-width);
+            margin: 0 auto;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 32px;
+            height: 64px;
+        }
+
+        .navbar-logo svg { height: 30px; width: auto; }
+
+        .navbar-links { display: flex; gap: 24px; list-style: none; align-items: center; }
+        .navbar-links a {
+            color: var(--dark-grey);
+            font-weight: 500;
+            font-size: 0.95rem;
+            transition: color 0.2s;
+        }
+        .navbar-links a:hover { color: var(--innovation-blue); text-decoration: none; }
+
+        .nav-cta-mobile { display: none; }
+
+        .hamburger { display: none; flex-direction: column; gap: 5px; cursor: pointer; background: none; border: none; padding: 4px; }
+        .hamburger span { display: block; width: 24px; height: 2.5px; background: var(--dark-grey); border-radius: 2px; transition: 0.3s; }
+
+        /* ===================== HERO ===================== */
+        .hero {
+            background: linear-gradient(135deg, var(--geotab-blue) 0%, #1a3a6b 100%);
+            color: var(--white);
+            text-align: center;
+            padding: 72px 24px 56px;
+        }
+
+        .hero h1 {
+            font-size: 2.5rem;
+            font-weight: 700;
+            margin-bottom: 16px;
+            letter-spacing: -0.5px;
+        }
+
+        .hero p {
+            font-size: 1.15rem;
+            font-weight: 300;
+            max-width: 720px;
+            margin: 0 auto;
+            opacity: 0.92;
+            line-height: 1.7;
+        }
+
+        /* ===================== QUICK START STRIP ===================== */
+        .quick-start {
+            background: var(--white);
+            border-bottom: 1px solid var(--light-grey);
+            padding: 0;
+        }
+
+        .quick-start-inner {
+            max-width: var(--max-width);
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: repeat(5, 1fr);
+            text-align: center;
+        }
+
+        .qs-item {
+            padding: 28px 16px;
+            border-right: 1px solid var(--pale-grey);
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+
+        .qs-item:last-child { border-right: none; }
+        .qs-item:hover { background: var(--pale-grey); }
+
+        .qs-item a { color: var(--dark-grey); text-decoration: none; display: block; }
+
+        .qs-number {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            background: var(--innovation-blue);
+            color: var(--white);
+            font-weight: 700;
+            font-size: 1rem;
+            margin-bottom: 10px;
+        }
+
+        .qs-item h3 {
+            font-size: 0.92rem;
+            font-weight: 600;
+            color: var(--geotab-blue);
+            margin-bottom: 4px;
+        }
+
+        .qs-item p {
+            font-size: 0.8rem;
+            color: var(--medium-grey);
+            line-height: 1.4;
+        }
+
+        /* ===================== SECTION ===================== */
+        .section {
+            max-width: var(--max-width);
+            margin: 0 auto;
+            padding: 56px 32px;
+        }
+
+        .section-header {
+            text-align: center;
+            margin-bottom: 40px;
+        }
+
+        .section-header .step-badge {
+            display: inline-block;
+            background: var(--innovation-blue);
+            color: var(--white);
+            font-size: 0.8rem;
+            font-weight: 600;
+            padding: 4px 14px;
+            border-radius: 20px;
+            margin-bottom: 12px;
+            letter-spacing: 0.5px;
+            text-transform: uppercase;
+        }
+
+        .section-header h2 {
+            font-size: 1.75rem;
+            font-weight: 700;
+            color: var(--geotab-blue);
+            margin-bottom: 10px;
+        }
+
+        .section-header p {
+            font-size: 1.05rem;
+            color: var(--medium-grey);
+            max-width: 650px;
+            margin: 0 auto;
+        }
+
+        .section-divider {
+            border: none;
+            border-top: 1px solid var(--light-grey);
+            max-width: var(--max-width);
+            margin: 0 auto;
+        }
+
+        /* ===================== SECTION CHECKLIST ===================== */
+        .section-checklist {
+            margin-top: 32px;
+            padding: 24px 28px;
+            background: linear-gradient(135deg, #f0f6ff 0%, #f8fafe 100%);
+            border: 1px solid #d4e3f5;
+            border-radius: 12px;
+        }
+        .section-checklist h4 {
+            margin: 0 0 14px;
+            font-size: 0.95rem;
+            font-weight: 600;
+            color: var(--geotab-blue);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+        .section-checklist label {
+            display: flex;
+            align-items: flex-start;
+            gap: 12px;
+            padding: 12px 16px;
+            background: #fff;
+            border: 1px solid var(--light-grey);
+            border-radius: 8px;
+            margin-bottom: 8px;
+            cursor: pointer;
+            transition: background 0.15s, border-color 0.15s;
+        }
+        .section-checklist label:last-child { margin-bottom: 0; }
+        .section-checklist label:hover { border-color: var(--innovation-blue); }
+        .section-checklist input[type="checkbox"] {
+            margin-top: 2px;
+            width: 18px;
+            height: 18px;
+            accent-color: var(--innovation-blue);
+            flex-shrink: 0;
+            cursor: pointer;
+        }
+        .section-checklist .cl-text strong {
+            color: var(--geotab-blue);
+            font-size: 0.93rem;
+        }
+        .section-checklist .cl-text p {
+            margin: 3px 0 0;
+            font-size: 0.85rem;
+            color: var(--dark-grey);
+        }
+
+        /* ===================== ERP CALLOUT ===================== */
+        .erp-callout {
+            background: linear-gradient(135deg, #0078d3 0%, #005ea2 100%);
+            color: var(--white);
+            border-radius: var(--radius);
+            padding: 32px 36px;
+            text-align: center;
+            box-shadow: var(--shadow-md);
+            margin-bottom: 40px;
+        }
+
+        .erp-callout h3 {
+            font-size: 1.15rem;
+            font-weight: 600;
+            margin-bottom: 8px;
+        }
+
+        .erp-callout p {
+            font-size: 0.97rem;
+            opacity: 0.92;
+            max-width: 650px;
+            margin: 0 auto;
+            line-height: 1.6;
+        }
+
+        .erp-code-box {
+            display: inline-block;
+            background: rgba(255,255,255,0.2);
+            border: 2px dashed rgba(255,255,255,0.5);
+            border-radius: 8px;
+            padding: 12px 32px;
+            margin-top: 16px;
+            font-size: 1.3rem;
+            font-weight: 700;
+            letter-spacing: 2px;
+            font-family: 'Courier New', monospace;
+        }
+
+        /* ===================== STEP CARDS (numbered) ===================== */
+        .step-flow {
+            display: flex;
+            flex-direction: column;
+            gap: 24px;
+        }
+
+        .step-card {
+            background: var(--white);
+            border-radius: var(--radius);
+            box-shadow: var(--shadow-sm);
+            padding: 28px 32px;
+            display: flex;
+            gap: 24px;
+            align-items: flex-start;
+            transition: box-shadow 0.25s;
+        }
+
+        .step-card:hover { box-shadow: var(--shadow-md); }
+
+        .step-card-num {
+            flex-shrink: 0;
+            width: 44px;
+            height: 44px;
+            border-radius: 50%;
+            background: var(--pale-grey);
+            color: var(--innovation-blue);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            font-size: 1.1rem;
+            border: 2px solid var(--innovation-blue);
+        }
+
+        .step-card-content h3 {
+            font-size: 1.08rem;
+            font-weight: 600;
+            color: var(--geotab-blue);
+            margin-bottom: 6px;
+        }
+
+        .step-card-content p {
+            font-size: 0.95rem;
+            color: var(--medium-grey);
+            line-height: 1.6;
+        }
+
+        .step-card-content .step-link {
+            display: inline-block;
+            margin-top: 10px;
+            font-weight: 500;
+            font-size: 0.93rem;
+        }
+
+        /* ===================== CARD GRID ===================== */
+        .card-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 24px;
+        }
+
+        .card {
+            background: var(--white);
+            border-radius: var(--radius);
+            box-shadow: var(--shadow-sm);
+            padding: 28px;
+            transition: box-shadow 0.25s, transform 0.25s;
+        }
+
+        .card:hover {
+            box-shadow: var(--shadow-md);
+            transform: translateY(-2px);
+        }
+
+        .card h3 {
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: var(--geotab-blue);
+            margin-bottom: 8px;
+        }
+
+        .card p {
+            font-size: 0.95rem;
+            color: var(--medium-grey);
+            line-height: 1.6;
+        }
+
+        .card .card-link {
+            display: inline-block;
+            margin-top: 12px;
+            font-weight: 500;
+            font-size: 0.93rem;
+        }
+
+        /* ===================== ROADMAP ===================== */
+        .roadmap {
+            position: relative;
+            padding-left: 40px;
+        }
+
+        .roadmap::before {
+            content: '';
+            position: absolute;
+            left: 15px;
+            top: 0;
+            bottom: 0;
+            width: 3px;
+            background: linear-gradient(to bottom, var(--innovation-blue), var(--success-green));
+            border-radius: 2px;
+        }
+
+        .roadmap-step {
+            position: relative;
+            margin-bottom: 32px;
+            padding: 22px 24px;
+            background: var(--white);
+            border-radius: var(--radius);
+            box-shadow: var(--shadow-sm);
+        }
+
+        .roadmap-step:last-child { margin-bottom: 0; }
+
+        .roadmap-step::before {
+            content: '';
+            position: absolute;
+            left: -33px;
+            top: 26px;
+            width: 14px;
+            height: 14px;
+            background: var(--innovation-blue);
+            border: 3px solid var(--white);
+            border-radius: 50%;
+            box-shadow: 0 0 0 3px var(--innovation-blue);
+        }
+
+        .roadmap-step .step-time {
+            font-size: 0.8rem;
+            font-weight: 600;
+            color: var(--innovation-blue);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-bottom: 4px;
+        }
+
+        .roadmap-step h3 {
+            font-size: 1.05rem;
+            font-weight: 600;
+            color: var(--geotab-blue);
+            margin-bottom: 4px;
+        }
+
+        .roadmap-step p {
+            font-size: 0.93rem;
+            color: var(--medium-grey);
+        }
+
+        /* ===================== INFO BOX ===================== */
+        .info-box {
+            background: var(--white);
+            border-left: 4px solid var(--innovation-blue);
+            border-radius: var(--radius);
+            padding: 24px 28px;
+            margin: 24px 0;
+            box-shadow: var(--shadow-sm);
+        }
+
+        .info-box.green { border-left-color: var(--success-green); }
+        .info-box.orange { border-left-color: var(--accent-orange); }
+
+        .info-box h3 {
+            font-size: 1.05rem;
+            font-weight: 600;
+            color: var(--geotab-blue);
+            margin-bottom: 8px;
+        }
+
+        .info-box p {
+            font-size: 0.95rem;
+            color: var(--medium-grey);
+        }
+
+        /* ===================== CONTACTS TABLE ===================== */
+        .contacts-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+            gap: 20px;
+        }
+
+        .contact-card {
+            background: var(--white);
+            border-radius: var(--radius);
+            box-shadow: var(--shadow-sm);
+            padding: 22px 24px;
+            display: flex;
+            gap: 16px;
+            align-items: flex-start;
+        }
+
+        .contact-icon {
+            flex-shrink: 0;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: var(--pale-grey);
+            color: var(--innovation-blue);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.85rem;
+            font-weight: 700;
+        }
+
+        .contact-info h4 {
+            font-size: 0.95rem;
+            font-weight: 600;
+            color: var(--geotab-blue);
+            margin-bottom: 2px;
+        }
+
+        .contact-info p {
+            font-size: 0.88rem;
+            color: var(--medium-grey);
+            line-height: 1.5;
+        }
+
+        .contact-info a {
+            font-size: 0.88rem;
+        }
+
+        /* ===================== LINK TABLE ===================== */
+        .link-table {
+            width: 100%;
+            border-collapse: collapse;
+            background: var(--white);
+            border-radius: var(--radius);
+            overflow: hidden;
+            box-shadow: var(--shadow-sm);
+        }
+
+        .link-table th {
+            background: var(--geotab-blue);
+            color: var(--white);
+            padding: 14px 20px;
+            text-align: left;
+            font-size: 0.9rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .link-table td {
+            padding: 14px 20px;
+            border-bottom: 1px solid var(--pale-grey);
+            font-size: 0.95rem;
+        }
+
+        .link-table tr:last-child td { border-bottom: none; }
+        .link-table tr:hover td { background: var(--pale-grey); }
+
+        /* ===================== CURRICULUM ===================== */
+        .curriculum-category {
+            margin-bottom: 40px;
+        }
+
+        .curriculum-category-header {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 16px;
+            padding-bottom: 10px;
+            border-bottom: 2px solid var(--innovation-blue);
+        }
+
+        .curriculum-priority {
+            display: inline-block;
+            font-size: 0.72rem;
+            font-weight: 700;
+            padding: 3px 10px;
+            border-radius: 12px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            flex-shrink: 0;
+        }
+
+        .priority-highest { background: #dc2626; color: var(--white); }
+        .priority-high { background: var(--accent-orange); color: var(--white); }
+        .priority-recommended { background: var(--innovation-blue); color: var(--white); }
+        .priority-elective { background: var(--medium-grey); color: var(--white); }
+
+        .curriculum-category-header h3 {
+            font-size: 1.1rem;
+            font-weight: 700;
+            color: var(--geotab-blue);
+        }
+
+        .course-list {
+            list-style: none;
+            padding: 0;
+            background: var(--white);
+            border-radius: var(--radius);
+            box-shadow: var(--shadow-sm);
+            overflow: hidden;
+        }
+
+        .course-item {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 14px 20px;
+            border-bottom: 1px solid var(--pale-grey);
+            gap: 12px;
+        }
+
+        .course-item:last-child { border-bottom: none; }
+
+        .course-item-info {
+            flex: 1;
+            min-width: 0;
+        }
+
+        .course-item-info .course-name {
+            font-size: 0.95rem;
+            font-weight: 500;
+            color: var(--dark-grey);
+        }
+
+        .course-item-info .course-name a {
+            color: var(--dark-grey);
+        }
+
+        .course-item-info .course-name a:hover {
+            color: var(--innovation-blue);
+        }
+
+        .course-item-info .course-meta {
+            font-size: 0.8rem;
+            color: var(--medium-grey);
+            margin-top: 2px;
+        }
+
+        .course-badge {
+            flex-shrink: 0;
+            font-size: 0.75rem;
+            font-weight: 600;
+            padding: 3px 10px;
+            border-radius: 12px;
+            background: var(--pale-grey);
+            color: var(--medium-grey);
+        }
+
+        .course-badge.curriculum { background: #dbeafe; color: #1e40af; }
+        .course-badge.exam { background: #fef3c7; color: #92400e; }
+        .video-callout {
+            display: flex;
+            align-items: center;
+            gap: 14px;
+            background: linear-gradient(135deg, #ede9fe 0%, #f5f3ff 100%);
+            border: 1px solid #c4b5fd;
+            border-radius: var(--radius);
+            padding: 16px 20px;
+            margin-bottom: 24px;
+        }
+
+        .video-callout-icon {
+            flex-shrink: 0;
+            width: 44px;
+            height: 44px;
+            border-radius: 50%;
+            background: #7c3aed;
+            color: var(--white);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.2rem;
+        }
+
+        .video-callout p {
+            font-size: 0.93rem;
+            color: var(--dark-grey);
+            line-height: 1.5;
+        }
+
+        /* ===================== TRAINING JOURNEY ===================== */
+        .training-journey {
+            position: relative;
+            margin-top: 8px;
+        }
+
+        .training-phase {
+            display: flex;
+            gap: 24px;
+            position: relative;
+        }
+
+        .phase-timeline {
+            flex-shrink: 0;
+            width: 80px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            position: relative;
+        }
+
+        .phase-number {
+            width: 38px;
+            height: 38px;
+            border-radius: 50%;
+            background: var(--innovation-blue);
+            color: var(--white);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            font-size: 0.95rem;
+            z-index: 1;
+        }
+
+        .phase-when {
+            font-size: 0.72rem;
+            font-weight: 700;
+            color: var(--innovation-blue);
+            text-align: center;
+            margin-top: 6px;
+            text-transform: uppercase;
+            letter-spacing: 0.3px;
+        }
+
+        .training-phase:not(:last-child) .phase-timeline::after {
+            content: '';
+            position: absolute;
+            top: 38px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 2px;
+            height: calc(100% - 16px);
+            background: var(--light-grey);
+        }
+
+        .phase-content {
+            flex: 1;
+            background: var(--white);
+            border-radius: var(--radius);
+            padding: 20px 24px;
+            box-shadow: var(--shadow-sm);
+            margin-bottom: 20px;
+            transition: box-shadow 0.2s;
+        }
+
+        .phase-content:hover {
+            box-shadow: var(--shadow-md);
+        }
+
+        .phase-content h4 {
+            font-size: 1.05rem;
+            font-weight: 700;
+            color: var(--geotab-blue);
+            margin-bottom: 8px;
+        }
+
+        .phase-content p {
+            font-size: 0.93rem;
+            color: var(--dark-grey);
+            line-height: 1.6;
+            margin-bottom: 12px;
+        }
+
+        .phase-links {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 18px;
+        }
+
+        .phase-links a {
+            font-size: 0.88rem;
+            font-weight: 600;
+            color: var(--innovation-blue);
+        }
+
+        .phase-detail {
+            font-size: 0.82rem;
+            color: var(--medium-grey);
+            font-weight: 500;
+            margin-bottom: 10px;
+        }
+
+        .access-notice {
+            background: linear-gradient(135deg, #f0f9ff 0%, #e0f2fe 100%);
+            border: 1px solid #bae6fd;
+            border-radius: var(--radius);
+            padding: 20px 24px;
+            margin-bottom: 32px;
+            display: flex;
+            gap: 14px;
+            align-items: flex-start;
+        }
+
+        .access-notice-icon {
+            flex-shrink: 0;
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            background: var(--innovation-blue);
+            color: var(--white);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1rem;
+            font-weight: 700;
+        }
+
+        .access-notice p {
+            font-size: 0.93rem;
+            color: var(--dark-grey);
+            line-height: 1.6;
+        }
+
+        /* ===================== CTA ===================== */
+        .cta-section {
+            background: linear-gradient(135deg, var(--geotab-blue) 0%, #1a3a6b 100%);
+            color: var(--white);
+            text-align: center;
+            padding: 56px 24px;
+        }
+
+        .cta-section h2 {
+            font-size: 1.8rem;
+            font-weight: 700;
+            margin-bottom: 12px;
+        }
+
+        .cta-section p {
+            font-size: 1.05rem;
+            font-weight: 300;
+            max-width: 600px;
+            margin: 0 auto;
+            opacity: 0.9;
+        }
+
+        /* ===================== FOOTER ===================== */
+        .footer {
+            background: var(--dark-grey);
+            color: rgba(255,255,255,0.7);
+            text-align: center;
+            padding: 36px 24px;
+            font-size: 0.9rem;
+        }
+
+        .footer a { color: rgba(255,255,255,0.85); }
+        .footer a:hover { color: var(--white); }
+
+        .footer-links {
+            display: flex;
+            justify-content: center;
+            gap: 24px;
+            flex-wrap: wrap;
+            margin-top: 16px;
+        }
+
+        /* ===================== BACK TO TOP ===================== */
+        .back-to-top {
+            position: fixed;
+            bottom: 32px;
+            right: 32px;
+            z-index: 99;
+            width: 44px;
+            height: 44px;
+            border-radius: 50%;
+            background: var(--innovation-blue);
+            color: var(--white);
+            border: none;
+            cursor: pointer;
+            font-size: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.15);
+            opacity: 0;
+            visibility: hidden;
+            transition: opacity 0.3s, visibility 0.3s;
+        }
+
+        .back-to-top.visible { opacity: 1; visibility: visible; }
+        .back-to-top:hover { background: var(--geotab-blue); }
+
+        /* ===================== PROGRESS BAR ===================== */
+        .progress-bar-wrap {
+            background: var(--white);
+            border-bottom: 1px solid var(--light-grey);
+            padding: 14px 32px;
+            position: sticky;
+            top: 64px;
+            z-index: 99;
+        }
+        .progress-bar-inner {
+            max-width: var(--max-width);
+            margin: 0 auto;
+            display: flex;
+            align-items: center;
+            gap: 16px;
+        }
+        .progress-label {
+            font-size: 0.85rem;
+            font-weight: 600;
+            color: var(--geotab-blue);
+            white-space: nowrap;
+        }
+        .progress-track {
+            flex: 1;
+            height: 8px;
+            background: var(--pale-grey);
+            border-radius: 4px;
+            overflow: hidden;
+        }
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, var(--innovation-blue), var(--success-green));
+            border-radius: 4px;
+            transition: width 0.4s ease;
+            width: 0%;
+        }
+        .progress-count {
+            font-size: 0.82rem;
+            color: var(--medium-grey);
+            white-space: nowrap;
+        }
+
+        /* ===================== RESPONSIVE ===================== */
+        @media (max-width: 900px) {
+            .hero h1 { font-size: 1.8rem; }
+            .hero { padding: 56px 20px 44px; }
+            .section { padding: 40px 20px; }
+            .section-header h2 { font-size: 1.4rem; }
+
+            .quick-start-inner { grid-template-columns: repeat(3, 1fr); }
+            .qs-item { border-bottom: 1px solid var(--pale-grey); }
+
+            .navbar-links {
+                display: none;
+                position: absolute;
+                top: 64px;
+                left: 0;
+                right: 0;
+                background: var(--white);
+                flex-direction: column;
+                padding: 16px 24px;
+                box-shadow: var(--shadow-md);
+                gap: 0;
+            }
+
+            .navbar-links.open { display: flex; }
+            .navbar-links li { padding: 12px 0; border-bottom: 1px solid var(--pale-grey); }
+            .navbar-links li:last-child { border-bottom: none; }
+
+            .nav-cta-mobile { display: block; }
+            .hamburger { display: flex; }
+
+            .card-grid { grid-template-columns: 1fr; }
+            .contacts-grid { grid-template-columns: 1fr; }
+
+            .step-card { flex-direction: column; gap: 16px; }
+
+            .training-phase { gap: 16px; }
+            .phase-timeline { width: 60px; }
+            .phase-number { width: 32px; height: 32px; font-size: 0.85rem; }
+            .training-phase:not(:last-child) .phase-timeline::after { top: 32px; }
+            .phase-content { padding: 16px 18px; }
+            .phase-content h4 { font-size: 0.95rem; }
+
+            .erp-callout { padding: 24px 20px; }
+            .erp-code-box { font-size: 1.1rem; padding: 10px 20px; }
+        }
+
+        @media (max-width: 480px) {
+            .quick-start-inner { grid-template-columns: 1fr; }
+        }
+    </style>
+</head>
+<body>
+
+<!-- ==================== TOP BANNER ==================== -->
+<div class="top-banner">
+    Welcome to the Geotab Family &#8212; your onboarding guide starts here.
+</div>
+
+<!-- ==================== NAVBAR ==================== -->
+<nav class="navbar">
+    <div class="navbar-inner">
+        <div class="navbar-logo">
+            <svg aria-hidden="true" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1800 239" height="30"><g><path fill="#25477B" d="M141.1,119.293v22.728H252.284v13.038h0v.83h0c0,25.069-4.978,40.8-14.372,46.671s-35.352,9.1-76.482,9.1c-53.872,0-87.3-3.23-99.625-9.631s-18.283-23.5-18.283-51.264v-32l.385-29.9c0-27.41,5.571-44.775,16.505-51.59S99.617,26.9,144.273,26.9c47.886,0,78.319,2.163,89.757,6.46S250.3,49.034,250.3,66.991v5.927h39.174v-9.1c0-25.01-8.682-41.486-25.84-48.657S208.783,4.348,150.614,4.348,53.42,9.889,34.218,20.853,5,54.368,5,87.645v52.894C5,180.158,13.89,206,31.225,217.376s56.657,17.187,117.049,17.187c63.917,0,104.01-4.86,119.212-14.49s22.017-32.062,22.965-68.155h0v-32.6Z"/><polygon fill="#25477B" points="327.373 232.163 549.321 232.163 549.321 209.464 367.466 209.464 367.466 127.086 541.794 127.086 541.794 104.328 367.466 104.328 367.466 29.358 549.321 29.358 549.321 6.6 327.373 6.6 327.373 232.163"/><path fill="#25477B" d="M847.928,23.016C831.749,10.63,790.56,4.348,725.812,4.348c-56.006,0-94.824,5.512-115.36,16.387S579.22,52.441,579.22,82.37l-.5,21.306v15.735c0,51.531,8.09,83.771,23.943,96.454s57.4,18.787,123.153,18.787,107.714-6.519,123.153-18.965,23.943-45.96,23.943-99.21C872.582,66.991,864.048,35.521,847.928,23.016Zm-13.809,96.276c0,45.9-4.534,73.074-13.572,80.778s-41.041,11.675-95.15,11.675-85.934-3.941-94.824-11.675S617,165.193,617,119.293s4.682-72.9,13.69-80.6,40.982-11.675,94.824-11.675c46.908,0,77.045,3.348,89.757,9.927S834.119,59.227,834.119,83.5Z"/><polygon fill="#25477B" points="1151.158 6.6 888.228 6.6 888.228 31.491 1000.121 31.491 1000.121 232.163 1040.273 232.163 1040.273 31.491 1151.158 31.491 1151.158 6.6"/><path fill="#25477B" d="M1292.861,6.6h-55.146L1111.184,232.163H1153.8l26.4-47.412h173.084l26.669,47.412h41.9l-128.813-225ZM1192.11,164.275l74.081-134.887,75.03,134.828Z"/><path fill="#25477B" d="M1670.054,113.9c28.121-6.875,42.434-22.787,42.434-47.412s-6.579-40.834-19.824-48.449S1651.741,6.6,1609.693,6.6H1457V232.163H1625.9c35.559,0,60.806-4.919,75.207-14.55s21.78-26.669,21.78-50.672C1723.067,137.843,1705.228,120,1670.054,113.9ZM1497.208,29.358h111.715c27.41,0,45.367,2.222,53.339,6.578s11.853,13.957,11.853,28.714c0,17.068-4.534,28.181-13.572,33.04s-29.929,7.467-62.228,7.467H1497.208Zm174.151,172.521c-8.89,4.919-28.358,7.349-57.635,7.349H1497.208V127.916h99.062c40.626,0,65.814,2.282,74.911,6.756s13.453,16.565,13.453,36.27C1684.693,186.647,1680.218,197.078,1671.358,201.879Z"/></g></svg>
+        </div>
+        <button class="hamburger" onclick="document.querySelector('.navbar-links').classList.toggle('open')" aria-label="Menu">
+            <span></span><span></span><span></span>
+        </button>
+        <ul class="navbar-links">
+            <li><a href="#get-started">Get Started</a></li>
+            <li><a href="#training">Training</a></li>
+            <li><a href="#first-order">Pricing</a></li>
+            <li><a href="#installation">Installation</a></li>
+            <li><a href="#go-to-market">Go to Market</a></li>
+            <li><a href="#contacts">Contacts</a></li>
+            <li class="nav-cta-mobile"><a href="#contacts" style="color:var(--innovation-blue);font-weight:600;">Get Help &rarr;</a></li>
+        </ul>
+    </div>
+</nav>
+
+<!-- ==================== HERO ==================== -->
+<section class="hero">
+    <h1>Welcome to the Geotab Family!</h1>
+    <p>This guide walks you through everything you need — from account setup to your first sale. Follow each step, check it off, and you'll be market-ready. Your Partner Account Manager is with you every step of the way.</p>
+</section>
+
+<!-- ==================== QUICK START STRIP ==================== -->
+<div class="quick-start">
+    <div class="quick-start-inner">
+        <div class="qs-item">
+            <a href="#get-started">
+                <div class="qs-number">1</div>
+                <h3>Set Up Accounts</h3>
+                <p>MyAdmin + PX Hub access</p>
+            </a>
+        </div>
+        <div class="qs-item">
+            <a href="#training">
+                <div class="qs-number">2</div>
+                <h3>Get Certified</h3>
+                <p>Complete your training</p>
+            </a>
+        </div>
+        <div class="qs-item">
+            <a href="#first-order">
+                <div class="qs-number">3</div>
+                <h3>Pricing &amp; Ordering</h3>
+                <p>Set up your pricing</p>
+            </a>
+        </div>
+        <div class="qs-item">
+            <a href="#installation">
+                <div class="qs-number">4</div>
+                <h3>Installation</h3>
+                <p>Choose your install path</p>
+            </a>
+        </div>
+        <div class="qs-item">
+            <a href="#go-to-market">
+                <div class="qs-number">5</div>
+                <h3>Go to Market</h3>
+                <p>Close your first sale</p>
+            </a>
+        </div>
+    </div>
+</div>
+
+<!-- ==================== PROGRESS BAR ==================== -->
+<div class="progress-bar-wrap">
+    <div class="progress-bar-inner">
+        <div class="progress-label">Your Progress</div>
+        <div class="progress-track"><div class="progress-fill" id="progress-fill"></div></div>
+        <div class="progress-count" id="progress-count">0 of 22 complete</div>
+    </div>
+</div>
+
+<!-- ==================== SECTION 1: GET STARTED — ACCOUNT SETUP ==================== -->
+<section class="section" id="get-started">
+    <div class="section-header">
+        <div class="step-badge">Start Here</div>
+        <h2>Set Up Your Accounts</h2>
+        <p>These are the first things you need to do. Your ERP code and platform access are the foundation of your Geotab partnership.</p>
+    </div>
+
+    <!-- ERP CALLOUT -->
+    <div class="erp-callout">
+        <h3>Your ERP Code</h3>
+        <p>Your ERP code is your internal Geotab account number. You will need it across all partner platforms and for every purchase, billing report, and support interaction. Keep it handy.</p>
+        <div class="erp-code-box">Provided in your welcome email</div>
+    </div>
+
+    <!-- STEP-BY-STEP ACCOUNT SETUP -->
+    <div class="step-flow">
+        <div class="step-card">
+            <div class="step-card-num">1</div>
+            <div class="step-card-content">
+                <h3>Create Your MyAdmin Account</h3>
+                <div style="background:var(--pale-grey);border-left:3px solid var(--innovation-blue);padding:12px 16px;border-radius:6px;margin-bottom:12px;">
+                    <p style="margin:0;font-size:0.9rem;color:var(--dark-grey);"><strong>What is MyAdmin?</strong> MyAdmin is your back-office platform — it's where you place hardware orders, manage device subscriptions, view billing and invoices, track shipments, submit RMA requests, and access support. Think of it as your operational hub for everything behind the scenes.</p>
+                </div>
+                <p>Visit <a href="https://myadmin.geotab.com" target="_blank">myadmin.geotab.com</a> and select <strong>"Create an account"</strong> to get started.</p>
+                <a class="step-link" href="https://drive.google.com/file/d/1UjsCG6b0wcmpiPz9wCwaieUGLO5NUMjR/view" target="_blank">&#9654; Watch: How to Create a MyAdmin Account (1 min video) &rarr;</a>
+                <a class="step-link" href="https://myadmin.geotab.com" target="_blank">Go to MyAdmin &rarr;</a>
+            </div>
+        </div>
+        <div class="step-card">
+            <div class="step-card-num">2</div>
+            <div class="step-card-content">
+                <h3>Notify Your Partner Account Manager</h3>
+                <p>Once your MyAdmin account is created, notify your PAM so they can <strong>link your ERP code</strong> to your account. This step is required before you can place orders or access partner pricing.</p>
+            </div>
+        </div>
+        <div class="step-card">
+            <div class="step-card-num">3</div>
+            <div class="step-card-content">
+                <h3>Log In to PX Hub</h3>
+                <div style="background:var(--pale-grey);border-left:3px solid var(--innovation-blue);padding:12px 16px;border-radius:6px;margin-bottom:12px;">
+                    <p style="margin:0;font-size:0.9rem;color:var(--dark-grey);"><strong>What is PX Hub?</strong> The Partner Experience (PX) Hub is your partner-facing portal — it's where you register deals to protect your opportunities, access the Partner Learning Hub for training and certifications, download marketing and sales resources, and submit support requests. Think of it as your sales and enablement hub.</p>
+                </div>
+                <p>To log in for the first time:</p>
+                <ol style="margin:10px 0 10px 18px;font-size:0.93rem;line-height:1.8;color:var(--dark-grey);">
+                    <li>Ask your Account Administrator to ensure your MyAdmin profile is <strong>Active and Approved</strong> with all General Info fields populated.</li>
+                    <li>Your Administrator assigns you a <strong>PX Hub role</strong> in MyAdmin (Executive, Manager, or General).</li>
+                    <li>Navigate to the PX Hub login page, select <strong>"Geotab Partner"</strong> as User Type, and sign in with your <strong>MyAdmin email and password</strong>.</li>
+                </ol>
+                <p style="font-size:0.85rem;color:var(--medium-grey);">Login issues? Email <a href="mailto:pxhub@geotab.com">pxhub@geotab.com</a> &nbsp;|&nbsp; <a href="https://docs.google.com/document/d/1MdO7eQiislTMC6-2EE-lk9J3AWM4_67ns9iZ5f4Jsg8/edit" target="_blank">Full PX Hub Handbook</a></p>
+                <a class="step-link" href="https://geotab.my.site.com/pxhub/s/login/?language=en_US" target="_blank">Go to PX Hub &rarr;</a>
+            </div>
+        </div>
+        <div class="step-card">
+            <div class="step-card-num">4</div>
+            <div class="step-card-content">
+                <h3>Add Your Team Members &amp; Assign Roles</h3>
+                <p>Your Account Administrator manages all user access through MyAdmin under <strong>Configurations &gt; User Management</strong>. When adding team members, assign them the appropriate roles based on their responsibilities:</p>
+                <div style="margin:12px 0;overflow-x:auto;">
+                    <table style="width:100%;border-collapse:collapse;font-size:0.88rem;">
+                        <thead>
+                            <tr style="background:var(--pale-grey);text-align:left;">
+                                <th style="padding:10px 14px;font-weight:600;color:var(--geotab-blue);border-bottom:2px solid var(--light-grey);">Role</th>
+                                <th style="padding:10px 14px;font-weight:600;color:var(--geotab-blue);border-bottom:2px solid var(--light-grey);">Access Level</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr style="border-bottom:1px solid var(--pale-grey);">
+                                <td style="padding:10px 14px;font-weight:600;color:var(--dark-grey);">PXHub.Access-Executive</td>
+                                <td style="padding:10px 14px;color:var(--dark-grey);">Highest level &#8212; sees all users' data, can view partner scorecards and accept agreements. Only one Executive per organization.</td>
+                            </tr>
+                            <tr style="border-bottom:1px solid var(--pale-grey);">
+                                <td style="padding:10px 14px;font-weight:600;color:var(--dark-grey);">PXHub.Access-Manager</td>
+                                <td style="padding:10px 14px;color:var(--dark-grey);">Mid level &#8212; sees their own data plus all General Users' data. Cannot see Executive or other Managers' data.</td>
+                            </tr>
+                            <tr style="border-bottom:1px solid var(--pale-grey);">
+                                <td style="padding:10px 14px;font-weight:600;color:var(--dark-grey);">PXHub.Access-User</td>
+                                <td style="padding:10px 14px;color:var(--dark-grey);">Standard level &#8212; can only view and manage their own PX Hub data. Most common role for team members.</td>
+                            </tr>
+                            <tr>
+                                <td style="padding:10px 14px;font-weight:600;color:var(--dark-grey);">UserManagement.Admin-Users</td>
+                                <td style="padding:10px 14px;color:var(--dark-grey);">Account Administrator &#8212; can add/edit users and assign all roles in MyAdmin. Required for managing your team's access.</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+                <p style="font-size:0.85rem;color:var(--medium-grey);margin-bottom:6px;">Each user should only be assigned <strong>one PX Hub role</strong>. To assign roles: navigate to User Management, select the user, go to the Roles tab, and search "PXHub".</p>
+                <a class="step-link" href="https://support.geotab.com/help/myadmin" target="_blank">MyAdmin Help &amp; Training (Support Site) &rarr;</a>
+            </div>
+        </div>
+    </div>
+
+    <div class="info-box orange" style="margin-top:32px;">
+        <h3>Important: Documents You Received</h3>
+        <p>Along with your welcome email, you should have received your signed <strong>Geotab Reseller Agreement</strong>, a <strong>Finance Welcome Letter</strong>, and <strong>Payment Instructions</strong>. Keep these on file for reference. If anything is missing, contact your Partner Account Manager.</p>
+    </div>
+
+    <!-- SECTION CHECKLIST -->
+    <div class="section-checklist">
+        <h4>Account Setup Checklist</h4>
+        <label>
+            <input type="checkbox" data-cl="setup-myadmin">
+            <div class="cl-text">
+                <strong>Create your MyAdmin account</strong>
+                <p>Register at myadmin.geotab.com and notify your PAM to link your ERP code.</p>
+            </div>
+        </label>
+        <label>
+            <input type="checkbox" data-cl="setup-pam">
+            <div class="cl-text">
+                <strong>Notify your PAM to link your ERP code</strong>
+                <p>Your PAM must link your ERP code before you can access partner pricing or place orders.</p>
+            </div>
+        </label>
+        <label>
+            <input type="checkbox" data-cl="setup-pxhub">
+            <div class="cl-text">
+                <strong>Log in to PX Hub</strong>
+                <p>Get your PX Hub role assigned and access deal registration, resources, and the Partner Learning Hub.</p>
+            </div>
+        </label>
+        <label>
+            <input type="checkbox" data-cl="setup-team">
+            <div class="cl-text">
+                <strong>Add team members and assign roles</strong>
+                <p>Set up your team's MyAdmin access and PX Hub roles through User Management.</p>
+            </div>
+        </label>
+        <label>
+            <input type="checkbox" data-cl="setup-docs">
+            <div class="cl-text">
+                <strong>Review and file your partnership documents</strong>
+                <p>Confirm you have your Reseller Agreement, Finance Welcome Letter, and Payment Instructions on file.</p>
+            </div>
+        </label>
+    </div>
+</section>
+
+<hr class="section-divider">
+
+<!-- ==================== SECTION 2: TRAINING ==================== -->
+<section class="section" id="training">
+    <div class="section-header">
+        <div class="step-badge">Step 2</div>
+        <h2>Training &amp; Certification</h2>
+        <p>Your training is structured in phases &#8212; from platform basics through advanced certification. Your assigned Geotab trainer will guide you through each stage.</p>
+    </div>
+
+    <!-- ACCESS NOTICE -->
+    <div class="access-notice">
+        <div class="access-notice-icon">i</div>
+        <p><strong>Access Note:</strong> Your Geotab Academy access is granted once your MyAdmin and PX Hub accounts are activated. All self-paced courses are available through the <a href="https://geotab.myabsorb.ca" target="_blank">Partner Learning Hub</a> inside PX Hub. Instructor-led sessions will be scheduled by your assigned Geotab trainer.</p>
+    </div>
+
+    <!-- ═══════ TRAINING JOURNEY TIMELINE ═══════ -->
+    <div class="training-journey">
+
+        <!-- Phase 1 -->
+        <div class="training-phase">
+            <div class="phase-timeline">
+                <div class="phase-number">1</div>
+                <div class="phase-when">Week 1</div>
+            </div>
+            <div class="phase-content">
+                <h4>Platform Essentials &#8212; MyAdmin &amp; PX Hub</h4>
+                <p>Get hands-on with the two platforms you'll use daily. <strong>MyAdmin</strong> is where you place orders, manage devices, handle billing, and submit support tickets. <strong>PX Hub</strong> is where you register deals, access partner resources, and use the AI-powered search agent. Your trainer will walk you through both in live sessions.</p>
+                <div class="phase-links">
+                    <a href="https://myadmin.geotab.com" target="_blank">MyAdmin &rarr;</a>
+                    <a href="https://support.geotab.com/help/myadmin" target="_blank">MyAdmin Help &amp; Training &rarr;</a>
+                    <a href="https://geotab.my.site.com/pxhub/s/login/?language=en_US" target="_blank">PX Hub &rarr;</a>
+                    <a href="https://docs.google.com/document/d/1MdO7eQiislTMC6-2EE-lk9J3AWM4_67ns9iZ5f4Jsg8/edit" target="_blank">PX Hub Handbook &rarr;</a>
+                </div>
+            </div>
+        </div>
+
+        <!-- Phase 2 -->
+        <div class="training-phase">
+            <div class="phase-timeline">
+                <div class="phase-number">2</div>
+                <div class="phase-when">Weeks 1&#8211;3</div>
+            </div>
+            <div class="phase-content">
+                <h4>Geotab Training Fundamentals</h4>
+                <p>A structured 12-session program (~16 hours) covering everything you need: Geotab overview, simplified selling, MyAdmin deep-dive, device installations, MyGeotab platform mastery (database setup, route planning, rules &amp; reports, safety management), marketplace integrations, and support &amp; troubleshooting. Your assigned trainer will schedule and guide you through each session.</p>
+                <div class="phase-links">
+                    <a href="https://docs.google.com/document/d/1b_ts3kgQaIOq_2sYRGLG6k2pSuQoABpY9tL4UXbTf0k/edit" target="_blank">View Full 12-Session Program &rarr;</a>
+                </div>
+            </div>
+        </div>
+
+        <!-- Phase 3 -->
+        <div class="training-phase">
+            <div class="phase-timeline">
+                <div class="phase-number">3</div>
+                <div class="phase-when">Weeks 2&#8211;4</div>
+            </div>
+            <div class="phase-content">
+                <h4>GCP &#8212; Geotab Certified Professional</h4>
+                <p>The gold standard certification for Geotab partners. Complete 12 self-paced courses + a final exam (~8 hours total) covering ecosystem fundamentals, product portfolio, commercial segment strategies, fleet challenges, and simplified selling. On completion, you earn your official <strong>GCP designation and digital badge</strong>.</p>
+                <div class="phase-detail">12 courses across 4 sections: Core (5 required) &#8226; GO Focus Plus (1 of 2) &#8226; Geotab Solutions (2 of 4) &#8226; Final Exam (45 min)</div>
+                <div class="phase-links">
+                    <a href="https://geotab.myabsorb.ca/#/curricula/2c5c91be-f122-44f4-a762-879e16c20967" target="_blank">Start GCP Curriculum &rarr;</a>
+                </div>
+            </div>
+        </div>
+
+        <!-- Phase 4 -->
+        <div class="training-phase">
+            <div class="phase-timeline">
+                <div class="phase-number">4</div>
+                <div class="phase-when">Month 2</div>
+            </div>
+            <div class="phase-content">
+                <h4>GO Focus &amp; Camera Solutions</h4>
+                <p>Deep-dive into Geotab's fast-growing camera product line. Covers the full GO Focus family, GO Focus Plus AI Dash Cam, GO Focus Pro 360&#176;, installation procedures, video coaching, privacy compliance, and the latest product updates. Search <strong>"GO Focus"</strong> in the Academy catalog to find all related courses.</p>
+                <div class="phase-links">
+                    <a href="https://geotab.myabsorb.ca/#/catalog" target="_blank">Browse Academy Catalog &rarr;</a>
+                </div>
+            </div>
+        </div>
+
+        <!-- Phase 5 -->
+        <div class="training-phase">
+            <div class="phase-timeline">
+                <div class="phase-number">5</div>
+                <div class="phase-when">Months 2&#8211;3</div>
+            </div>
+            <div class="phase-content">
+                <h4>Segment Specialization</h4>
+                <p>Pick 1&#8211;2 industry segments matching your target market. Each segment curriculum includes 5 courses + a final exam, making you a certified specialist in that vertical. Available segments: Transportation &amp; Logistics, Field Service, Vocational, Rental &amp; Leasing, and Public Safety. Search by segment name in the Academy.</p>
+                <div class="phase-links">
+                    <a href="https://geotab.myabsorb.ca/#/catalog" target="_blank">Find Your Segment &rarr;</a>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <p style="font-size:0.88rem;color:var(--medium-grey);margin-top:12px;text-align:center;">
+        Explore additional solution and product courses anytime in the <a href="https://geotab.myabsorb.ca/#/catalog" target="_blank">Academy catalog</a> as your expertise grows.
+    </p>
+
+    <div class="info-box green" style="margin-top:20px;">
+        <h3>Geotab Connect &#8212; Annual Partner Conference</h3>
+        <p>Every year, Geotab hosts <strong>Geotab Connect</strong> &#8212; the company's flagship event bringing together partners, customers, and industry leaders. It's the best opportunity to see product roadmaps, attend hands-on workshops, network with top-performing resellers, and meet the Geotab leadership team. Ask your PAM about registration and upcoming dates.</p>
+    </div>
+
+    <!-- GEOTAB TEAMS SUPPORTING YOUR SUCCESS -->
+    <h3 style="font-size:1.1rem;font-weight:700;color:var(--geotab-blue);margin:40px 0 8px;">Geotab Teams Supporting Your Success</h3>
+    <p style="font-size:0.93rem;color:var(--dark-grey);margin-bottom:20px;">You're not doing this alone. Geotab has dedicated teams that support you and your customers at every stage &#8212; from your first training session to managing a large strategic account. Here's who's behind you.</p>
+
+    <div class="card-grid">
+        <div class="card">
+            <div style="background:var(--innovation-blue);color:#fff;display:inline-block;padding:4px 12px;border-radius:20px;font-size:0.75rem;font-weight:600;letter-spacing:0.5px;margin-bottom:12px;">FROM DAY ONE</div>
+            <h3>Professional Training Team</h3>
+            <p>Your assigned Geotab trainer delivers the 12-session Training Fundamentals program, GCP certification prep, and ongoing platform training. They ensure you and your team are confident with MyGeotab, MyAdmin, and the full product suite before you start selling.</p>
+        </div>
+        <div class="card">
+            <div style="background:var(--innovation-blue);color:#fff;display:inline-block;padding:4px 12px;border-radius:20px;font-size:0.75rem;font-weight:600;letter-spacing:0.5px;margin-bottom:12px;">WHEN BUILDING PIPELINE</div>
+            <h3>Business Development (BD) Team</h3>
+            <p>Geotab's Business Development Managers (BDMs) co-sell alongside you on new logo acquisition. They help build pipeline, qualify leads, and close deals &#8212; especially on larger opportunities (500+ vehicles). SDRs generate and qualify inbound leads that are distributed to partners through the partner program. Think of BD as <strong>your extended sales team</strong>.</p>
+        </div>
+        <div class="card">
+            <div style="background:#e67e22;color:#fff;display:inline-block;padding:4px 12px;border-radius:20px;font-size:0.75rem;font-weight:600;letter-spacing:0.5px;margin-bottom:12px;">LARGE OPPORTUNITIES (500+)</div>
+            <h3>Pilot Team</h3>
+            <p>For strategic prospects with 500+ vehicles, Geotab's Pilot Success Managers run structured pilot projects &#8212; from demos and proof-of-concept trials to full evaluations. They use a data-driven approach to define success criteria, demonstrate ROI, and help you close the deal. <strong>No additional cost</strong> to your customer. The Pilot Team plans and executes the project so you can focus on the sales relationship.</p>
+        </div>
+    </div>
+    <div class="card-grid" style="margin-top:16px;">
+        <div class="card">
+            <div style="background:#e67e22;color:#fff;display:inline-block;padding:4px 12px;border-radius:20px;font-size:0.75rem;font-weight:600;letter-spacing:0.5px;margin-bottom:12px;">STRATEGIC DEPLOYMENTS (500+)</div>
+            <h3>Customer Onboarding &amp; Delivery Team</h3>
+            <p>For large new-logo deployments, a <strong>Customer Delivery Manager (CDM)</strong> is assigned to project-manage the entire rollout. They coordinate across Sales, Solutions Engineering, Field Services, Training, and your team to ensure a smooth deployment &#8212; from kickoff and installation execution through MyGeotab configuration, end-user training, and project closure. The CDM acts as a single point of contact so no action is required from you to engage other Geotab teams.</p>
+        </div>
+        <div class="card">
+            <div style="background:#2e8b57;color:#fff;display:inline-block;padding:4px 12px;border-radius:20px;font-size:0.75rem;font-weight:600;letter-spacing:0.5px;margin-bottom:12px;">POST-DEPLOYMENT (500+ DEVICES)</div>
+            <h3>Signature Account Advisors</h3>
+            <p>For your largest customers (500+ devices or global presence), Geotab assigns a <strong>Signature Account Advisor</strong> &#8212; a dedicated point of contact who acts as the trusted voice of Geotab. They own escalations, run quarterly business reviews (QBRs), provide product roadmap transparency, help improve Innovation Scores, and facilitate C-Suite engagement. <strong>No additional cost.</strong> This is Geotab's highest level of customer support and partnership.</p>
+        </div>
+    </div>
+
+    <div class="info-box" style="margin-top:20px;">
+        <h3>How Do I Access These Teams?</h3>
+        <p>Your <strong>Partner Account Manager (PAM)</strong> is your gateway to all of these teams. When you have an opportunity that qualifies, your PAM will connect you with the right team. For pilot requests, your BD contact can also initiate the process. You don't need to navigate this alone &#8212; just talk to your PAM.</p>
+    </div>
+
+    <!-- SECTION CHECKLIST -->
+    <div class="section-checklist">
+        <h4>Training Checklist</h4>
+        <label>
+            <input type="checkbox" data-cl="train-fundamentals">
+            <div class="cl-text">
+                <strong>Complete the 12-session Training Fundamentals</strong>
+                <p>Work through the full program with your assigned Geotab trainer.</p>
+            </div>
+        </label>
+        <label>
+            <input type="checkbox" data-cl="train-gcp">
+            <div class="cl-text">
+                <strong>Earn your GCP certification</strong>
+                <p>Pass the Geotab Certified Professional exam through the Partner Learning Hub.</p>
+            </div>
+        </label>
+        <label>
+            <input type="checkbox" data-cl="train-mygeotab">
+            <div class="cl-text">
+                <strong>Complete MyGeotab platform training</strong>
+                <p>Learn how to navigate, configure, and demo the MyGeotab fleet management platform.</p>
+            </div>
+        </label>
+        <label>
+            <input type="checkbox" data-cl="train-pricing">
+            <div class="cl-text">
+                <strong>Review pricing and bundle plans with your PAM</strong>
+                <p>Understand the product lineup and set your retail pricing before your first sales conversation.</p>
+            </div>
+        </label>
+    </div>
+</section>
+
+<hr class="section-divider">
+
+<!-- ==================== SECTION 4: PRICING & ORDERING ==================== -->
+<section class="section" id="first-order">
+    <div class="section-header">
+        <div class="step-badge">Step 3</div>
+        <h2>Pricing &amp; Ordering</h2>
+        <p>Understand how Geotab pricing works, set up your own retail pricing, and learn how to place orders through MyAdmin.</p>
+    </div>
+
+    <!-- UNDERSTANDING THE MODEL -->
+    <h3 style="font-size:1.1rem;font-weight:700;color:var(--geotab-blue);margin-bottom:16px;">Understanding the Pricing Model</h3>
+
+    <div class="card-grid">
+        <div class="card">
+            <h3>How It Works</h3>
+            <p>Geotab uses a <strong>bundle pricing model</strong> &#8212; hardware is included in the monthly subscription fee with no upfront device cost for your customer. Each subscription has a <strong>36-month minimum term</strong> with a prorated early termination fee. You purchase at partner pricing and sell at your own retail price.</p>
+        </div>
+        <div class="card">
+            <h3>Available Bundle Plans</h3>
+            <p>Bundle plans range from GPS tracking to full telematics with AI dash cameras. <strong>Install bundle</strong> variants are also available and include installation services. Review all available plans and pricing in <a href="https://myadmin.geotab.com" target="_blank">MyAdmin</a> or speak with your PAM.</p>
+        </div>
+        <div class="card">
+            <h3>Promo Codes</h3>
+            <p>Bundle plan pricing requires a <strong>promo code</strong> applied in MyAdmin when placing orders. Promo codes are available in the pricing templates provided in MyAdmin, or ask your PAM or Geotab team. Without a promo code, standard (non-bundle) pricing applies.</p>
+        </div>
+    </div>
+
+    <!-- SETTING UP YOUR PRICING -->
+    <h3 style="font-size:1.1rem;font-weight:700;color:var(--geotab-blue);margin:32px 0 16px;">Setting Up Your Pricing</h3>
+
+    <div class="card-grid">
+        <div class="card">
+            <h3>Define Your Retail Pricing</h3>
+            <p>Work with your PAM to review partner pricing for each bundle plan, then set your own retail rates. Define a <strong>list price</strong> (what you quote customers) and a <strong>floor price</strong> (the lowest you'll go after discounts). Having these ready before your first sales conversation is critical.</p>
+        </div>
+        <div class="card">
+            <h3>Pricing Calculator</h3>
+            <p>Use the pricing calculator to model your margins. Enter your Geotab cost, set your markup, and calculate what your customer pays and what you earn per vehicle per month.</p>
+            <a class="card-link" href="calculator.html" target="_blank">Open Pricing Calculator &rarr;</a>
+        </div>
+        <div class="card">
+            <h3>Deal Registration</h3>
+            <p>Before quoting a customer, register the deal through PX Hub. This protects your opportunity, gives your PAM visibility, and can unlock special pricing for competitive situations.</p>
+            <a class="card-link" href="https://geotab.my.site.com/pxhub/s/login/?language=en_US" target="_blank">Register a Deal &rarr;</a>
+        </div>
+    </div>
+
+    <!-- HOW TO ORDER -->
+    <h3 style="font-size:1.1rem;font-weight:700;color:var(--geotab-blue);margin:32px 0 16px;">Place Your First Order &amp; Get Your Database Set Up</h3>
+
+    <div class="step-flow">
+        <div class="step-card">
+            <div class="step-card-num">1</div>
+            <div class="step-card-content">
+                <h3>Lead with the GO Device &amp; GO Focus</h3>
+                <p>Every sale starts with the <strong>GO device</strong> &#8212; Geotab's current-generation telematics device for GPS tracking, engine diagnostics, and driver behavior. Pair it with a <strong>GO Focus</strong> (road-facing camera) or <strong>GO Focus Plus</strong> (AI-powered dash cam with driver coaching) to offer a complete telematics + camera solution.</p>
+                <p style="margin-top:8px;">Once you've covered the core, Geotab has a full ecosystem of <strong>add-on solutions</strong> to expand the conversation: <strong>asset trackers</strong> for non-powered equipment, <strong>GO Anywhere</strong> for portable tracking, <strong>Geotab Vitality</strong> for driver wellness, and 200+ integrations on the <a href="https://marketplace.geotab.com" target="_blank">Geotab Marketplace</a>. Start with GO + GO Focus, then layer on additional solutions as customer needs grow.</p>
+            </div>
+        </div>
+        <div class="step-card">
+            <div class="step-card-num">2</div>
+            <div class="step-card-content">
+                <h3>Place the Order in MyAdmin</h3>
+                <p>Log in to <a href="https://myadmin.geotab.com" target="_blank">MyAdmin</a>, select products and quantities, apply your <strong>promo code</strong>, confirm the shipping address, and submit. You can track order status from placement to delivery.</p>
+            </div>
+        </div>
+        <div class="step-card">
+            <div class="step-card-num">3</div>
+            <div class="step-card-content">
+                <h3>Create Your Own Database &amp; Learn the Platform</h3>
+                <p>Before onboarding customers, create your own company database in MyGeotab. Install GO devices in your own vehicles, activate them, and spend time exploring the platform &#8212; dashboards, live tracking, reports, driver scorecards, and camera footage. The more familiar you are with MyGeotab, the more confidently you'll demo and support your customers.</p>
+                <div style="background:linear-gradient(135deg, #e8f4e8 0%, #f0f8f0 100%);border-left:4px solid #2e8b57;padding:14px 18px;border-radius:8px;margin:12px 0;">
+                    <p style="margin:0;font-size:0.92rem;color:var(--dark-grey);"><strong style="color:#2e8b57;">Your Most Powerful Sales Tool:</strong> Order GO devices and GO Focus cameras, install them in your own vehicles, and start building a live MyGeotab database with real data. Show prospects real trips, driver scores, and camera footage from your own fleet &#8212; nothing sells better than a live demo with real results.</p>
+                </div>
+                <a class="step-link" href="https://my.geotab.com/registration.html" target="_blank">Create Your Database &rarr;</a>
+            </div>
+        </div>
+        <div class="step-card">
+            <div class="step-card-num">4</div>
+            <div class="step-card-content">
+                <h3>Build Your Customer Onboarding Process</h3>
+                <p>Set up a repeatable process for onboarding every new customer. This should include: creating their MyGeotab database, activating their devices, setting up user accounts, and sending a welcome email that walks them through the platform. Make sure your customers know how to reach you for support and how to escalate to Geotab when needed.</p>
+                <a class="step-link" href="https://my.geotab.com/registration.html" target="_blank">Create a Database for Your Customer &rarr;</a>
+                <a class="step-link" href="https://docs.google.com/document/d/1pZNjJrvKxJQXLbtmNKuqheqM_oKKSFR9/edit" target="_blank">Welcome Email Template &rarr;</a>
+                <a class="step-link" href="https://support.geotab.com" target="_blank">Geotab Support Site &rarr;</a>
+            </div>
+        </div>
+    </div>
+
+    <div class="info-box orange" style="margin-top:32px;">
+        <h3>Finance &amp; Billing Setup</h3>
+        <p>Set up your billing and payment method with Geotab <strong>before</strong> you need to place your first order. Review your <strong>Finance Welcome Letter</strong> and <strong>Payment Instructions</strong> received with your agreement. Monthly subscription billing begins when a device is activated. For credit setup, contact <a href="mailto:creditapps@geotab.com">creditapps@geotab.com</a>. For invoice questions, contact <a href="mailto:ar@geotab.com">ar@geotab.com</a>.</p>
+    </div>
+
+    <div class="info-box" style="margin-top:16px;">
+        <h3>Warranty &amp; Returns (RMA)</h3>
+        <p>All GO devices include a standard warranty. If a device arrives defective or fails under warranty, submit a <strong>Return Merchandise Authorization (RMA)</strong> request through MyAdmin. Geotab will ship a replacement device. Review the warranty terms in your partner agreement for full coverage details.</p>
+    </div>
+
+    <!-- CUSTOMER SUPPORT -->
+    <h3 style="font-size:1.1rem;font-weight:700;color:var(--geotab-blue);margin:32px 0 16px;">Customer Support Readiness</h3>
+    <div class="card-grid" style="grid-template-columns: repeat(2, 1fr);">
+        <div class="card">
+            <h3>Define Your Support Process</h3>
+            <p>Decide how your customers will reach you for help &#8212; phone, email, or a ticketing system. Set expectations with customers on response times and what you handle vs. what gets escalated to Geotab. If you want customers to reach out to <strong>Geotab first</strong> and need this reflected in the database, speak to your PAM to ensure support services are automatically enabled.</p>
+        </div>
+        <div class="card">
+            <h3>Know the Escalation Path</h3>
+            <p><strong>Tier 1:</strong> Self-service (support.geotab.com, community) &#8594; <strong>Tier 2:</strong> Partner support ticket &#8594; <strong>Tier 3:</strong> Channel Manager escalation &#8594; <strong>Tier 4:</strong> Engineering escalation.</p>
+            <a class="card-link" href="https://support.geotab.com" target="_blank">Support Site &rarr;</a>
+        </div>
+    </div>
+
+    <!-- SECTION CHECKLIST -->
+    <div class="section-checklist">
+        <h4>Pricing &amp; Ordering Checklist</h4>
+        <label>
+            <input type="checkbox" data-cl="price-review">
+            <div class="cl-text">
+                <strong>Review partner pricing with your PAM</strong>
+                <p>Understand the bundle plans and your partner cost for each.</p>
+            </div>
+        </label>
+        <label>
+            <input type="checkbox" data-cl="price-retail">
+            <div class="cl-text">
+                <strong>Set your list price and floor price</strong>
+                <p>Define what you'll quote customers and the lowest you'll discount to.</p>
+            </div>
+        </label>
+        <label>
+            <input type="checkbox" data-cl="price-promo">
+            <div class="cl-text">
+                <strong>Get your promo codes</strong>
+                <p>Available in the pricing templates provided in MyAdmin, or ask your PAM or Geotab team. You'll need these to apply bundle pricing when placing orders.</p>
+            </div>
+        </label>
+        <label>
+            <input type="checkbox" data-cl="price-billing">
+            <div class="cl-text">
+                <strong>Set up billing and payment method</strong>
+                <p>Complete credit setup before you need to place your first order.</p>
+            </div>
+        </label>
+        <label>
+            <input type="checkbox" data-cl="price-calculator">
+            <div class="cl-text">
+                <strong>Model your margins in the Pricing Calculator</strong>
+                <p>Run the numbers so you know your profit per vehicle before quoting.</p>
+            </div>
+        </label>
+    </div>
+</section>
+
+<hr class="section-divider">
+
+<!-- ==================== SECTION 5: INSTALLATION ==================== -->
+<section class="section" id="installation">
+    <div class="section-header">
+        <div class="step-badge">Step 4</div>
+        <h2>Installation</h2>
+        <p>Choose how you'll handle device installations for your customers.</p>
+    </div>
+
+    <p style="font-size:0.95rem;color:var(--dark-grey);margin-bottom:24px;">Every reseller needs an installation strategy. You have three options &#8212; choose one or combine them based on your business model.</p>
+
+    <div class="card-grid">
+        <div class="card">
+            <h3>Option 1: Become a Certified Installer</h3>
+            <p>Complete the <strong>Geotab Installation Certification</strong> through the Academy and install devices yourself. This gives you full control over scheduling, quality, and customer experience. Certification is required before performing any installations.</p>
+            <a class="card-link" href="https://geotab.myabsorb.ca" target="_blank">Start Installation Certification &rarr;</a>
+        </div>
+        <div class="card">
+            <h3>Option 2: Provide Installation Documents</h3>
+            <p>Provide your customers with Geotab's vehicle-specific installation guides and let them handle installs using their own technicians. Use the <strong>Harness Lookup Tool</strong> in MyAdmin to identify the correct wiring harness by VIN for each vehicle — it covers light-duty, medium-duty, and heavy-duty makes including Ford, GM, Ram, Toyota, Mack, Kenworth, Peterbilt, Freightliner, Hino, and more.</p>
+            <a class="card-link" href="https://myadmin.geotab.com" target="_blank">Harness Lookup (MyAdmin) &rarr;</a>
+            <a class="card-link" href="https://support.geotab.com/help/device-install-guides" target="_blank">Vehicle Install Guides (by Make/Model) &rarr;</a>
+        </div>
+        <div class="card">
+            <h3>Option 3: Use the Geotab Installation Network</h3>
+            <p>Leverage Geotab's network of certified installers to handle installations on your behalf. This is ideal if you don't have in-house technicians or need national coverage. Geotab offers <strong>Install Bundle Plans</strong> &#8212; installation packages and pricing are available in <a href="https://myadmin.geotab.com" target="_blank">MyAdmin</a>.</p>
+        </div>
+    </div>
+
+    <div class="info-box" style="margin-top:24px;">
+        <h3>Harness Lookup &amp; Vehicle Compatibility</h3>
+        <p>Before every installation, use the <strong>Harness Lookup Tool</strong> in MyAdmin to identify the correct wiring harness for the vehicle. Enter the VIN and MyAdmin will return the exact harness part number. This ensures compatibility and avoids installation issues. For <strong>electric vehicles</strong>, special installation considerations may apply &#8212; consult the vehicle-specific install guide or contact Geotab support.</p>
+    </div>
+
+    <!-- SECTION CHECKLIST -->
+    <div class="section-checklist">
+        <h4>Installation Checklist</h4>
+        <label>
+            <input type="checkbox" data-cl="install-path">
+            <div class="cl-text">
+                <strong>Choose your installation path</strong>
+                <p>Decide whether to certify in-house, provide documentation, or use the Geotab Installation Network.</p>
+            </div>
+        </label>
+        <label>
+            <input type="checkbox" data-cl="install-harness">
+            <div class="cl-text">
+                <strong>Run a test harness lookup in MyAdmin</strong>
+                <p>Enter a VIN in the Harness Lookup Tool and confirm you can identify the correct harness.</p>
+            </div>
+        </label>
+        <label>
+            <input type="checkbox" data-cl="install-first">
+            <div class="cl-text">
+                <strong>Complete your first vehicle installation</strong>
+                <p>Install a GO device in a vehicle and verify it's reporting data in MyGeotab.</p>
+            </div>
+        </label>
+    </div>
+</section>
+
+<hr class="section-divider">
+
+<!-- ==================== SECTION 6: GO TO MARKET ==================== -->
+<section class="section" id="go-to-market">
+    <div class="section-header">
+        <div class="step-badge">Step 5</div>
+        <h2>Go to Market</h2>
+        <p>Everything you need to build your sales engine, market your Geotab partnership, and close your first deals.</p>
+    </div>
+
+    <!-- MARKETING -->
+    <h3 style="font-size:1.1rem;font-weight:700;color:var(--geotab-blue);margin-bottom:16px;">Marketing &amp; Brand</h3>
+
+    <div class="info-box green" style="margin-bottom:20px;">
+        <h3>Marketing Kickoff Meeting</h3>
+        <p>We will arrange a <strong>marketing kickoff meeting</strong> to help you get started the right way. In this session, we'll provide you with brochures, marketing content, product images, and brand assets &#8212; so you don't have to build everything from scratch. <strong>We're here to help</strong>, so please don't attempt to create marketing materials on your own. Additional resources and support will also be provided by the Geotab marketing department on an ongoing basis.</p>
+    </div>
+
+    <div class="card-grid">
+        <div class="card">
+            <h3>Update Your Website</h3>
+            <p>Add Geotab to your company website &#8212; create service pages for fleet management, vehicle tracking, and video safety. Highlight the partnership and the problems you solve for customers in your target verticals.</p>
+        </div>
+        <div class="card">
+            <h3>Brand Guidelines &amp; Assets</h3>
+            <p>Download approved Geotab logos, partner badges, and messaging guidelines. Follow co-branding standards for your website, presentations, and marketing materials.</p>
+        </div>
+        <div class="card">
+            <h3>Marketing Collateral</h3>
+            <p>Geotab will provide you with customer-facing brochures, one-pagers, datasheets, and product images tailored to your market. Templates and ROI calculators are also available through the PX Hub resource library.</p>
+            <a class="card-link" href="https://geotab.my.site.com/pxhub/s/login/?language=en_US" target="_blank">Resource Library &rarr;</a>
+        </div>
+        <div class="card">
+            <h3>Co-Marketing &amp; MDF</h3>
+            <p><strong>Initiate a co-marketing conversation</strong> with your Channel Manager to discuss marketing development funds (MDF), co-branded campaigns, and joint lead generation activities.</p>
+        </div>
+    </div>
+
+    <!-- SALES INFRASTRUCTURE -->
+    <h3 style="font-size:1.1rem;font-weight:700;color:var(--geotab-blue);margin:32px 0 16px;">Sales Infrastructure</h3>
+    <div class="card-grid">
+        <div class="card">
+            <h3>Set Up Your CRM</h3>
+            <p>Configure your CRM with Geotab product catalog entries and pipeline stages aligned to PX Hub deal registration. Start collecting and tracking leads from day one so nothing falls through the cracks.</p>
+        </div>
+        <div class="card">
+            <h3>Build Proposal Templates</h3>
+            <p>Create standardized quote and proposal templates branded with your company logo alongside the Geotab partner badge. Have these ready before your first sales conversation.</p>
+        </div>
+        <div class="card">
+            <h3>Define Your Target Market</h3>
+            <p>Pick 1&#8211;2 industry verticals to focus on (e.g., transportation, field service, construction). Build a prospect list in those verticals and align your segment training to match your chosen markets. Use the segment training and industry knowledge to define <strong>which solutions you need to sell</strong>, the <strong>value proposition</strong> for each customer type, and support your pitch with <strong>success stories</strong> and <strong>ROI examples</strong> relevant to your chosen verticals.</p>
+            <a class="card-link" href="https://www.geotab.com/success-stories/" target="_blank">Success Stories &rarr;</a>
+        </div>
+    </div>
+
+    <!-- SECTION CHECKLIST -->
+    <div class="section-checklist">
+        <h4>Go to Market Checklist</h4>
+        <label>
+            <input type="checkbox" data-cl="gtm-website">
+            <div class="cl-text">
+                <strong>Update your company website</strong>
+                <p>Add Geotab to your website with the partner badge and solution overview.</p>
+            </div>
+        </label>
+        <label>
+            <input type="checkbox" data-cl="gtm-proposals">
+            <div class="cl-text">
+                <strong>Build your proposal and quote templates</strong>
+                <p>Create branded templates ready for customer-facing conversations.</p>
+            </div>
+        </label>
+        <label>
+            <input type="checkbox" data-cl="gtm-target">
+            <div class="cl-text">
+                <strong>Define your target market and build a prospect list</strong>
+                <p>Pick 1-2 verticals and identify your initial prospects.</p>
+            </div>
+        </label>
+        <label>
+            <input type="checkbox" data-cl="gtm-deal">
+            <div class="cl-text">
+                <strong>Register your first deal in PX Hub</strong>
+                <p>Submit your first deal registration to protect your opportunity.</p>
+            </div>
+        </label>
+        <label>
+            <input type="checkbox" data-cl="gtm-sale">
+            <div class="cl-text">
+                <strong>Close your first sale and onboard your first customer</strong>
+                <p>Complete the full cycle: order, install, activate, and send the welcome email.</p>
+            </div>
+        </label>
+        <label>
+            <input type="checkbox" data-cl="gtm-review">
+            <div class="cl-text">
+                <strong>Schedule your business review with your PAM</strong>
+                <p>Review performance, discuss growth opportunities, and set goals for your next phase.</p>
+            </div>
+        </label>
+    </div>
+</section>
+
+<hr class="section-divider">
+
+<!-- ==================== SECTION 7: KEY CONTACTS ==================== -->
+<section class="section" id="contacts">
+    <div class="section-header">
+        <div class="step-badge">Your Team</div>
+        <h2>Main Contacts &amp; References</h2>
+        <p>The people and teams here to support you. Save these contacts for quick access.</p>
+    </div>
+
+    <div class="contacts-grid">
+        <div class="contact-card">
+            <div class="contact-icon">PAM</div>
+            <div class="contact-info">
+                <h4>Your Partner Account Manager</h4>
+                <p>Your primary point of contact for onboarding, deal strategy, pricing, escalations, and business planning.</p>
+            </div>
+        </div>
+        <div class="contact-card">
+            <div class="contact-icon">S</div>
+            <div class="contact-info">
+                <h4>Sales Team</h4>
+                <p>General sales inquiries and support.</p>
+                <a href="mailto:salesteam@geotab.com">salesteam@geotab.com</a>
+            </div>
+        </div>
+        <div class="contact-card">
+            <div class="contact-icon">AR</div>
+            <div class="contact-info">
+                <h4>Finance &#8212; Billing Inquiries</h4>
+                <p>Invoice questions, account balances, and billing support.</p>
+                <a href="mailto:ar@geotab.com">ar@geotab.com</a>
+            </div>
+        </div>
+        <div class="contact-card">
+            <div class="contact-icon">RM</div>
+            <div class="contact-info">
+                <h4>Finance &#8212; Remittances</h4>
+                <p>Payment confirmations and remittance submissions.</p>
+                <a href="mailto:remittances@geotab.com">remittances@geotab.com</a>
+            </div>
+        </div>
+        <div class="contact-card">
+            <div class="contact-icon">O</div>
+            <div class="contact-info">
+                <h4>Order Inquiries</h4>
+                <p>Order status, shipping, and logistics questions.</p>
+                <a href="mailto:geoorders@geotab.com">geoorders@geotab.com</a>
+            </div>
+        </div>
+        <div class="contact-card">
+            <div class="contact-icon">T</div>
+            <div class="contact-info">
+                <h4>Technical Support</h4>
+                <p>Device issues, platform troubleshooting, and technical questions.</p>
+                <a href="https://myadmin.geotab.com/Support/HelpDesk" target="_blank">MyAdmin Support Portal &rarr;</a>
+            </div>
+        </div>
+        <div class="contact-card">
+            <div class="contact-icon">C</div>
+            <div class="contact-info">
+                <h4>Community Forum</h4>
+                <p>Connect with other partners, share best practices, and get answers.</p>
+                <a href="https://community.geotab.com" target="_blank">community.geotab.com &rarr;</a>
+            </div>
+        </div>
+        <div class="contact-card">
+            <div class="contact-icon">CR</div>
+            <div class="contact-info">
+                <h4>Credit Applications</h4>
+                <p>Credit setup and application inquiries.</p>
+                <a href="mailto:creditapps@geotab.com">creditapps@geotab.com</a>
+            </div>
+        </div>
+    </div>
+</section>
+
+<hr class="section-divider">
+
+<!-- ==================== SECTION 8: PLATFORMS & RESOURCES ==================== -->
+<section class="section" id="resources">
+    <div class="section-header">
+        <div class="step-badge">Reference</div>
+        <h2>Platforms &amp; Resources</h2>
+        <p>Quick access to every Geotab platform you will use day-to-day.</p>
+    </div>
+
+    <table class="link-table">
+        <thead>
+            <tr>
+                <th>Platform</th>
+                <th>What It Does</th>
+                <th>Link</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td><strong>MyAdmin</strong></td>
+                <td>Device ordering, billing, harness lookup, support tickets, account management</td>
+                <td><a href="https://myadmin.geotab.com" target="_blank">myadmin.geotab.com</a></td>
+            </tr>
+            <tr>
+                <td><strong>PX Hub</strong></td>
+                <td>Deal registration, partner resources, commercial support, Partner Learning Hub</td>
+                <td><a href="https://geotab.my.site.com/pxhub/s/login/?language=en_US" target="_blank">PX Hub Login</a></td>
+            </tr>
+            <tr>
+                <td><strong>MyGeotab</strong></td>
+                <td>Fleet management platform — live tracking, reports, alerts, driver management</td>
+                <td><a href="https://my.geotab.com" target="_blank">my.geotab.com</a></td>
+            </tr>
+            <tr>
+                <td><strong>Geotab Academy</strong></td>
+                <td>Training courses, certifications, and self-paced learning paths</td>
+                <td><a href="https://geotab.myabsorb.ca" target="_blank">geotab.myabsorb.ca</a></td>
+            </tr>
+            <tr>
+                <td><strong>Support Center</strong></td>
+                <td>Knowledge base, troubleshooting guides, how-to articles</td>
+                <td><a href="https://support.geotab.com" target="_blank">support.geotab.com</a></td>
+            </tr>
+            <tr>
+                <td><strong>Community</strong></td>
+                <td>Partner and customer forums, discussions, best practices</td>
+                <td><a href="https://community.geotab.com" target="_blank">community.geotab.com</a></td>
+            </tr>
+            <tr>
+                <td><strong>Marketplace</strong></td>
+                <td>200+ integrations, Add-Ons, and third-party solutions</td>
+                <td><a href="https://marketplace.geotab.com" target="_blank">marketplace.geotab.com</a></td>
+            </tr>
+            <tr>
+                <td><strong>Developers / SDK</strong></td>
+                <td>API documentation, SDK references, custom development</td>
+                <td><a href="https://developers.geotab.com" target="_blank">developers.geotab.com</a></td>
+            </tr>
+            <tr>
+                <td><strong>Geotab.com</strong></td>
+                <td>Product information, success stories, company overview</td>
+                <td><a href="https://www.geotab.com" target="_blank">geotab.com</a></td>
+            </tr>
+        </tbody>
+    </table>
+</section>
+
+<!-- ==================== CTA ==================== -->
+<section class="cta-section">
+    <h2>You Are Not Alone</h2>
+    <p>Your Partner Account Manager and the entire Geotab partner team are here to support you at every stage. Do not hesitate to reach out &#8212; your success is our success.</p>
+    <p style="margin-top:16px;font-size:0.95rem;opacity:0.85;">Your PAM will schedule a <strong>kickoff call within your first week</strong> to walk through this guide together and answer any questions.</p>
+</section>
+
+<!-- ==================== FOOTER ==================== -->
+<footer class="footer">
+    <div>Maha Afana &#8212; Senior Partnership Business Development Manager, Channels</div>
+    <div style="margin-top:4px;"><a href="mailto:mahaafana@geotab.com">mahaafana@geotab.com</a></div>
+    <div class="footer-links">
+        <a href="https://www.geotab.com" target="_blank">geotab.com</a>
+        <a href="https://geotab.my.site.com/pxhub/s/login/?language=en_US" target="_blank">Partner Hub</a>
+        <a href="https://support.geotab.com" target="_blank">Support Center</a>
+        <a href="https://geotab.myabsorb.ca" target="_blank">Geotab Academy</a>
+        <a href="https://community.geotab.com" target="_blank">Community</a>
+    </div>
+</footer>
+
+<!-- ==================== BACK TO TOP ==================== -->
+<button class="back-to-top" onclick="window.scrollTo({top:0,behavior:'smooth'})" aria-label="Back to top">&#8593;</button>
+
+<!-- ==================== SCRIPTS ==================== -->
+<script>
+    // Back to top
+    window.addEventListener('scroll', function() {
+        var btn = document.querySelector('.back-to-top');
+        if (window.scrollY > 600) { btn.classList.add('visible'); }
+        else { btn.classList.remove('visible'); }
+    });
+
+    // Close mobile menu on link click
+    document.querySelectorAll('.navbar-links a').forEach(function(link) {
+        link.addEventListener('click', function() {
+            document.querySelector('.navbar-links').classList.remove('open');
+        });
+    });
+
+    // Checklist persistence (keyed by data-cl attribute) + progress bar
+    (function() {
+        var key = 'geotab-onboarding-checklist';
+        var saved = JSON.parse(localStorage.getItem(key) || '{}');
+        var boxes = document.querySelectorAll('.section-checklist input[type="checkbox"][data-cl]');
+        var fill = document.getElementById('progress-fill');
+        var countEl = document.getElementById('progress-count');
+
+        function updateProgress() {
+            var total = boxes.length;
+            var done = 0;
+            boxes.forEach(function(cb) { if (cb.checked) done++; });
+            var pct = total > 0 ? Math.round((done / total) * 100) : 0;
+            if (fill) fill.style.width = pct + '%';
+            if (countEl) countEl.textContent = done + ' of ' + total + ' complete';
+        }
+
+        boxes.forEach(function(cb) {
+            var id = cb.getAttribute('data-cl');
+            if (saved[id]) cb.checked = true;
+            cb.addEventListener('change', function() {
+                var state = JSON.parse(localStorage.getItem(key) || '{}');
+                state[id] = cb.checked;
+                localStorage.setItem(key, JSON.stringify(state));
+                updateProgress();
+            });
+        });
+
+        updateProgress();
+    })();
+</script>
+
+</body>
+</html>

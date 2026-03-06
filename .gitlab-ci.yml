@@ -1,0 +1,15 @@
+image: alpine:latest
+
+pages:
+  stage: deploy
+  tags:
+    - prod-docker-autoscaler-runner
+  script:
+    - mkdir -p public
+    - cp index.html public/
+    - cp calculator.html public/
+  artifacts:
+    paths:
+      - public
+  only:
+    - main

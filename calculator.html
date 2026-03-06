@@ -1,0 +1,635 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Geotab Pricing Calculator</title>
+<link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
+<style>
+    :root {
+        --geotab-blue: #25477b;
+        --innovation-blue: #0078d3;
+        --dark-grey: #3c5164;
+        --medium-grey: #6b7a8d;
+        --pale-grey: #eff2f7;
+        --white: #ffffff;
+        --green: #34a853;
+        --orange: #e8740c;
+        --radius: 12px;
+        --shadow-sm: 0 2px 8px rgba(0,0,0,0.06);
+        --shadow-md: 0 4px 16px rgba(0,0,0,0.1);
+    }
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+        font-family: 'Roboto', sans-serif;
+        color: var(--dark-grey);
+        background: var(--pale-grey);
+        line-height: 1.6;
+    }
+
+    /* HEADER */
+    .header {
+        background: var(--geotab-blue);
+        color: var(--white);
+        padding: 24px 0;
+    }
+    .header-inner {
+        max-width: 960px;
+        margin: 0 auto;
+        padding: 0 24px;
+        text-align: center;
+    }
+    .header h1 { font-size: 1.5rem; font-weight: 700; margin-bottom: 4px; }
+    .header p { font-size: 0.9rem; opacity: 0.85; }
+    .header .back-link {
+        display: inline-block;
+        margin-bottom: 12px;
+        color: rgba(255,255,255,0.8);
+        text-decoration: none;
+        font-size: 0.85rem;
+    }
+    .header .back-link:hover { color: var(--white); }
+    .header .logo { margin-bottom: 12px; }
+
+    /* MAIN */
+    .main { max-width: 960px; margin: 0 auto; padding: 32px 24px 60px; }
+    .disclaimer {
+        background: var(--white);
+        border-left: 4px solid var(--innovation-blue);
+        padding: 16px 20px;
+        border-radius: var(--radius);
+        margin-bottom: 32px;
+        font-size: 0.88rem;
+        color: var(--medium-grey);
+    }
+
+    /* CALC SECTIONS */
+    .calc-section {
+        background: var(--white);
+        border-radius: var(--radius);
+        box-shadow: var(--shadow-sm);
+        padding: 28px;
+        margin-bottom: 24px;
+    }
+    .calc-section h2 {
+        font-size: 1.1rem;
+        font-weight: 700;
+        color: var(--geotab-blue);
+        margin-bottom: 20px;
+        padding-bottom: 10px;
+        border-bottom: 2px solid var(--pale-grey);
+    }
+
+    /* QUOTE HEADER */
+    .quote-header-grid {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 16px;
+        margin-bottom: 8px;
+    }
+    .quote-field label {
+        display: block;
+        font-size: 0.82rem;
+        font-weight: 500;
+        color: var(--medium-grey);
+        margin-bottom: 4px;
+        text-transform: uppercase;
+        letter-spacing: 0.3px;
+    }
+    .quote-field input {
+        width: 100%;
+        padding: 10px 12px;
+        border: 1px solid #d1d5db;
+        border-radius: 6px;
+        font-family: 'Roboto', sans-serif;
+        font-size: 0.9rem;
+        color: var(--dark-grey);
+        background: var(--pale-grey);
+        transition: border-color 0.2s;
+    }
+    .quote-field input:focus {
+        outline: none;
+        border-color: var(--innovation-blue);
+        background: var(--white);
+    }
+
+    /* CURRENCY + TERM ROW */
+    .settings-row {
+        display: flex;
+        gap: 24px;
+        align-items: center;
+        flex-wrap: wrap;
+        margin-bottom: 20px;
+    }
+    .settings-row label {
+        font-size: 0.85rem;
+        font-weight: 500;
+        color: var(--medium-grey);
+    }
+    .settings-row input, .settings-row select {
+        padding: 8px 10px;
+        border: 1px solid #d1d5db;
+        border-radius: 6px;
+        font-size: 0.88rem;
+        font-family: 'Roboto', sans-serif;
+        color: var(--dark-grey);
+        background: var(--white);
+    }
+    .currency-toggle {
+        display: inline-flex;
+        border-radius: 6px;
+        overflow: hidden;
+        border: 1px solid #d1d5db;
+    }
+    .currency-toggle button {
+        padding: 8px 16px;
+        border: none;
+        background: var(--white);
+        font-family: 'Roboto', sans-serif;
+        font-size: 0.85rem;
+        font-weight: 500;
+        color: var(--medium-grey);
+        cursor: pointer;
+        transition: all 0.2s;
+    }
+    .currency-toggle button.active {
+        background: var(--geotab-blue);
+        color: var(--white);
+    }
+
+    /* LINE ITEMS TABLE */
+    .line-items-table {
+        width: 100%;
+        border-collapse: collapse;
+        font-size: 0.88rem;
+        margin-bottom: 16px;
+    }
+    .line-items-table thead th {
+        background: var(--geotab-blue);
+        color: var(--white);
+        padding: 10px 12px;
+        text-align: left;
+        font-weight: 600;
+        font-size: 0.82rem;
+        white-space: nowrap;
+    }
+    .line-items-table thead th:first-child { border-radius: 8px 0 0 0; }
+    .line-items-table thead th:last-child { border-radius: 0 8px 0 0; }
+    .line-items-table tbody td {
+        padding: 8px 12px;
+        border-bottom: 1px solid var(--pale-grey);
+        vertical-align: middle;
+    }
+    .line-items-table tbody tr:last-child td { border-bottom: none; }
+    .line-items-table input[type="text"],
+    .line-items-table input[type="number"] {
+        width: 100%;
+        padding: 8px 10px;
+        border: 1px solid #d1d5db;
+        border-radius: 6px;
+        font-family: 'Roboto', sans-serif;
+        font-size: 0.88rem;
+        color: var(--dark-grey);
+        background: var(--pale-grey);
+        transition: border-color 0.2s;
+    }
+    .line-items-table input:focus {
+        outline: none;
+        border-color: var(--innovation-blue);
+        background: var(--white);
+    }
+    .line-items-table .calc-output { font-weight: 600; color: var(--geotab-blue); }
+    .line-items-table .remove-btn {
+        background: none; border: none; color: #d1535e; cursor: pointer;
+        font-size: 1.1rem; padding: 4px 8px; border-radius: 4px; transition: background 0.2s;
+    }
+    .line-items-table .remove-btn:hover { background: #fde8e8; }
+
+    .add-line-btn {
+        display: inline-flex; align-items: center; gap: 6px;
+        padding: 8px 16px; background: var(--pale-grey); border: 1px dashed #b0b8c4;
+        border-radius: 8px; cursor: pointer; font-family: 'Roboto', sans-serif;
+        font-size: 0.85rem; color: var(--medium-grey); transition: all 0.2s;
+    }
+    .add-line-btn:hover { background: var(--white); border-color: var(--innovation-blue); color: var(--innovation-blue); }
+
+    /* SUMMARY */
+    .summary-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+        gap: 14px;
+        margin-top: 24px;
+    }
+    .summary-card {
+        background: var(--pale-grey);
+        border-radius: 10px;
+        padding: 18px;
+        text-align: center;
+    }
+    .summary-card.highlight { background: var(--geotab-blue); color: var(--white); }
+    .summary-card .label {
+        font-size: 0.72rem; font-weight: 500; text-transform: uppercase;
+        letter-spacing: 0.5px; opacity: 0.75; margin-bottom: 6px;
+    }
+    .summary-card .value { font-size: 1.4rem; font-weight: 700; }
+    .summary-card .sub { font-size: 0.75rem; opacity: 0.65; margin-top: 4px; }
+
+    /* ACTIONS */
+    .actions { display: flex; gap: 12px; margin-top: 24px; flex-wrap: wrap; }
+    .btn {
+        padding: 10px 24px; border-radius: 8px; font-family: 'Roboto', sans-serif;
+        font-size: 0.88rem; font-weight: 500; cursor: pointer; border: none; transition: all 0.2s;
+    }
+    .btn-primary { background: var(--innovation-blue); color: var(--white); }
+    .btn-primary:hover { background: #005fa3; }
+    .btn-secondary { background: var(--white); color: var(--dark-grey); border: 1px solid #d1d5db; }
+    .btn-secondary:hover { background: var(--pale-grey); }
+
+    .saved-notice {
+        display: none;
+        font-size: 0.82rem;
+        color: var(--green);
+        font-weight: 500;
+        align-items: center;
+        gap: 4px;
+        margin-left: 8px;
+        line-height: 40px;
+    }
+
+    /* RESPONSIVE */
+    @media (max-width: 700px) {
+        .quote-header-grid { grid-template-columns: 1fr; }
+        .line-items-table { font-size: 0.82rem; }
+        .line-items-table thead { display: none; }
+        .line-items-table tbody tr {
+            display: block; background: var(--pale-grey);
+            border-radius: 8px; padding: 12px; margin-bottom: 12px;
+        }
+        .line-items-table tbody td {
+            display: flex; justify-content: space-between; align-items: center;
+            border: none; padding: 4px 0;
+        }
+        .line-items-table tbody td::before {
+            content: attr(data-label);
+            font-weight: 600; font-size: 0.78rem; color: var(--medium-grey); min-width: 100px;
+        }
+        .summary-grid { grid-template-columns: 1fr 1fr; }
+    }
+
+    /* PRINT */
+    @media print {
+        body { background: white; }
+        .header { background: var(--geotab-blue) !important; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+        .summary-card.highlight { background: var(--geotab-blue) !important; color: white !important; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+        .add-line-btn, .remove-btn, .actions, .back-link, .disclaimer, .saved-notice { display: none !important; }
+        .line-items-table input, .quote-field input, .settings-row input, .settings-row select {
+            border: none; background: transparent; padding: 0;
+        }
+        .currency-toggle button:not(.active) { display: none; }
+        .currency-toggle button.active { background: transparent !important; color: var(--dark-grey) !important; border: none; padding: 0; }
+        .currency-toggle { border: none; }
+    }
+</style>
+</head>
+<body>
+
+<div class="header">
+    <div class="header-inner">
+        <a href="index.html" class="back-link">&larr; Back to Onboarding</a>
+        <div class="logo">
+            <svg aria-hidden="true" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1800 239" height="28"><g><path fill="#ffffff" d="M141.1,119.293v22.728H252.284v13.038h0v.83h0c0,25.069-4.978,40.8-14.372,46.671s-35.352,9.1-76.482,9.1c-53.872,0-87.3-3.23-99.625-9.631s-18.283-23.5-18.283-51.264v-32l.385-29.9c0-27.41,5.571-44.775,16.505-51.59S99.617,26.9,144.273,26.9c47.886,0,78.319,2.163,89.757,6.46S250.3,49.034,250.3,66.991v5.927h39.174v-9.1c0-25.01-8.682-41.486-25.84-48.657S208.783,4.348,150.614,4.348,53.42,9.889,34.218,20.853,5,54.368,5,87.645v52.894C5,180.158,13.89,206,31.225,217.376s56.657,17.187,117.049,17.187c63.917,0,104.01-4.86,119.212-14.49s22.017-32.062,22.965-68.155h0v-32.6Z"/><polygon fill="#ffffff" points="327.373 232.163 549.321 232.163 549.321 209.464 367.466 209.464 367.466 127.086 541.794 127.086 541.794 104.328 367.466 104.328 367.466 29.358 549.321 29.358 549.321 6.6 327.373 6.6 327.373 232.163"/><path fill="#ffffff" d="M847.928,23.016C831.749,10.63,790.56,4.348,725.812,4.348c-56.006,0-94.824,5.512-115.36,16.387S579.22,52.441,579.22,82.37l-.5,21.306v15.735c0,51.531,8.09,83.771,23.943,96.454s57.4,18.787,123.153,18.787,107.714-6.519,123.153-18.965,23.943-45.96,23.943-99.21C872.582,66.991,864.048,35.521,847.928,23.016Zm-13.809,96.276c0,45.9-4.534,73.074-13.572,80.778s-41.041,11.675-95.15,11.675-85.934-3.941-94.824-11.675S617,165.193,617,119.293s4.682-72.9,13.69-80.6,40.982-11.675,94.824-11.675c46.908,0,77.045,3.348,89.757,9.927S834.119,59.227,834.119,83.5Z"/><polygon fill="#ffffff" points="1151.158 6.6 888.228 6.6 888.228 31.491 1000.121 31.491 1000.121 232.163 1040.273 232.163 1040.273 31.491 1151.158 31.491 1151.158 6.6"/><path fill="#ffffff" d="M1292.861,6.6h-55.146L1111.184,232.163H1153.8l26.4-47.412h173.084l26.669,47.412h41.9l-128.813-225ZM1192.11,164.275l74.081-134.887,75.03,134.828Z"/><path fill="#ffffff" d="M1670.054,113.9c28.121-6.875,42.434-22.787,42.434-47.412s-6.579-40.834-19.824-48.449S1651.741,6.6,1609.693,6.6H1457V232.163H1625.9c35.559,0,60.806-4.919,75.207-14.55s21.78-26.669,21.78-50.672C1723.067,137.843,1705.228,120,1670.054,113.9ZM1497.208,29.358h111.715c27.41,0,45.367,2.222,53.339,6.578s11.853,13.957,11.853,28.714c0,17.068-4.534,28.181-13.572,33.04s-29.929,7.467-62.228,7.467H1497.208Zm174.151,172.521c-8.89,4.919-28.358,7.349-57.635,7.349H1497.208V127.916h99.062c40.626,0,65.814,2.282,74.911,6.756s13.453,16.565,13.453,36.27C1684.693,186.647,1680.218,197.078,1671.358,201.879Z"/></g></svg>
+        </div>
+        <h1>Pricing Calculator</h1>
+        <p>Enter your Geotab plan costs, set your margins, and calculate customer pricing.</p>
+    </div>
+</div>
+
+<div class="main">
+    <div class="disclaimer">
+        This calculator does not contain any Geotab pricing. Enter your plan costs from MyAdmin and your desired margin to calculate customer-facing pricing and projected profit. All calculations are done locally in your browser &mdash; no data is sent anywhere. Your quote is automatically saved and will persist when you return.
+    </div>
+
+    <!-- QUOTE INFO -->
+    <div class="calc-section">
+        <h2>Quote Details</h2>
+        <div class="quote-header-grid">
+            <div class="quote-field">
+                <label>Prepared By (Your Company)</label>
+                <input type="text" id="preparedBy" placeholder="Your company name" oninput="saveState()">
+            </div>
+            <div class="quote-field">
+                <label>Prepared For (Customer)</label>
+                <input type="text" id="preparedFor" placeholder="Customer name" oninput="saveState()">
+            </div>
+            <div class="quote-field">
+                <label>Quote Date</label>
+                <input type="date" id="quoteDate" oninput="saveState()">
+            </div>
+            <div class="quote-field">
+                <label>Quote Reference</label>
+                <input type="text" id="quoteRef" placeholder="e.g. Q-001" oninput="saveState()">
+            </div>
+        </div>
+    </div>
+
+    <!-- LINE ITEMS -->
+    <div class="calc-section">
+        <h2>Quote Line Items</h2>
+
+        <div class="settings-row">
+            <div>
+                <label>Currency</label>
+                <div class="currency-toggle" id="currencyToggle">
+                    <button class="active" onclick="setCurrency('USD')">USD</button>
+                    <button onclick="setCurrency('CAD')">CAD</button>
+                </div>
+            </div>
+            <div>
+                <label>Contract Term</label>
+                <input type="number" id="contractTerm" value="36" min="1" max="120"
+                    style="width:80px;" oninput="recalcAll()">
+                <span style="font-size:0.82rem;color:var(--medium-grey);">months</span>
+            </div>
+            <div>
+                <label>Fleet Size (vehicles)</label>
+                <input type="number" id="fleetSize" value="" min="1" placeholder="e.g. 50"
+                    style="width:90px;" oninput="applyFleetSize()">
+            </div>
+        </div>
+
+        <div style="overflow-x:auto;">
+            <table class="line-items-table" id="lineItemsTable">
+                <thead>
+                    <tr>
+                        <th style="width:24%;">Plan / Item Name</th>
+                        <th style="width:14%;" id="costHeader">Your Cost/mo</th>
+                        <th style="width:11%;">Margin %</th>
+                        <th style="width:14%;" id="custHeader">Customer Price</th>
+                        <th style="width:9%;">Qty</th>
+                        <th style="width:14%;">Monthly Profit</th>
+                        <th style="width:10%;">Monthly Total</th>
+                        <th style="width:4%;"></th>
+                    </tr>
+                </thead>
+                <tbody id="lineItemsBody">
+                </tbody>
+            </table>
+        </div>
+        <button class="add-line-btn" onclick="addLineItem()">+ Add Line Item</button>
+    </div>
+
+    <!-- SUMMARY -->
+    <div class="calc-section">
+        <h2>Quote Summary</h2>
+
+        <div class="summary-grid" id="summaryGrid">
+            <div class="summary-card">
+                <div class="label">Fleet Size</div>
+                <div class="value" id="sumVehicles">0</div>
+                <div class="sub">vehicles</div>
+            </div>
+            <div class="summary-card">
+                <div class="label">Per Vehicle / Month</div>
+                <div class="value" id="sumPerVehicle">$0.00</div>
+                <div class="sub">blended customer rate</div>
+            </div>
+            <div class="summary-card">
+                <div class="label">Your Monthly Cost</div>
+                <div class="value" id="sumCost">$0.00</div>
+            </div>
+            <div class="summary-card">
+                <div class="label">Customer Monthly Total</div>
+                <div class="value" id="sumCustomer">$0.00</div>
+            </div>
+            <div class="summary-card highlight">
+                <div class="label">Your Monthly Profit</div>
+                <div class="value" id="sumProfit">$0.00</div>
+            </div>
+            <div class="summary-card">
+                <div class="label">Customer Contract Value</div>
+                <div class="value" id="sumContract">$0.00</div>
+                <div class="sub" id="sumContractSub">36-month term</div>
+            </div>
+            <div class="summary-card highlight">
+                <div class="label">Your Contract Profit</div>
+                <div class="value" id="sumContractProfit">$0.00</div>
+                <div class="sub" id="sumContractProfitSub">36-month term</div>
+            </div>
+        </div>
+    </div>
+
+    <div class="actions">
+        <button class="btn btn-primary" onclick="window.print()">Print / Save as PDF</button>
+        <button class="btn btn-secondary" onclick="resetAll()">Reset Calculator</button>
+        <span class="saved-notice" id="savedNotice">Saved</span>
+    </div>
+</div>
+
+<script>
+let lineItemId = 0;
+let currency = 'USD';
+var saveTimeout;
+
+function sym() { return currency === 'CAD' ? 'C$' : '$'; }
+
+function setCurrency(c) {
+    currency = c;
+    var btns = document.querySelectorAll('#currencyToggle button');
+    btns.forEach(function(b) { b.className = b.textContent === c ? 'active' : ''; });
+    document.getElementById('costHeader').textContent = 'Your Cost/mo (' + c + ')';
+    document.getElementById('custHeader').textContent = 'Customer (' + c + ')';
+    recalcAllRows();
+    saveState();
+}
+
+function addLineItem(name, cost, margin, vehicles) {
+    lineItemId++;
+    var id = lineItemId;
+    var tbody = document.getElementById('lineItemsBody');
+    var tr = document.createElement('tr');
+    tr.id = 'row-' + id;
+    tr.innerHTML =
+        '<td data-label="Plan / Item">' +
+            '<input type="text" placeholder="e.g. GO Bundle Plan" value="' + (name || '') + '" oninput="saveState()">' +
+        '</td>' +
+        '<td data-label="Your Cost">' +
+            '<input type="number" step="0.01" min="0" placeholder="0.00" value="' + (cost || '') + '" oninput="recalcRow(' + id + ')">' +
+        '</td>' +
+        '<td data-label="Margin %">' +
+            '<input type="number" step="0.5" min="0" max="100" placeholder="20" value="' + (margin || '20') + '" oninput="recalcRow(' + id + ')">' +
+        '</td>' +
+        '<td data-label="Customer Price" class="calc-output" id="custPrice-' + id + '">' + sym() + '0.00</td>' +
+        '<td data-label="Qty">' +
+            '<input type="number" min="0" placeholder="0" value="' + (vehicles || '') + '" oninput="recalcRow(' + id + ')">' +
+        '</td>' +
+        '<td data-label="Monthly Profit" class="calc-output" id="profit-' + id + '">' + sym() + '0.00</td>' +
+        '<td data-label="Monthly Total" class="calc-output" id="total-' + id + '">' + sym() + '0.00</td>' +
+        '<td><button class="remove-btn" onclick="removeRow(' + id + ')" title="Remove">&times;</button></td>';
+    tbody.appendChild(tr);
+    recalcRow(id);
+}
+
+function removeRow(id) {
+    var row = document.getElementById('row-' + id);
+    if (row) row.remove();
+    recalcAll();
+}
+
+function getRowInputs(id) {
+    var row = document.getElementById('row-' + id);
+    if (!row) return null;
+    var inputs = row.querySelectorAll('input');
+    return {
+        name: inputs[0].value,
+        cost: parseFloat(inputs[1].value) || 0,
+        margin: parseFloat(inputs[2].value) || 0,
+        vehicles: parseInt(inputs[3].value) || 0
+    };
+}
+
+function recalcRow(id) {
+    var d = getRowInputs(id);
+    if (!d) return;
+    var custPrice = d.cost * (1 + d.margin / 100);
+    var monthlyProfit = (custPrice - d.cost) * d.vehicles;
+    var monthlyTotal = custPrice * d.vehicles;
+    var s = sym();
+    document.getElementById('custPrice-' + id).textContent = s + custPrice.toFixed(2);
+    document.getElementById('profit-' + id).textContent = s + monthlyProfit.toFixed(2);
+    document.getElementById('total-' + id).textContent = s + monthlyTotal.toFixed(2);
+    recalcAll();
+}
+
+function recalcAllRows() {
+    var rows = document.getElementById('lineItemsBody').querySelectorAll('tr');
+    rows.forEach(function(row) {
+        var id = parseInt(row.id.replace('row-', ''));
+        if (id) recalcRow(id);
+    });
+}
+
+function recalcAll() {
+    var rows = document.getElementById('lineItemsBody').querySelectorAll('tr');
+    var totalCost = 0, totalCustomer = 0, totalProfit = 0;
+    var maxVehicles = 0;
+
+    rows.forEach(function(row) {
+        var inputs = row.querySelectorAll('input');
+        var cost = parseFloat(inputs[1].value) || 0;
+        var margin = parseFloat(inputs[2].value) || 0;
+        var vehicles = parseInt(inputs[3].value) || 0;
+        var custPrice = cost * (1 + margin / 100);
+
+        totalCost += cost * vehicles;
+        totalCustomer += custPrice * vehicles;
+        totalProfit += (custPrice - cost) * vehicles;
+        if (vehicles > maxVehicles) maxVehicles = vehicles;
+    });
+
+    var fleetInput = parseInt(document.getElementById('fleetSize').value) || maxVehicles;
+    var term = parseInt(document.getElementById('contractTerm').value) || 36;
+    var s = sym();
+    var perVehicle = fleetInput > 0 ? totalCustomer / fleetInput : 0;
+
+    document.getElementById('sumVehicles').textContent = fleetInput;
+    document.getElementById('sumPerVehicle').textContent = s + perVehicle.toFixed(2);
+    document.getElementById('sumCost').textContent = s + totalCost.toFixed(2);
+    document.getElementById('sumCustomer').textContent = s + totalCustomer.toFixed(2);
+    document.getElementById('sumProfit').textContent = s + totalProfit.toFixed(2);
+    document.getElementById('sumContract').textContent = s + (totalCustomer * term).toFixed(2);
+    document.getElementById('sumContractSub').textContent = term + '-month term';
+    document.getElementById('sumContractProfit').textContent = s + (totalProfit * term).toFixed(2);
+    document.getElementById('sumContractProfitSub').textContent = term + '-month term';
+
+    saveState();
+}
+
+function applyFleetSize() {
+    var fleet = parseInt(document.getElementById('fleetSize').value) || 0;
+    var rows = document.getElementById('lineItemsBody').querySelectorAll('tr');
+    rows.forEach(function(row) {
+        var inputs = row.querySelectorAll('input');
+        if (fleet > 0) inputs[3].value = fleet;
+    });
+    recalcAllRows();
+}
+
+function saveState() {
+    clearTimeout(saveTimeout);
+    saveTimeout = setTimeout(function() {
+        var rows = document.getElementById('lineItemsBody').querySelectorAll('tr');
+        var items = [];
+        rows.forEach(function(row) {
+            var inputs = row.querySelectorAll('input');
+            items.push({
+                name: inputs[0].value,
+                cost: inputs[1].value,
+                margin: inputs[2].value,
+                vehicles: inputs[3].value
+            });
+        });
+        var state = {
+            preparedBy: document.getElementById('preparedBy').value,
+            preparedFor: document.getElementById('preparedFor').value,
+            quoteDate: document.getElementById('quoteDate').value,
+            quoteRef: document.getElementById('quoteRef').value,
+            currency: currency,
+            contractTerm: document.getElementById('contractTerm').value,
+            fleetSize: document.getElementById('fleetSize').value,
+            items: items
+        };
+        try {
+            localStorage.setItem('geotab-calc', JSON.stringify(state));
+            var notice = document.getElementById('savedNotice');
+            notice.style.display = 'inline-flex';
+            setTimeout(function() { notice.style.display = 'none'; }, 1500);
+        } catch(e) {}
+    }, 500);
+}
+
+function loadState() {
+    try {
+        var data = localStorage.getItem('geotab-calc');
+        if (!data) return false;
+        var state = JSON.parse(data);
+        document.getElementById('preparedBy').value = state.preparedBy || '';
+        document.getElementById('preparedFor').value = state.preparedFor || '';
+        document.getElementById('quoteDate').value = state.quoteDate || '';
+        document.getElementById('quoteRef').value = state.quoteRef || '';
+        document.getElementById('contractTerm').value = state.contractTerm || '36';
+        document.getElementById('fleetSize').value = state.fleetSize || '';
+        if (state.currency) setCurrency(state.currency);
+        if (state.items && state.items.length > 0) {
+            state.items.forEach(function(item) {
+                addLineItem(item.name, item.cost, item.margin, item.vehicles);
+            });
+            return true;
+        }
+        return false;
+    } catch(e) { return false; }
+}
+
+function resetAll() {
+    if (!confirm('Reset all fields and clear saved data?')) return;
+    document.getElementById('lineItemsBody').innerHTML = '';
+    document.getElementById('contractTerm').value = 36;
+    document.getElementById('fleetSize').value = '';
+    document.getElementById('preparedBy').value = '';
+    document.getElementById('preparedFor').value = '';
+    document.getElementById('quoteDate').value = '';
+    document.getElementById('quoteRef').value = '';
+    lineItemId = 0;
+    setCurrency('USD');
+    addLineItem('', '', '20', '');
+    try { localStorage.removeItem('geotab-calc'); } catch(e) {}
+    recalcAll();
+}
+
+// Init
+document.getElementById('quoteDate').value = new Date().toISOString().split('T')[0];
+if (!loadState()) {
+    addLineItem('', '', '20', '');
+}
+</script>
+</body>
+</html>
