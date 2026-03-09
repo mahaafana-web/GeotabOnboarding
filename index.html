@@ -1054,7 +1054,7 @@
     <div class="progress-bar-inner">
         <div class="progress-label">Your Progress</div>
         <div class="progress-track"><div class="progress-fill" id="progress-fill"></div></div>
-        <div class="progress-count" id="progress-count">0 of 22 complete</div>
+        <div class="progress-count" id="progress-count">0 of 23 complete</div>
     </div>
 </div>
 
@@ -1912,7 +1912,11 @@
             if (saved[id]) cb.checked = true;
             cb.addEventListener('change', function() {
                 var state = JSON.parse(localStorage.getItem(key) || '{}');
-                state[id] = cb.checked;
+                if (cb.checked) {
+                    state[id] = true;
+                } else {
+                    delete state[id];
+                }
                 localStorage.setItem(key, JSON.stringify(state));
                 updateProgress();
             });
