@@ -1128,7 +1128,13 @@
             <div class="step-card-num">4</div>
             <div class="step-card-content">
                 <h3>Add Your Team Members &amp; Assign Roles</h3>
-                <p>Your Account Administrator manages all user access through MyAdmin under <strong>Configurations &gt; User Management</strong>. When adding team members, assign them the appropriate roles based on their responsibilities:</p>
+                <p>Your Account Administrator (the user with the <strong>UserManagement.Admin-Users</strong> role) manages all user access through MyAdmin under <strong>Configurations &gt; User Management</strong>. To add a team member:</p>
+                <ol style="margin:8px 0 12px 18px;font-size:0.93rem;line-height:1.8;color:var(--dark-grey);">
+                    <li>Have the team member create their own MyAdmin account at <a href="https://myadmin.geotab.com" target="_blank">myadmin.geotab.com</a>.</li>
+                    <li>Ensure their profile is <strong>Active and Approved</strong> with all <strong>General Info</strong> fields populated and the correct <strong>ERP listed first</strong> under Accounts.</li>
+                    <li>Navigate to <strong>Configurations &gt; User Management</strong>, find the user, and go to the <strong>Roles</strong> tab.</li>
+                    <li>Search <strong>"PXHub"</strong> and assign the appropriate role below.</li>
+                </ol>
                 <div style="margin:12px 0;overflow-x:auto;">
                     <table style="width:100%;border-collapse:collapse;font-size:0.88rem;">
                         <thead>
@@ -1157,7 +1163,7 @@
                         </tbody>
                     </table>
                 </div>
-                <p style="font-size:0.85rem;color:var(--medium-grey);margin-bottom:6px;">Each user should only be assigned <strong>one PX Hub role</strong>. To assign roles: navigate to User Management, select the user, go to the Roles tab, and search "PXHub".</p>
+                <p style="font-size:0.85rem;color:var(--medium-grey);margin-bottom:6px;">Each user should only be assigned <strong>one PX Hub role</strong>. If no one in your organization has the Account Administrator role yet, designate one person and ensure they have <strong>UserManagement.Admin-Users</strong> assigned first.</p>
                 <a class="step-link" href="https://support.geotab.com/help/myadmin" target="_blank">MyAdmin Help &amp; Training (Support Site) &rarr;</a>
             </div>
         </div>
