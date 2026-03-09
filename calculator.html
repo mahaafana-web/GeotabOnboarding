@@ -281,7 +281,7 @@
         body { background: white; }
         .header { background: var(--geotab-blue) !important; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
         .summary-card.highlight { background: var(--geotab-blue) !important; color: white !important; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
-        .add-line-btn, .remove-btn, .actions, .back-link, .disclaimer, .saved-notice { display: none !important; }
+        .add-line-btn, .remove-btn, .actions, .back-link, .disclaimer, .saved-notice, .top-actions { display: none !important; }
         .line-items-table input, .quote-field input, .settings-row input, .settings-row select {
             border: none; background: transparent; padding: 0;
         }
@@ -305,6 +305,11 @@
 </div>
 
 <div class="main">
+    <div class="top-actions" style="display:flex;gap:12px;margin-bottom:20px;flex-wrap:wrap;">
+        <button class="btn btn-primary" onclick="window.print()">Print / Save as PDF</button>
+        <button class="btn btn-secondary" onclick="resetAll()">Reset Calculator</button>
+    </div>
+
     <div class="disclaimer">
         This calculator does not contain any Geotab pricing. Enter your plan costs from MyAdmin and your desired margin to calculate customer-facing pricing and projected profit. All calculations are done locally in your browser &mdash; no data is sent anywhere. Your quote is automatically saved and will persist when you return.
     </div>
@@ -353,7 +358,7 @@
             <div>
                 <label>Fleet Size (vehicles)</label>
                 <input type="number" id="fleetSize" value="" min="1" placeholder="e.g. 50"
-                    style="width:90px;" oninput="applyFleetSize()">
+                    style="width:140px;padding:10px 12px;" oninput="applyFleetSize()">
             </div>
         </div>
 
