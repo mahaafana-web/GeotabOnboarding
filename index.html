@@ -1054,7 +1054,7 @@
     <div class="progress-bar-inner">
         <div class="progress-label">Your Progress</div>
         <div class="progress-track"><div class="progress-fill" id="progress-fill"></div></div>
-        <div class="progress-count" id="progress-count">0 of 23 complete</div>
+        <div class="progress-count" id="progress-count">0 of 24 complete</div>
     </div>
 </div>
 
@@ -1354,73 +1354,104 @@
     <div class="section-header">
         <div class="step-badge">Step 3</div>
         <h2>Pricing &amp; Ordering</h2>
-        <p>Understand how Geotab pricing works, set up your own retail pricing, and learn how to place orders through MyAdmin.</p>
+        <p>Everything you need to understand Geotab pricing, build your own customer pricing, and place your first order.</p>
     </div>
 
-    <!-- UNDERSTANDING THE MODEL -->
-    <h3 style="font-size:1.1rem;font-weight:700;color:var(--geotab-blue);margin-bottom:16px;">Understanding the Pricing Model</h3>
-
-    <div class="card-grid">
-        <div class="card">
-            <h3>How It Works</h3>
-            <p>Geotab uses a <strong>bundle pricing model</strong> &#8212; hardware is included in the monthly subscription fee with no upfront device cost for your customer. Each subscription has a <strong>36-month minimum term</strong> with a prorated early termination fee. You purchase at partner pricing and sell at your own retail price.</p>
-        </div>
-        <div class="card">
-            <h3>Available Bundle Plans</h3>
-            <p>Plans include <strong>GO Core Bundle</strong>, <strong>GO Bundle</strong>, <strong>Safety Bundle</strong> (GO + GO Focus), and <strong>Safety Plus Bundle</strong> (GO + GO Focus Plus). <strong>Install bundle</strong> variants include standard installation. Review all plans and pricing in <a href="https://myadmin.geotab.com" target="_blank">MyAdmin</a> or speak with your PAM.</p>
-        </div>
-        <div class="card">
-            <h3>Promo Codes</h3>
-            <p>Bundle plan pricing requires a <strong>promo code</strong> applied in MyAdmin when placing orders. Promo codes are available in the pricing templates provided in MyAdmin, or ask your PAM or Geotab team. Without a promo code, standard (non-bundle) pricing applies.</p>
-        </div>
-    </div>
-
-    <!-- SETTING UP YOUR PRICING -->
-    <h3 style="font-size:1.1rem;font-weight:700;color:var(--geotab-blue);margin:32px 0 16px;">Setting Up Your Pricing</h3>
-
-    <div class="card-grid">
-        <div class="card">
-            <h3>Define Your Retail Pricing</h3>
-            <p>Work with your PAM to review partner pricing for each bundle plan, then set your own retail rates. Define a <strong>list price</strong> (what you quote customers) and a <strong>floor price</strong> (the lowest you'll go after discounts). Having these ready before your first sales conversation is critical.</p>
-        </div>
-        <div class="card">
-            <h3>Pricing Calculator</h3>
-            <p>Use the pricing calculator to model your margins. Enter your Geotab cost, set your markup, and calculate what your customer pays and what you earn per vehicle per month.</p>
-            <a class="card-link" href="calculator.html" target="_blank">Open Pricing Calculator &rarr;</a>
-        </div>
-        <div class="card">
-            <h3>Deal Registration</h3>
-            <p>Before quoting a customer, register the deal through PX Hub. This protects your opportunity, gives your PAM visibility, and can unlock special pricing for competitive situations.</p>
-            <a class="card-link" href="https://geotab.my.site.com/pxhub/s/login/?language=en_US" target="_blank">Register a Deal &rarr;</a>
-        </div>
-    </div>
-
-    <div class="info-box orange" style="margin-top:32px;margin-bottom:24px;">
-        <h3>Finance &amp; Billing Setup</h3>
-        <p>Set up your billing and payment method with Geotab <strong>before</strong> you need to place your first order. Review your <strong>Finance Welcome Letter</strong> and <strong>Payment Instructions</strong> received with your agreement. Monthly subscription billing begins when a device is activated. For credit setup, contact <a href="mailto:creditapps@geotab.com">creditapps@geotab.com</a>. For invoice questions, contact <a href="mailto:ar@geotab.com">ar@geotab.com</a>.</p>
-    </div>
-
-    <!-- HOW TO ORDER -->
-    <h3 style="font-size:1.1rem;font-weight:700;color:var(--geotab-blue);margin:32px 0 16px;">Placing Your First Order</h3>
-
+    <!-- STEP 1: UNDERSTAND THE MODEL -->
     <div class="step-flow">
         <div class="step-card">
             <div class="step-card-num">1</div>
             <div class="step-card-content">
-                <h3>Select Your Products</h3>
-                <p>Your core order will include <strong>GO devices</strong> (telematics hardware) paired with a bundle plan. You can also add <strong>GO Focus</strong> cameras, <strong>asset trackers</strong>, and other accessories. Review the full product catalog and available bundle plans in <a href="https://myadmin.geotab.com" target="_blank">MyAdmin</a> before placing your first order.</p>
+                <h3>Understand the Pricing Model</h3>
+                <p>Geotab uses a <strong>bundle pricing model (OPEX)</strong> &#8212; hardware is included in the monthly subscription fee with no upfront device cost. Each subscription has a <strong>36-month minimum term</strong>. If a customer terminates early, a <strong>prorated early termination fee (ETF)</strong> applies, equal to the remaining contract value.</p>
+                <p style="margin-top:8px;">Geotab also offers a <strong>CAPEX model</strong> where customers purchase hardware upfront at standard pricing. However, the bundle discounts below are only available on OPEX plans. Speak with your PAM to determine which model fits your customer base.</p>
+
+                <!-- PLAN COMPARISON TABLE -->
+                <div style="overflow-x:auto;margin-top:16px;">
+                    <table style="width:100%;border-collapse:collapse;font-size:0.88rem;">
+                        <thead>
+                            <tr style="background:var(--pale-grey);text-align:left;">
+                                <th style="padding:10px 14px;font-weight:600;color:var(--geotab-blue);border-bottom:2px solid var(--light-grey);">Plan</th>
+                                <th style="padding:10px 14px;font-weight:600;color:var(--geotab-blue);border-bottom:2px solid var(--light-grey);">What's Included</th>
+                                <th style="padding:10px 14px;font-weight:600;color:var(--geotab-blue);border-bottom:2px solid var(--light-grey);white-space:nowrap;">Promo Code</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr style="border-bottom:1px solid var(--pale-grey);">
+                                <td style="padding:10px 14px;font-weight:600;color:var(--dark-grey);white-space:nowrap;">GO Core Bundle</td>
+                                <td style="padding:10px 14px;color:var(--dark-grey);">GO device + harness (entry-level)</td>
+                                <td style="padding:10px 14px;color:var(--dark-grey);font-style:italic;">Coming soon</td>
+                            </tr>
+                            <tr style="border-bottom:1px solid var(--pale-grey);">
+                                <td style="padding:10px 14px;font-weight:600;color:var(--dark-grey);white-space:nowrap;">GO Bundle</td>
+                                <td style="padding:10px 14px;color:var(--dark-grey);">GO device + harness (full telematics)</td>
+                                <td style="padding:10px 14px;color:var(--dark-grey);">BUNDLE-GO</td>
+                            </tr>
+                            <tr style="border-bottom:1px solid var(--pale-grey);">
+                                <td style="padding:10px 14px;font-weight:600;color:var(--dark-grey);white-space:nowrap;">Safety Bundle</td>
+                                <td style="padding:10px 14px;color:var(--dark-grey);">GO device + harness + GO Focus camera</td>
+                                <td style="padding:10px 14px;color:var(--dark-grey);">BUNDLE-GOGF</td>
+                            </tr>
+                            <tr style="border-bottom:1px solid var(--pale-grey);">
+                                <td style="padding:10px 14px;font-weight:600;color:var(--dark-grey);white-space:nowrap;">Safety Plus Bundle</td>
+                                <td style="padding:10px 14px;color:var(--dark-grey);">GO device + harness + GO Focus Plus AI camera</td>
+                                <td style="padding:10px 14px;color:var(--dark-grey);">BUNDLE-GOGFP</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                    <p style="font-size:0.82rem;color:#888;margin-top:6px;"><strong>Install bundle</strong> variants of each plan are also available and include standard installation. Add <strong>-INS</strong> to the promo code (e.g., BUNDLE-GO-INS). For exact pricing, refer to <a href="https://myadmin.geotab.com" target="_blank">MyAdmin</a> or your PAM.</p>
+                </div>
             </div>
         </div>
+
+        <!-- STEP 2: SET YOUR PRICING -->
         <div class="step-card">
             <div class="step-card-num">2</div>
             <div class="step-card-content">
-                <h3>Place the Order in MyAdmin</h3>
-                <p>Log in to <a href="https://myadmin.geotab.com" target="_blank">MyAdmin</a>, select products and quantities, apply your <strong>promo code</strong>, confirm the shipping address, and submit. You can track order status from placement to delivery.</p>
+                <h3>Review Plans &amp; Set Your Retail Pricing</h3>
+                <p>Work with your PAM to review your partner pricing for each bundle plan, then define your own retail rates. Set a <strong>list price</strong> (what you quote customers) and a <strong>floor price</strong> (the lowest you'll go after discounts). Use the pricing calculator to model your margins per vehicle per month.</p>
+                <a class="step-link" href="calculator.html" target="_blank">Open Pricing Calculator &rarr;</a>
+            </div>
+        </div>
+
+        <!-- STEP 3: BILLING & PROMO CODES -->
+        <div class="step-card">
+            <div class="step-card-num">3</div>
+            <div class="step-card-content">
+                <h3>Set Up Billing &amp; Get Your Promo Codes</h3>
+                <p>Set up your billing and payment method with Geotab <strong>before</strong> placing your first order. Review your <strong>Finance Welcome Letter</strong> and <strong>Payment Instructions</strong> received with your agreement. For credit setup, contact <a href="mailto:creditapps@geotab.com">creditapps@geotab.com</a>.</p>
+                <p style="margin-top:8px;">Bundle pricing requires a <strong>promo code</strong> applied in MyAdmin when ordering. Promo codes are in the pricing templates provided in MyAdmin, or ask your PAM. Without a promo code, standard (non-bundle) pricing applies.</p>
+            </div>
+        </div>
+
+        <!-- STEP 4: DEAL REGISTRATION -->
+        <div class="step-card">
+            <div class="step-card-num">4</div>
+            <div class="step-card-content">
+                <h3>Register Your First Deal in PX Hub</h3>
+                <p>Before quoting a customer, <strong>always register the deal</strong> through PX Hub. This protects your opportunity from channel conflict, gives your PAM visibility to support you, and can unlock special pricing for competitive situations.</p>
+                <a class="step-link" href="https://geotab.my.site.com/pxhub/s/login/?language=en_US" target="_blank">Register a Deal &rarr;</a>
+            </div>
+        </div>
+
+        <!-- STEP 5: PLACE ORDER -->
+        <div class="step-card">
+            <div class="step-card-num">5</div>
+            <div class="step-card-content">
+                <h3>Place Your First Order in MyAdmin</h3>
+                <p>Log in to <a href="https://myadmin.geotab.com" target="_blank">MyAdmin</a>, select your products and quantities, apply your <strong>promo code</strong>, confirm the shipping address, and submit. Orders typically ship within a few business days. Monthly subscription billing begins when a device is activated on a customer database.</p>
+                <a class="step-link" href="https://myadmin.geotab.com" target="_blank">Go to MyAdmin &rarr;</a>
             </div>
         </div>
     </div>
 
-    <div class="info-box" style="margin-top:24px;">
+    <!-- YOUR CUSTOMER CONTRACT -->
+    <div class="info-box orange" style="margin-top:32px;">
+        <h3>Your Customer, Your Contract</h3>
+        <p>As a Geotab reseller, the contract with your end customer is <strong>between you and your customer</strong> &#8212; not Geotab. You are responsible for building your own customer terms and conditions, including pricing, payment terms, service level commitments, and cancellation policies. Geotab provides partner pricing and bundle terms, but how you price and package services to your customers is entirely <strong>at your own discretion and risk</strong>. Make sure your customer agreements reflect the 36-month subscription commitment and any applicable early termination fees.</p>
+    </div>
+
+    <div class="info-box" style="margin-top:16px;">
         <h3>Warranty &amp; Returns (RMA)</h3>
         <p>All GO devices include a standard warranty. If a device arrives defective or fails under warranty, submit a <strong>Return Merchandise Authorization (RMA)</strong> request through MyAdmin. Geotab will ship a replacement device. Review the warranty terms in your partner agreement for full coverage details.</p>
     </div>
@@ -1451,7 +1482,7 @@
             <input type="checkbox" data-cl="price-promo">
             <div class="cl-text">
                 <strong>Get your promo codes</strong>
-                <p>Available in the pricing templates provided in MyAdmin, or ask your PAM or Geotab team. You'll need these to apply bundle pricing when placing orders.</p>
+                <p>You'll need these to apply bundle pricing when placing orders in MyAdmin.</p>
             </div>
         </label>
         <label>
@@ -1466,6 +1497,13 @@
             <div class="cl-text">
                 <strong>Model your margins in the Pricing Calculator</strong>
                 <p>Run the numbers so you know your profit per vehicle before quoting.</p>
+            </div>
+        </label>
+        <label>
+            <input type="checkbox" data-cl="price-deal">
+            <div class="cl-text">
+                <strong>Register your first deal in PX Hub</strong>
+                <p>Protect your opportunity and get PAM support before quoting.</p>
             </div>
         </label>
     </div>
