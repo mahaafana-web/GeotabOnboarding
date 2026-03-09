@@ -225,6 +225,46 @@
             color: var(--geotab-blue);
             text-transform: uppercase;
             letter-spacing: 0.5px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            cursor: pointer;
+            user-select: none;
+        }
+        .section-checklist h4::after {
+            content: '\25B2';
+            font-size: 0.7rem;
+            color: var(--medium-grey);
+            transition: transform 0.3s ease;
+        }
+        .section-checklist.collapsed h4::after {
+            transform: rotate(180deg);
+        }
+        .section-checklist .cl-badge {
+            font-size: 0.75rem;
+            font-weight: 700;
+            padding: 2px 10px;
+            border-radius: 20px;
+            background: var(--pale-grey);
+            color: var(--medium-grey);
+            margin-left: auto;
+            margin-right: 12px;
+            text-transform: none;
+            letter-spacing: 0;
+        }
+        .section-checklist .cl-badge.all-done {
+            background: #dcfce7;
+            color: var(--success-green);
+        }
+        .section-checklist .cl-items {
+            overflow: hidden;
+            transition: max-height 0.35s ease, opacity 0.25s ease;
+            max-height: 2000px;
+            opacity: 1;
+        }
+        .section-checklist.collapsed .cl-items {
+            max-height: 0;
+            opacity: 0;
         }
         .section-checklist label {
             display: flex;
@@ -236,10 +276,19 @@
             border-radius: 8px;
             margin-bottom: 8px;
             cursor: pointer;
-            transition: background 0.15s, border-color 0.15s;
+            transition: background 0.15s, border-color 0.15s, opacity 0.3s;
         }
         .section-checklist label:last-child { margin-bottom: 0; }
         .section-checklist label:hover { border-color: var(--innovation-blue); }
+        .section-checklist label.checked {
+            background: #f8fdf8;
+            border-color: #bbf0c8;
+            opacity: 0.7;
+        }
+        .section-checklist label.checked .cl-text strong {
+            text-decoration: line-through;
+            color: var(--medium-grey);
+        }
         .section-checklist input[type="checkbox"] {
             margin-top: 2px;
             width: 18px;
@@ -248,9 +297,13 @@
             flex-shrink: 0;
             cursor: pointer;
         }
+        .section-checklist label.checked input[type="checkbox"] {
+            accent-color: var(--success-green);
+        }
         .section-checklist .cl-text strong {
             color: var(--geotab-blue);
             font-size: 0.93rem;
+            transition: color 0.2s, text-decoration 0.2s;
         }
         .section-checklist .cl-text p {
             margin: 3px 0 0;
@@ -889,6 +942,11 @@
             position: sticky;
             top: 64px;
             z-index: 99;
+            transition: background 0.5s ease;
+        }
+        .progress-bar-wrap.complete {
+            background: linear-gradient(135deg, #f0fdf4 0%, #dcfce7 100%);
+            border-bottom-color: #bbf7d0;
         }
         .progress-bar-inner {
             max-width: var(--max-width);
@@ -902,25 +960,88 @@
             font-weight: 600;
             color: var(--geotab-blue);
             white-space: nowrap;
+            transition: color 0.3s;
+        }
+        .progress-bar-wrap.complete .progress-label {
+            color: var(--success-green);
         }
         .progress-track {
             flex: 1;
-            height: 8px;
+            height: 10px;
             background: var(--pale-grey);
-            border-radius: 4px;
+            border-radius: 5px;
             overflow: hidden;
+            display: flex;
         }
+        .progress-segment {
+            height: 100%;
+            transition: width 0.4s ease;
+            width: 0%;
+        }
+        .progress-segment:first-child { border-radius: 5px 0 0 5px; }
+        .progress-segment:last-child { border-radius: 0 5px 5px 0; }
+        .progress-segment:only-child { border-radius: 5px; }
         .progress-fill {
             height: 100%;
             background: linear-gradient(90deg, var(--innovation-blue), var(--success-green));
-            border-radius: 4px;
+            border-radius: 5px;
             transition: width 0.4s ease;
             width: 0%;
+        }
+        .progress-meta {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            white-space: nowrap;
+        }
+        .progress-pct {
+            font-size: 0.9rem;
+            font-weight: 700;
+            color: var(--geotab-blue);
+            min-width: 36px;
+            text-align: right;
+            transition: color 0.3s;
+        }
+        .progress-bar-wrap.complete .progress-pct {
+            color: var(--success-green);
         }
         .progress-count {
             font-size: 0.82rem;
             color: var(--medium-grey);
             white-space: nowrap;
+        }
+        .progress-reset {
+            font-size: 0.75rem;
+            color: var(--medium-grey);
+            cursor: pointer;
+            border: none;
+            background: none;
+            padding: 2px 6px;
+            border-radius: 4px;
+            transition: color 0.2s, background 0.2s;
+        }
+        .progress-reset:hover {
+            color: #dc2626;
+            background: #fef2f2;
+        }
+        .progress-celebration {
+            display: none;
+            max-width: var(--max-width);
+            margin: 8px auto 0;
+            padding: 10px 16px;
+            background: linear-gradient(135deg, #dcfce7 0%, #f0fdf4 100%);
+            border: 1px solid #bbf7d0;
+            border-radius: 8px;
+            text-align: center;
+            font-size: 0.9rem;
+            color: #166534;
+            font-weight: 500;
+            animation: celebrationFade 0.5s ease;
+        }
+        .progress-celebration.show { display: block; }
+        @keyframes celebrationFade {
+            from { opacity: 0; transform: translateY(-8px); }
+            to { opacity: 1; transform: translateY(0); }
         }
 
         /* ===================== RESPONSIVE ===================== */
@@ -1068,11 +1189,24 @@
 </div>
 
 <!-- ==================== PROGRESS BAR ==================== -->
-<div class="progress-bar-wrap">
+<div class="progress-bar-wrap" id="progress-wrap">
     <div class="progress-bar-inner">
-        <div class="progress-label">Your Progress</div>
-        <div class="progress-track"><div class="progress-fill" id="progress-fill"></div></div>
-        <div class="progress-count" id="progress-count">0 of 29 complete</div>
+        <div class="progress-label" id="progress-label">Your Progress</div>
+        <div class="progress-track" id="progress-track">
+            <div class="progress-segment" data-section="setup" style="background:#4a90d9;"></div>
+            <div class="progress-segment" data-section="training" style="background:#5ba5e8;"></div>
+            <div class="progress-segment" data-section="pricing" style="background:#0891b2;"></div>
+            <div class="progress-segment" data-section="install" style="background:#059669;"></div>
+            <div class="progress-segment" data-section="gtm" style="background:#16a34a;"></div>
+        </div>
+        <div class="progress-meta">
+            <div class="progress-pct" id="progress-pct">0%</div>
+            <div class="progress-count" id="progress-count">0 of 29</div>
+            <button class="progress-reset" id="progress-reset" title="Reset all progress" style="display:none;">Reset</button>
+        </div>
+    </div>
+    <div class="progress-celebration" id="progress-celebration">
+        Congratulations! You have completed every step in the onboarding guide. You are ready to grow with Geotab!
     </div>
 </div>
 
@@ -1221,8 +1355,9 @@
     </div>
 
     <!-- SECTION CHECKLIST -->
-    <div class="section-checklist">
-        <h4>Account Setup Checklist</h4>
+    <div class="section-checklist" data-checklist="setup">
+        <h4>Account Setup Checklist <span class="cl-badge">0/5</span></h4>
+        <div class="cl-items">
         <label>
             <input type="checkbox" data-cl="setup-myadmin">
             <div class="cl-text">
@@ -1258,6 +1393,7 @@
                 <p>Confirm you have your Reseller Agreement, Finance Welcome Letter, and Payment Instructions on file.</p>
             </div>
         </label>
+        </div>
     </div>
 </section>
 
@@ -1384,8 +1520,9 @@
     </div>
 
     <!-- SECTION CHECKLIST -->
-    <div class="section-checklist">
-        <h4>Training Checklist</h4>
+    <div class="section-checklist" data-checklist="training">
+        <h4>Training Checklist <span class="cl-badge">0/5</span></h4>
+        <div class="cl-items">
         <label>
             <input type="checkbox" data-cl="train-fundamentals">
             <div class="cl-text">
@@ -1421,6 +1558,7 @@
                 <p>Understand the product lineup and set your retail pricing before your first sales conversation.</p>
             </div>
         </label>
+        </div>
     </div>
 </section>
 
@@ -1516,8 +1654,9 @@
     </div>
 
     <!-- SECTION CHECKLIST -->
-    <div class="section-checklist">
-        <h4>Pricing &amp; Ordering Checklist</h4>
+    <div class="section-checklist" data-checklist="pricing">
+        <h4>Pricing &amp; Ordering Checklist <span class="cl-badge">0/6</span></h4>
+        <div class="cl-items">
         <label>
             <input type="checkbox" data-cl="price-review">
             <div class="cl-text">
@@ -1560,6 +1699,7 @@
                 <p>Protect your opportunity and get PAM support before quoting.</p>
             </div>
         </label>
+        </div>
     </div>
 </section>
 
@@ -1669,8 +1809,9 @@
     </div>
 
     <!-- SECTION CHECKLIST -->
-    <div class="section-checklist">
-        <h4>Installation Checklist</h4>
+    <div class="section-checklist" data-checklist="install">
+        <h4>Installation Checklist <span class="cl-badge">0/4</span></h4>
+        <div class="cl-items">
         <label>
             <input type="checkbox" data-cl="install-path">
             <div class="cl-text">
@@ -1699,6 +1840,7 @@
                 <p>Confirm the device appears on the live map, trips are recording, and engine data is flowing.</p>
             </div>
         </label>
+        </div>
     </div>
 </section>
 
@@ -2020,8 +2162,9 @@
     </div>
 
     <!-- SECTION CHECKLIST -->
-    <div class="section-checklist">
-        <h4>Go to Market Checklist</h4>
+    <div class="section-checklist" data-checklist="gtm">
+        <h4>Go to Market Checklist <span class="cl-badge">0/9</span></h4>
+        <div class="cl-items">
         <label>
             <input type="checkbox" data-cl="gtm-segments">
             <div class="cl-text">
@@ -2085,6 +2228,7 @@
                 <p>Review activity metrics, pipeline, camera attach rate, and adjust campaigns with your PAM weekly.</p>
             </div>
         </label>
+        </div>
     </div>
 </section>
 
@@ -2333,26 +2477,114 @@
         });
     });
 
-    // Checklist persistence (keyed by data-cl attribute) + progress bar
+    // Checklist persistence, section progress, collapsible, segments, celebration
     (function() {
         var key = 'geotab-onboarding-checklist';
+        var collapseKey = 'geotab-onboarding-collapsed';
         var saved = JSON.parse(localStorage.getItem(key) || '{}');
-        var boxes = document.querySelectorAll('.section-checklist input[type="checkbox"][data-cl]');
-        var fill = document.getElementById('progress-fill');
-        var countEl = document.getElementById('progress-count');
+        var collapsedState = JSON.parse(localStorage.getItem(collapseKey) || '{}');
 
-        function updateProgress() {
-            var total = boxes.length;
-            var done = 0;
-            boxes.forEach(function(cb) { if (cb.checked) done++; });
-            var pct = total > 0 ? Math.round((done / total) * 100) : 0;
-            if (fill) fill.style.width = pct + '%';
-            if (countEl) countEl.textContent = done + ' of ' + total + ' complete';
+        var boxes = document.querySelectorAll('.section-checklist input[type="checkbox"][data-cl]');
+        var checklists = document.querySelectorAll('.section-checklist[data-checklist]');
+        var segments = document.querySelectorAll('.progress-segment[data-section]');
+        var pctEl = document.getElementById('progress-pct');
+        var countEl = document.getElementById('progress-count');
+        var wrapEl = document.getElementById('progress-wrap');
+        var resetBtn = document.getElementById('progress-reset');
+        var celebrationEl = document.getElementById('progress-celebration');
+
+        // Section config: name -> color (matches segment data-section)
+        var sectionNames = ['setup', 'training', 'pricing', 'install', 'gtm'];
+
+        // Count items per section
+        function getSectionCounts() {
+            var counts = {};
+            checklists.forEach(function(cl) {
+                var name = cl.getAttribute('data-checklist');
+                var all = cl.querySelectorAll('input[type="checkbox"][data-cl]');
+                var done = 0;
+                all.forEach(function(cb) { if (cb.checked) done++; });
+                counts[name] = { total: all.length, done: done };
+            });
+            return counts;
         }
 
+        // Update label styling on check/uncheck
+        function updateLabelStyle(cb) {
+            var label = cb.closest('label');
+            if (label) {
+                if (cb.checked) {
+                    label.classList.add('checked');
+                } else {
+                    label.classList.remove('checked');
+                }
+            }
+        }
+
+        // Update section badge
+        function updateSectionBadge(cl) {
+            var badge = cl.querySelector('.cl-badge');
+            if (!badge) return;
+            var all = cl.querySelectorAll('input[type="checkbox"][data-cl]');
+            var done = 0;
+            all.forEach(function(cb) { if (cb.checked) done++; });
+            badge.textContent = done + '/' + all.length;
+            if (done === all.length && all.length > 0) {
+                badge.classList.add('all-done');
+            } else {
+                badge.classList.remove('all-done');
+            }
+        }
+
+        // Update progress bar with segments
+        function updateProgress() {
+            var counts = getSectionCounts();
+            var totalAll = 0, doneAll = 0;
+
+            // Update segments
+            sectionNames.forEach(function(name) {
+                var c = counts[name];
+                if (!c) return;
+                totalAll += c.total;
+                doneAll += c.done;
+            });
+
+            // Each segment width = (section_done / totalAll) * 100
+            segments.forEach(function(seg) {
+                var name = seg.getAttribute('data-section');
+                var c = counts[name];
+                if (!c || totalAll === 0) { seg.style.width = '0%'; return; }
+                var w = (c.done / totalAll) * 100;
+                seg.style.width = w + '%';
+            });
+
+            var pct = totalAll > 0 ? Math.round((doneAll / totalAll) * 100) : 0;
+            if (pctEl) pctEl.textContent = pct + '%';
+            if (countEl) countEl.textContent = doneAll + ' of ' + totalAll;
+
+            // Show/hide reset button
+            if (resetBtn) resetBtn.style.display = doneAll > 0 ? 'inline-block' : 'none';
+
+            // Completion state
+            if (wrapEl) {
+                if (doneAll === totalAll && totalAll > 0) {
+                    wrapEl.classList.add('complete');
+                    if (celebrationEl) celebrationEl.classList.add('show');
+                } else {
+                    wrapEl.classList.remove('complete');
+                    if (celebrationEl) celebrationEl.classList.remove('show');
+                }
+            }
+        }
+
+        // Initialize checkboxes from saved state
         boxes.forEach(function(cb) {
             var id = cb.getAttribute('data-cl');
-            if (saved[id]) cb.checked = true;
+            if (saved[id]) {
+                cb.checked = true;
+                updateLabelStyle(cb);
+            }
+
             cb.addEventListener('change', function() {
                 var state = JSON.parse(localStorage.getItem(key) || '{}');
                 if (cb.checked) {
@@ -2361,9 +2593,56 @@
                     delete state[id];
                 }
                 localStorage.setItem(key, JSON.stringify(state));
+                updateLabelStyle(cb);
+                var cl = cb.closest('.section-checklist');
+                if (cl) updateSectionBadge(cl);
                 updateProgress();
             });
         });
+
+        // Initialize section badges
+        checklists.forEach(function(cl) {
+            updateSectionBadge(cl);
+        });
+
+        // Collapsible checklists
+        checklists.forEach(function(cl) {
+            var name = cl.getAttribute('data-checklist');
+            var h4 = cl.querySelector('h4');
+            if (!h4) return;
+
+            // Restore collapsed state
+            if (collapsedState[name]) {
+                cl.classList.add('collapsed');
+            }
+
+            h4.addEventListener('click', function(e) {
+                // Don't collapse when clicking the badge
+                if (e.target.classList.contains('cl-badge')) return;
+                cl.classList.toggle('collapsed');
+                var cs = JSON.parse(localStorage.getItem(collapseKey) || '{}');
+                if (cl.classList.contains('collapsed')) {
+                    cs[name] = true;
+                } else {
+                    delete cs[name];
+                }
+                localStorage.setItem(collapseKey, JSON.stringify(cs));
+            });
+        });
+
+        // Reset button
+        if (resetBtn) {
+            resetBtn.addEventListener('click', function() {
+                if (!confirm('Reset all checklist progress? This cannot be undone.')) return;
+                localStorage.removeItem(key);
+                boxes.forEach(function(cb) {
+                    cb.checked = false;
+                    updateLabelStyle(cb);
+                });
+                checklists.forEach(function(cl) { updateSectionBadge(cl); });
+                updateProgress();
+            });
+        }
 
         updateProgress();
     })();
