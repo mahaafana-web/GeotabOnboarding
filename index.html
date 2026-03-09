@@ -976,10 +976,19 @@
             .info-box div[style*="grid-template-columns: repeat(3"] {
                 grid-template-columns: 1fr !important;
             }
+            .section > div[style*="grid-template-columns:repeat(5"] {
+                grid-template-columns: 1fr 1fr !important;
+            }
+            .mistakes-grid {
+                grid-template-columns: 1fr !important;
+            }
         }
 
         @media (max-width: 480px) {
             .quick-start-inner { grid-template-columns: 1fr; }
+            .section > div[style*="grid-template-columns:repeat(5"] {
+                grid-template-columns: 1fr !important;
+            }
         }
     </style>
 </head>
@@ -1066,6 +1075,39 @@
         <div class="progress-count" id="progress-count">0 of 29 complete</div>
     </div>
 </div>
+
+<!-- ==================== YOUR FIRST WEEK ==================== -->
+<section class="section" style="padding-bottom:24px;">
+    <div class="section-header" style="margin-bottom:24px;">
+        <h2>Your First Week</h2>
+        <p>Here's what to expect and accomplish in your first few days as a Geotab reseller.</p>
+    </div>
+
+    <div style="display:grid;grid-template-columns:repeat(5, 1fr);gap:16px;">
+        <div style="background:var(--white);border-radius:var(--radius);box-shadow:var(--shadow-sm);padding:18px 16px;text-align:center;border-top:4px solid var(--innovation-blue);">
+            <p style="margin:0;font-size:0.78rem;font-weight:700;color:var(--innovation-blue);text-transform:uppercase;letter-spacing:0.5px;">Day 1</p>
+            <p style="margin:8px 0 0;font-size:0.85rem;color:var(--dark-grey);line-height:1.5;">Receive your <strong>welcome email</strong>, Reseller Agreement, Finance Welcome Letter, and Payment Instructions</p>
+        </div>
+        <div style="background:var(--white);border-radius:var(--radius);box-shadow:var(--shadow-sm);padding:18px 16px;text-align:center;border-top:4px solid var(--innovation-blue);">
+            <p style="margin:0;font-size:0.78rem;font-weight:700;color:var(--innovation-blue);text-transform:uppercase;letter-spacing:0.5px;">Days 1&#8211;2</p>
+            <p style="margin:8px 0 0;font-size:0.85rem;color:var(--dark-grey);line-height:1.5;">Create your <strong>MyAdmin account</strong> and notify your PAM to link your ERP code</p>
+        </div>
+        <div style="background:var(--white);border-radius:var(--radius);box-shadow:var(--shadow-sm);padding:18px 16px;text-align:center;border-top:4px solid var(--innovation-blue);">
+            <p style="margin:0;font-size:0.78rem;font-weight:700;color:var(--innovation-blue);text-transform:uppercase;letter-spacing:0.5px;">Days 2&#8211;3</p>
+            <p style="margin:8px 0 0;font-size:0.85rem;color:var(--dark-grey);line-height:1.5;">PAM links your ERP code; log in to <strong>PX Hub</strong> and accept Partner Program Terms</p>
+        </div>
+        <div style="background:var(--white);border-radius:var(--radius);box-shadow:var(--shadow-sm);padding:18px 16px;text-align:center;border-top:4px solid var(--innovation-blue);">
+            <p style="margin:0;font-size:0.78rem;font-weight:700;color:var(--innovation-blue);text-transform:uppercase;letter-spacing:0.5px;">Days 3&#8211;5</p>
+            <p style="margin:8px 0 0;font-size:0.85rem;color:var(--dark-grey);line-height:1.5;"><strong>Kickoff call</strong> with your PAM to walk through this guide and plan your first 90 days</p>
+        </div>
+        <div style="background:var(--white);border-radius:var(--radius);box-shadow:var(--shadow-sm);padding:18px 16px;text-align:center;border-top:4px solid var(--success-green);">
+            <p style="margin:0;font-size:0.78rem;font-weight:700;color:var(--success-green);text-transform:uppercase;letter-spacing:0.5px;">End of Week 1</p>
+            <p style="margin:8px 0 0;font-size:0.85rem;color:var(--dark-grey);line-height:1.5;">Accounts active, team added, <strong>training started</strong> in the Partner Learning Hub</p>
+        </div>
+    </div>
+</section>
+
+<hr class="section-divider">
 
 <!-- ==================== SECTION 1: GET STARTED — ACCOUNT SETUP ==================== -->
 <section class="section" id="get-started">
@@ -1808,7 +1850,7 @@
                 </div>
                 <ul style="margin:0 0 0 18px;font-size:0.93rem;color:var(--dark-grey);line-height:1.7;">
                     <li><strong>Discovery:</strong> Understand where telematics and video can deliver immediate value. For high video-fit fleets, always ask about incidents, claims, and insurance pressure</li>
-                    <li><strong>Demo:</strong> Focus on business outcomes, not features. For medium/high risk fleets, a GO Focus camera demo is mandatory</li>
+                    <li><strong>Demo:</strong> Focus on business outcomes, not features. For medium/high risk fleets, a GO Focus camera demo is mandatory. <em>Use your own MyGeotab database with real data &mdash; live trips, driver scores, and camera footage sell better than any slide deck. <a href="https://my.geotab.com/registration.html" target="_blank">Set up your demo database &rarr;</a></em></li>
                     <li><strong>Propose:</strong> Clearly state the offer, commercials, and implementation approach. All proposals should be reflected in PX Hub</li>
                     <li><strong>Close &amp; Expand:</strong> After go-live, schedule a 30&#8211;60 day review. Look for expansion: more vehicles, more cameras, add-on solutions</li>
                 </ul>
@@ -2046,6 +2088,60 @@
     </div>
 </section>
 
+<!-- ==================== COMMON MISTAKES ==================== -->
+<section class="section" style="padding-bottom:24px;">
+    <div class="section-header" style="margin-bottom:20px;">
+        <h2>Common Mistakes to Avoid</h2>
+        <p>Learn from the experience of other partners &mdash; these are the most frequent early missteps.</p>
+    </div>
+    <div style="background:linear-gradient(135deg, #fff5f5 0%, #fff0f0 100%);border:1px solid #fecaca;border-radius:10px;padding:24px 28px;">
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;" class="mistakes-grid">
+            <div style="display:flex;align-items:flex-start;gap:10px;">
+                <span style="color:#dc2626;font-weight:700;font-size:1.2rem;line-height:1.4;">&#10007;</span>
+                <div>
+                    <strong style="color:#991b1b;">Ordering the wrong harness</strong>
+                    <p style="margin:4px 0 0;font-size:0.88rem;color:var(--dark-grey);">Always use the <a href="https://www.geotab.com/harness-lookup/" target="_blank">Harness Lookup Tool</a> with the exact VIN before ordering. Wrong harness = delayed install and returns.</p>
+                </div>
+            </div>
+            <div style="display:flex;align-items:flex-start;gap:10px;">
+                <span style="color:#dc2626;font-weight:700;font-size:1.2rem;line-height:1.4;">&#10007;</span>
+                <div>
+                    <strong style="color:#991b1b;">Not registering deals in PX Hub</strong>
+                    <p style="margin:4px 0 0;font-size:0.88rem;color:var(--dark-grey);">Unregistered deals are not protected and won&rsquo;t count toward your Excelerator score. Log every qualified opportunity.</p>
+                </div>
+            </div>
+            <div style="display:flex;align-items:flex-start;gap:10px;">
+                <span style="color:#dc2626;font-weight:700;font-size:1.2rem;line-height:1.4;">&#10007;</span>
+                <div>
+                    <strong style="color:#991b1b;">Quoting without a promo code</strong>
+                    <p style="margin:4px 0 0;font-size:0.88rem;color:var(--dark-grey);">Your PAM provides promo codes for partner pricing. Quoting at list price means you lose margin &mdash; always apply your code in MyAdmin.</p>
+                </div>
+            </div>
+            <div style="display:flex;align-items:flex-start;gap:10px;">
+                <span style="color:#dc2626;font-weight:700;font-size:1.2rem;line-height:1.4;">&#10007;</span>
+                <div>
+                    <strong style="color:#991b1b;">Skipping certifications</strong>
+                    <p style="margin:4px 0 0;font-size:0.88rem;color:var(--dark-grey);">GCP certification must be completed within 90 days. Missing the deadline can void your program terms and rebates.</p>
+                </div>
+            </div>
+            <div style="display:flex;align-items:flex-start;gap:10px;">
+                <span style="color:#dc2626;font-weight:700;font-size:1.2rem;line-height:1.4;">&#10007;</span>
+                <div>
+                    <strong style="color:#991b1b;">Not setting up billing first</strong>
+                    <p style="margin:4px 0 0;font-size:0.88rem;color:var(--dark-grey);">Complete your billing and ERP setup in MyAdmin before placing your first order. Orders without billing config create delays.</p>
+                </div>
+            </div>
+            <div style="display:flex;align-items:flex-start;gap:10px;">
+                <span style="color:#dc2626;font-weight:700;font-size:1.2rem;line-height:1.4;">&#10007;</span>
+                <div>
+                    <strong style="color:#991b1b;">Demoing without your own data</strong>
+                    <p style="margin:4px 0 0;font-size:0.88rem;color:var(--dark-grey);">Install GO devices on your own fleet first. A live demo with real trips and driver data is far more persuasive than a canned presentation.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
 <!-- ==================== CTA ==================== -->
 <section class="cta-section">
     <h2>You Are Not Alone</h2>
@@ -2108,6 +2204,7 @@
             <div class="contact-info">
                 <h4>Technical Support</h4>
                 <p>Device issues, platform troubleshooting, and technical questions. <strong>Escalation path:</strong> Self-service &#8594; Partner ticket &#8594; Channel Manager &#8594; Engineering.</p>
+                <p style="margin:6px 0 8px;font-size:0.88rem;color:var(--medium-grey);"><strong>Hours:</strong> 24/7 for critical device-down issues. Standard support: Mon&ndash;Fri, 8 AM&ndash;8 PM ET. <strong>Target response:</strong> Priority 1 (device down) within 2 hours; Priority 2&ndash;3 within 1 business day.</p>
                 <a href="https://myadmin.geotab.com/Support/HelpDesk" target="_blank">MyAdmin Support Portal &rarr;</a>
             </div>
         </div>
@@ -2194,6 +2291,11 @@
                 <td><strong>Geotab.com</strong></td>
                 <td>Product information, success stories, company overview</td>
                 <td><a href="https://www.geotab.com" target="_blank">geotab.com</a></td>
+            </tr>
+            <tr>
+                <td><strong>Harness Lookup Tool</strong></td>
+                <td>Find the correct wiring harness for any vehicle using VIN or year/make/model</td>
+                <td><a href="https://www.geotab.com/harness-lookup/" target="_blank">geotab.com/harness-lookup</a></td>
             </tr>
         </tbody>
     </table>
