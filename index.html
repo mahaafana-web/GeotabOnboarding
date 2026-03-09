@@ -967,6 +967,15 @@
 
             .erp-callout { padding: 24px 20px; }
             .erp-code-box { font-size: 1.1rem; padding: 10px 20px; }
+
+            /* Stack inline grids on mobile */
+            .section > div[style*="grid-template-columns: 1fr 1fr"],
+            .section > div[style*="grid-template-columns: repeat(3"] {
+                grid-template-columns: 1fr !important;
+            }
+            .info-box div[style*="grid-template-columns: repeat(3"] {
+                grid-template-columns: 1fr !important;
+            }
         }
 
         @media (max-width: 480px) {
@@ -1054,7 +1063,7 @@
     <div class="progress-bar-inner">
         <div class="progress-label">Your Progress</div>
         <div class="progress-track"><div class="progress-fill" id="progress-fill"></div></div>
-        <div class="progress-count" id="progress-count">0 of 26 complete</div>
+        <div class="progress-count" id="progress-count">0 of 29 complete</div>
     </div>
 </div>
 
@@ -1658,21 +1667,231 @@
     <div class="section-header">
         <div class="step-badge">Step 5</div>
         <h2>Go to Market</h2>
-        <p>Everything you need to build your sales engine, market your Geotab partnership, and close your first deals.</p>
+        <p>Your 90&#8211;180 day playbook to launch, sell, and grow your Geotab telematics and video business.</p>
     </div>
 
-    <!-- MARKETING -->
+    <!-- GTM PLAYBOOK INTRO -->
+    <div class="info-box orange" style="margin-bottom:28px;">
+        <h3>Your GTM Playbook</h3>
+        <p style="margin-bottom:12px;">You became a Geotab Reseller for one reason: <strong>to grow revenue and win more with your fleet customers</strong>. This section is your go-to-market roadmap. It is designed to help you:</p>
+        <ul style="margin:0 0 12px 18px;font-size:0.93rem;color:var(--dark-grey);line-height:1.7;">
+            <li>Turn existing customer relationships into <strong>recurring telematics and video revenue</strong></li>
+            <li>Convert competitors' telematics customers to <strong>Geotab + GO Focus</strong></li>
+            <li>Build repeatable motions to <strong>market, sell, and expand</strong> Geotab solutions in your target industries</li>
+        </ul>
+        <p style="margin:0;font-size:0.88rem;color:var(--dark-grey);">Your PAM will work through the full <strong>GTM Playbook</strong> with you and help you build your 90-Day Joint GTM Plan.</p>
+    </div>
+
+    <!-- HOW WE WORK TOGETHER -->
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:20px;margin-bottom:28px;">
+        <div style="background:var(--white);border-radius:var(--radius);box-shadow:var(--shadow-sm);padding:24px 28px;">
+            <h3 style="font-size:1.05rem;font-weight:600;color:var(--geotab-blue);margin-bottom:10px;">Your Role as a Reseller</h3>
+            <ul style="margin:0 0 0 16px;font-size:0.9rem;color:var(--dark-grey);line-height:1.7;">
+                <li>Own the <strong>customer relationship</strong></li>
+                <li>Prospecting, discovery calls, and pipeline</li>
+                <li>Proposals, deal closure, and account management</li>
+                <li>QBRs and ongoing customer engagement</li>
+                <li>Local market and segment expertise</li>
+            </ul>
+        </div>
+        <div style="background:var(--white);border-radius:var(--radius);box-shadow:var(--shadow-sm);padding:24px 28px;">
+            <h3 style="font-size:1.05rem;font-weight:600;color:var(--geotab-blue);margin-bottom:10px;">Geotab's Role</h3>
+            <ul style="margin:0 0 0 16px;font-size:0.9rem;color:var(--dark-grey);line-height:1.7;">
+                <li><strong>Platform:</strong> GO devices, GO Focus camera, MyGeotab, Marketplace</li>
+                <li><strong>Delivery:</strong> Implementation support and technical support</li>
+                <li><strong>Enablement:</strong> Training, co-selling, marketing resources</li>
+                <li>Product roadmap and innovation</li>
+            </ul>
+            <p style="margin-top:10px;font-size:0.85rem;color:var(--medium-grey);"><strong>Key point:</strong> You sell. Geotab supports and delivers.</p>
+        </div>
+    </div>
+
+    <!-- STRATEGIC FOCUS -->
+    <div class="info-box" style="margin-bottom:28px;">
+        <h3>Strategic Focus: Video-First</h3>
+        <p style="margin-bottom:10px;">Your primary growth motion is <strong>Geotab GO device + GO Focus connected camera</strong> (video telematics) as the default offer for safety- and risk-exposed fleets. You do not need to be a telematics engineering shop &#8212; you sell and manage relationships; Geotab provides the platform and technical support.</p>
+        <p style="margin:0;font-size:0.88rem;color:var(--dark-grey);"><strong>Phase 2 expansion:</strong> Once customers are live on GO + GO Focus, expand with Geotab Advanced Routing &amp; Dispatch and Geotab Vitality for additional value and revenue.</p>
+    </div>
+
+    <!-- 4-STEP GTM FRAMEWORK -->
+    <h3 style="font-size:1.1rem;font-weight:700;color:var(--geotab-blue);margin-bottom:16px;">Your Go-to-Market in 4 Steps</h3>
+
+    <div class="step-flow">
+        <!-- STEP 1: CHOOSE WHERE YOU WIN -->
+        <div class="step-card">
+            <div class="step-card-num">1</div>
+            <div class="step-card-content">
+                <h3>Choose Where You Win (Segment &amp; Customer Focus)</h3>
+                <p style="margin-bottom:10px;">Telematics is too broad to sell to everyone. Work with your PAM to select <strong>1&#8211;2 primary segments</strong> for your first 90 days (e.g., Transportation &amp; Logistics, Field Services, Public Works, Rental &amp; Leasing, Public Safety).</p>
+                <p style="margin-bottom:10px;"><strong>Build three practical prospect lists:</strong></p>
+                <ul style="margin:0 0 10px 18px;font-size:0.93rem;color:var(--dark-grey);line-height:1.7;">
+                    <li><strong>List A:</strong> Existing customers using other telematics providers &#8212; candidates for competitive conversion to Geotab + GO Focus</li>
+                    <li><strong>List B:</strong> Existing customers with fleets but no telematics &#8212; candidates for first-time deployment</li>
+                    <li><strong>List C:</strong> New prospects in your chosen segments that resemble your best customers</li>
+                </ul>
+                <p style="font-size:0.88rem;color:var(--medium-grey);">For each account, flag: video fit (High/Medium/Low), fleet size, existing cameras (Yes/No), and any recent incidents or insurance pressure.</p>
+            </div>
+        </div>
+
+        <!-- STEP 2: DEFINE WHAT YOU SELL -->
+        <div class="step-card">
+            <div class="step-card-num">2</div>
+            <div class="step-card-content">
+                <h3>Define What You Sell (Your Core Offers)</h3>
+                <p style="margin-bottom:10px;">Your customers don't buy "telematics" &#8212; they buy outcomes. Start with pre-defined offers that are easy to understand and sell:</p>
+                <div style="margin:10px 0;overflow-x:auto;">
+                    <table style="width:100%;border-collapse:collapse;font-size:0.88rem;">
+                        <thead>
+                            <tr style="background:var(--pale-grey);text-align:left;">
+                                <th style="padding:10px 14px;font-weight:600;color:var(--geotab-blue);border-bottom:2px solid var(--light-grey);">Offer</th>
+                                <th style="padding:10px 14px;font-weight:600;color:var(--geotab-blue);border-bottom:2px solid var(--light-grey);">Ideal For</th>
+                                <th style="padding:10px 14px;font-weight:600;color:var(--geotab-blue);border-bottom:2px solid var(--light-grey);">Customer Problems You Solve</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr style="border-bottom:1px solid var(--pale-grey);">
+                                <td style="padding:10px 14px;font-weight:600;color:var(--dark-grey);">Video Safety &amp; Connected Camera (GO + GO Focus)</td>
+                                <td style="padding:10px 14px;color:var(--dark-grey);">Fleets with safety/liability exposure, insurance pressure</td>
+                                <td style="padding:10px 14px;color:var(--dark-grey);">Rising insurance costs, false claims, no video evidence, no driver coaching program</td>
+                            </tr>
+                            <tr style="border-bottom:1px solid var(--pale-grey);">
+                                <td style="padding:10px 14px;font-weight:600;color:var(--dark-grey);">Fleet Visibility &amp; Efficiency</td>
+                                <td style="padding:10px 14px;color:var(--dark-grey);">General commercial, distribution, service fleets</td>
+                                <td style="padding:10px 14px;color:var(--dark-grey);">No vehicle visibility, high fuel costs, idle time, poor route planning</td>
+                            </tr>
+                            <tr style="border-bottom:1px solid var(--pale-grey);">
+                                <td style="padding:10px 14px;font-weight:600;color:var(--dark-grey);">Public / Service Operations</td>
+                                <td style="padding:10px 14px;color:var(--dark-grey);">Public works, municipal fleets, utilities</td>
+                                <td style="padding:10px 14px;color:var(--dark-grey);">Proof-of-service needs, route compliance, transparency pressure</td>
+                            </tr>
+                            <tr>
+                                <td style="padding:10px 14px;font-weight:600;color:var(--dark-grey);">Competitive Conversion</td>
+                                <td style="padding:10px 14px;color:var(--dark-grey);">Customers on Samsara, PowerFleet, or legacy platforms</td>
+                                <td style="padding:10px 14px;color:var(--dark-grey);">Locked-in platform, limited video integration, poor data flexibility</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+                <p style="font-size:0.88rem;color:var(--medium-grey);"><strong>Video-first rule:</strong> For all fleets flagged High video-fit, the default recommendation is GO + GO Focus &#8212; not GO-only. GO-only proposals should be treated as exceptions.</p>
+            </div>
+        </div>
+
+        <!-- STEP 3: LAUNCH YOUR GTM -->
+        <div class="step-card">
+            <div class="step-card-num">3</div>
+            <div class="step-card-content">
+                <h3>Launch Your Go-to-Market (Marketing &amp; Demand Generation)</h3>
+                <p style="margin-bottom:10px;">You don't need a full marketing department. You need a basic, consistent, and measurable presence you can execute in 90 days. <strong>Complete by Day 30:</strong></p>
+                <ul style="margin:0 0 12px 18px;font-size:0.93rem;color:var(--dark-grey);line-height:1.7;">
+                    <li><strong>Website page</strong> &#8212; Create a "Video Telematics &amp; Fleet Management Solutions" page with your core offers and a clear CTA ("Schedule a fleet and safety review")</li>
+                    <li><strong>One-page sales sheets</strong> &#8212; Create a 1-page PDF for each core offer (Video Safety, Fleet Visibility, Public/Service) for your sales team to use in emails and meetings</li>
+                    <li><strong>Launch email</strong> &#8212; Announce your new Geotab + video telematics offering to your existing customer base with a simple next step</li>
+                </ul>
+                <p style="margin-bottom:10px;">Then run targeted campaigns against your three lists:</p>
+                <ul style="margin:0 0 0 18px;font-size:0.93rem;color:var(--dark-grey);line-height:1.7;">
+                    <li><strong>List A campaign:</strong> "Modernize your telematics + add integrated video"</li>
+                    <li><strong>List B campaign:</strong> "Add telematics + video to reduce risk and improve operations"</li>
+                    <li><strong>List C campaign:</strong> Segment-specific value prop for new prospects</li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- STEP 4: RUN THE SALES PROCESS -->
+        <div class="step-card">
+            <div class="step-card-num">4</div>
+            <div class="step-card-content">
+                <h3>Run the Sales Process</h3>
+                <p style="margin-bottom:10px;">Follow a consistent sales motion your team can repeat across all segments:</p>
+                <div style="background:var(--pale-grey);border-radius:8px;padding:14px 18px;margin-bottom:12px;">
+                    <p style="margin:0;font-size:0.9rem;color:var(--dark-grey);text-align:center;font-weight:500;">Prospect &amp; Triage &rarr; Discovery Meeting &rarr; Log &amp; Qualify in PX Hub &rarr; Align on Offer &rarr; Demo &rarr; Propose &rarr; Close &amp; Expand</p>
+                </div>
+                <ul style="margin:0 0 0 18px;font-size:0.93rem;color:var(--dark-grey);line-height:1.7;">
+                    <li><strong>Discovery:</strong> Understand where telematics and video can deliver immediate value. For high video-fit fleets, always ask about incidents, claims, and insurance pressure</li>
+                    <li><strong>Demo:</strong> Focus on business outcomes, not features. For medium/high risk fleets, a GO Focus camera demo is mandatory</li>
+                    <li><strong>Propose:</strong> Clearly state the offer, commercials, and implementation approach. All proposals should be reflected in PX Hub</li>
+                    <li><strong>Close &amp; Expand:</strong> After go-live, schedule a 30&#8211;60 day review. Look for expansion: more vehicles, more cameras, add-on solutions</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <!-- 90-DAY MILESTONES -->
+    <h3 style="font-size:1.1rem;font-weight:700;color:var(--geotab-blue);margin:32px 0 16px;">What "Good" Looks Like</h3>
+
+    <div style="display:grid;grid-template-columns:repeat(3, 1fr);gap:20px;margin-bottom:28px;">
+        <div style="background:var(--white);border-radius:var(--radius);box-shadow:var(--shadow-sm);padding:22px 24px;border-top:4px solid var(--innovation-blue);">
+            <h4 style="font-size:0.95rem;font-weight:700;color:var(--innovation-blue);margin-bottom:8px;">By Day 30</h4>
+            <p style="font-size:0.85rem;font-weight:600;color:var(--geotab-blue);margin-bottom:6px;">Foundation Built</p>
+            <ul style="margin:0 0 0 14px;font-size:0.85rem;color:var(--dark-grey);line-height:1.6;">
+                <li>1&#8211;2 focus segments selected</li>
+                <li>Core offers defined (video-first)</li>
+                <li>90-Day Joint GTM Plan completed</li>
+                <li>Website page live with video telematics positioning</li>
+                <li>Lists A, B, C built and tagged</li>
+                <li>First outreach started (10&#8211;20 accounts)</li>
+            </ul>
+        </div>
+        <div style="background:var(--white);border-radius:var(--radius);box-shadow:var(--shadow-sm);padding:22px 24px;border-top:4px solid var(--accent-teal);">
+            <h4 style="font-size:0.95rem;font-weight:700;color:var(--accent-teal);margin-bottom:8px;">By Day 60</h4>
+            <p style="font-size:0.85rem;font-weight:600;color:var(--geotab-blue);margin-bottom:6px;">Pipeline Built &amp; Demos in Motion</p>
+            <ul style="margin:0 0 0 14px;font-size:0.85rem;color:var(--dark-grey);line-height:1.6;">
+                <li>Active campaigns running against all 3 lists</li>
+                <li>30&#8211;50 accounts contacted</li>
+                <li>Steady discovery meetings</li>
+                <li>Multiple demos completed (including camera demos)</li>
+                <li>Qualified opportunities logged in PX Hub</li>
+            </ul>
+        </div>
+        <div style="background:var(--white);border-radius:var(--radius);box-shadow:var(--shadow-sm);padding:22px 24px;border-top:4px solid var(--success-green);">
+            <h4 style="font-size:0.95rem;font-weight:700;color:var(--success-green);margin-bottom:8px;">By Day 90</h4>
+            <p style="font-size:0.85rem;font-weight:600;color:var(--geotab-blue);margin-bottom:6px;">First Wins &amp; Repeatable Motion</p>
+            <ul style="margin:0 0 0 14px;font-size:0.85rem;color:var(--dark-grey);line-height:1.6;">
+                <li>First Geotab deals closed</li>
+                <li>GO + GO Focus deployed in high video-fit fleets</li>
+                <li>Customers live on MyGeotab</li>
+                <li>30&#8211;60 day post-implementation reviews done</li>
+                <li>Expansion opportunities identified</li>
+                <li>Weekly GTM cadence established</li>
+            </ul>
+        </div>
+    </div>
+
+    <!-- EXCELERATOR PROGRAM -->
+    <div class="info-box" style="margin-bottom:28px;">
+        <h3>How This Ties into the Excelerator Program</h3>
+        <p style="margin-bottom:10px;">As you start selling, your performance feeds directly into the <strong>Geotab Excelerator Partner Program</strong> &#8212; Geotab's tiering and incentive framework that evaluates and rewards partners across three areas:</p>
+        <div style="display:grid;grid-template-columns:repeat(3, 1fr);gap:12px;margin-bottom:12px;">
+            <div style="background:var(--pale-grey);border-radius:8px;padding:12px 16px;text-align:center;">
+                <p style="margin:0;font-size:1.3rem;font-weight:700;color:var(--innovation-blue);">60%</p>
+                <p style="margin:4px 0 0;font-size:0.82rem;font-weight:600;color:var(--dark-grey);">Performance</p>
+                <p style="margin:2px 0 0;font-size:0.78rem;color:var(--medium-grey);">New customers, MRR growth, expansion, churn</p>
+            </div>
+            <div style="background:var(--pale-grey);border-radius:8px;padding:12px 16px;text-align:center;">
+                <p style="margin:0;font-size:1.3rem;font-weight:700;color:var(--innovation-blue);">20%</p>
+                <p style="margin:4px 0 0;font-size:0.82rem;font-weight:600;color:var(--dark-grey);">Skilling</p>
+                <p style="margin:2px 0 0;font-size:0.78rem;color:var(--medium-grey);">Certifications and training completion</p>
+            </div>
+            <div style="background:var(--pale-grey);border-radius:8px;padding:12px 16px;text-align:center;">
+                <p style="margin:0;font-size:1.3rem;font-weight:700;color:var(--innovation-blue);">20%</p>
+                <p style="margin:4px 0 0;font-size:0.82rem;font-weight:600;color:var(--dark-grey);">Specialization</p>
+                <p style="margin:2px 0 0;font-size:0.78rem;color:var(--medium-grey);">Segment focus and market visibility</p>
+            </div>
+        </div>
+        <p style="margin:0;font-size:0.88rem;color:var(--dark-grey);">All new partners start at the <strong>Foundation</strong> tier. As your score grows, you advance through tiers &#8212; unlocking higher rebates, enhanced support, and additional benefits. Your 90-day GTM activity directly drives your Excelerator performance score.</p>
+    </div>
+
+    <!-- MARKETING & BRAND -->
     <h3 style="font-size:1.1rem;font-weight:700;color:var(--geotab-blue);margin-bottom:16px;">Marketing &amp; Brand</h3>
 
     <div class="info-box green" style="margin-bottom:20px;">
         <h3>Marketing Kickoff Meeting</h3>
-        <p>We will arrange a <strong>marketing kickoff meeting</strong> to help you get started the right way. In this session, we'll provide you with brochures, marketing content, product images, and brand assets &#8212; so you don't have to build everything from scratch. <strong>We're here to help</strong>, so please don't attempt to create marketing materials on your own. Additional resources and support will also be provided by the Geotab marketing department on an ongoing basis.</p>
+        <p>We will arrange a <strong>marketing kickoff meeting</strong> to help you get started the right way. In this session, we'll provide you with brochures, marketing content, product images, and brand assets &#8212; so you don't have to build everything from scratch. <strong>We're here to help</strong>, so please don't attempt to create marketing materials on your own.</p>
     </div>
 
     <div class="card-grid">
         <div class="card">
             <h3>Update Your Website</h3>
-            <p>Add Geotab to your company website &#8212; create service pages for fleet management, vehicle tracking, and video safety. Highlight the partnership and the problems you solve for customers in your target verticals.</p>
+            <p>Create a <strong>"Video Telematics &amp; Fleet Management Solutions"</strong> page on your site. Highlight the business problems you solve (safety, claims, operating costs, service quality), your core offers, and a clear CTA such as "Schedule a fleet and safety review."</p>
         </div>
         <div class="card">
             <h3>Brand Guidelines &amp; Assets</h3>
@@ -1680,7 +1899,7 @@
         </div>
         <div class="card">
             <h3>Marketing Collateral</h3>
-            <p>Geotab will provide you with customer-facing brochures, one-pagers, datasheets, and product images tailored to your market. Templates and ROI calculators are also available through the PX Hub resource library.</p>
+            <p>Geotab will provide customer-facing brochures, one-pagers, datasheets, and product images. Create a <strong>1-page sales sheet</strong> for each core offer &#8212; your sales team will use these in emails and meetings.</p>
             <a class="card-link" href="https://geotab.my.site.com/pxhub/s/login/?language=en_US" target="_blank">Resource Library &rarr;</a>
         </div>
         <div class="card">
@@ -1689,12 +1908,12 @@
         </div>
     </div>
 
-    <!-- SALES INFRASTRUCTURE -->
+    <!-- SALES INFRASTRUCTURE (placeholder) -->
     <h3 style="font-size:1.1rem;font-weight:700;color:var(--geotab-blue);margin:32px 0 16px;">Sales Infrastructure</h3>
     <div class="card-grid">
         <div class="card">
             <h3>Set Up Your CRM</h3>
-            <p>Configure your CRM with Geotab product catalog entries and pipeline stages aligned to PX Hub deal registration. Start collecting and tracking leads from day one so nothing falls through the cracks.</p>
+            <p>Configure your CRM with Geotab product catalog entries and pipeline stages aligned to PX Hub deal registration. Start collecting and tracking leads from day one.</p>
         </div>
         <div class="card">
             <h3>Build Proposal Templates</h3>
@@ -1702,7 +1921,7 @@
         </div>
         <div class="card">
             <h3>Define Your Target Market</h3>
-            <p>Pick 1&#8211;2 industry verticals to focus on (e.g., transportation, field service, construction). Build a prospect list in those verticals and align your segment training to match your chosen markets. Use the segment training and industry knowledge to define <strong>which solutions you need to sell</strong>, the <strong>value proposition</strong> for each customer type, and support your pitch with <strong>success stories</strong> and <strong>ROI examples</strong> relevant to your chosen verticals.</p>
+            <p>Pick 1&#8211;2 industry verticals, build your prospect lists (A, B, C), and align your segment training to match. Use success stories and ROI examples relevant to your chosen verticals.</p>
             <a class="card-link" href="https://www.geotab.com/success-stories/" target="_blank">Success Stories &rarr;</a>
         </div>
     </div>
@@ -1760,10 +1979,31 @@
     <div class="section-checklist">
         <h4>Go to Market Checklist</h4>
         <label>
+            <input type="checkbox" data-cl="gtm-segments">
+            <div class="cl-text">
+                <strong>Select your 1&#8211;2 focus segments</strong>
+                <p>Work with your PAM to choose the verticals where you have the strongest customer relationships and video-fit potential.</p>
+            </div>
+        </label>
+        <label>
+            <input type="checkbox" data-cl="gtm-lists">
+            <div class="cl-text">
+                <strong>Build your three prospect lists (A, B, C)</strong>
+                <p>List A: competitive conversions. List B: existing fleets with no telematics. List C: lookalike prospects in your segments.</p>
+            </div>
+        </label>
+        <label>
+            <input type="checkbox" data-cl="gtm-plan">
+            <div class="cl-text">
+                <strong>Complete your 90-Day Joint GTM Plan with your PAM</strong>
+                <p>Define segments, offers, campaign targets, and weekly review cadence.</p>
+            </div>
+        </label>
+        <label>
             <input type="checkbox" data-cl="gtm-website">
             <div class="cl-text">
-                <strong>Update your company website</strong>
-                <p>Add Geotab to your website with the partner badge and solution overview.</p>
+                <strong>Launch your website page and sales one-pagers</strong>
+                <p>Create a "Video Telematics &amp; Fleet Management" page and 1-page sales sheets for each core offer.</p>
             </div>
         </label>
         <label>
@@ -1774,31 +2014,31 @@
             </div>
         </label>
         <label>
-            <input type="checkbox" data-cl="gtm-target">
+            <input type="checkbox" data-cl="gtm-outreach">
             <div class="cl-text">
-                <strong>Define your target market and build a prospect list</strong>
-                <p>Pick 1-2 verticals and identify your initial prospects.</p>
+                <strong>Start outreach and book your first discovery meetings</strong>
+                <p>Contact your first 10&#8211;20 accounts from Lists A and B. Book discovery calls including video telematics discussions.</p>
             </div>
         </label>
         <label>
             <input type="checkbox" data-cl="gtm-deal">
             <div class="cl-text">
                 <strong>Register your first deal in PX Hub</strong>
-                <p>Submit your first deal registration to protect your opportunity.</p>
+                <p>Submit your first deal registration to protect your opportunity and unlock support.</p>
             </div>
         </label>
         <label>
             <input type="checkbox" data-cl="gtm-sale">
             <div class="cl-text">
                 <strong>Close your first sale and onboard your first customer</strong>
-                <p>Complete the full cycle: order, install, activate, and send the welcome email.</p>
+                <p>Complete the full cycle: order, install, activate, verify data in MyGeotab, and walk the customer through their dashboard.</p>
             </div>
         </label>
         <label>
             <input type="checkbox" data-cl="gtm-review">
             <div class="cl-text">
-                <strong>Schedule your business review with your PAM</strong>
-                <p>Review performance, discuss growth opportunities, and set goals for your next phase.</p>
+                <strong>Establish your weekly GTM review cadence</strong>
+                <p>Review activity metrics, pipeline, camera attach rate, and adjust campaigns with your PAM weekly.</p>
             </div>
         </label>
     </div>
