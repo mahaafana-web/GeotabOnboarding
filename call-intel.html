@@ -21,7 +21,40 @@
     --red: #FF4D6A;
     --teal: #00C9C9;
     --purple: #A78BFA;
+    --gold: #F59E0B;
   }
+
+  /* ── PARTNER HEALTH ── */
+  .stat-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 14px; }
+  .stat-tile { background: var(--surface); border: 1px solid var(--border); border-radius: 12px; padding: 14px 16px; }
+  .stat-label { font-family: 'DM Mono', monospace; font-size: 10px; letter-spacing: 0.06em; color: var(--muted); text-transform: uppercase; margin-bottom: 6px; }
+  .stat-value { font-family: 'Syne', sans-serif; font-weight: 800; font-size: 20px; line-height: 1; }
+  .stat-sub { font-size: 11px; color: var(--muted); margin-top: 4px; }
+  .stat-up { color: var(--green); }
+  .stat-down { color: var(--red); }
+  .waterfall { display: flex; gap: 6px; margin-bottom: 14px; }
+  .wf-item { flex: 1; background: var(--surface); border: 1px solid var(--border); border-radius: 10px; padding: 10px 12px; text-align: center; }
+  .wf-label { font-family: 'DM Mono', monospace; font-size: 9px; letter-spacing: 0.05em; color: var(--muted); text-transform: uppercase; margin-bottom: 5px; }
+  .wf-val { font-size: 13px; font-weight: 600; }
+  .trend-table { width: 100%; border-collapse: collapse; font-size: 12px; }
+  .trend-table th { font-family: 'DM Mono', monospace; font-size: 9px; letter-spacing: 0.05em; color: var(--muted); text-transform: uppercase; padding: 6px 8px; text-align: right; border-bottom: 1px solid var(--border); }
+  .trend-table th:first-child { text-align: left; }
+  .trend-table td { padding: 7px 8px; border-bottom: 1px solid rgba(255,255,255,0.04); text-align: right; }
+  .trend-table td:first-child { text-align: left; color: var(--muted); }
+  .trend-table tr:last-child td { border-bottom: none; }
+  .trend-table tr:first-child td { font-weight: 600; color: var(--text); }
+  .top-cust { display: flex; flex-direction: column; gap: 0; }
+  .top-cust-row { display: flex; align-items: center; justify-content: space-between; gap: 10px; font-size: 12px; padding: 7px 0; border-bottom: 1px solid rgba(255,255,255,0.04); }
+  .top-cust-row:last-child { border-bottom: none; }
+  .top-cust-rank { font-family: 'DM Mono', monospace; font-size: 10px; color: var(--muted); min-width: 18px; }
+  .top-cust-name { flex: 1; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .top-cust-rev { font-family: 'DM Mono', monospace; font-size: 11px; color: var(--green); min-width: 70px; text-align: right; }
+  .top-cust-subs { font-family: 'DM Mono', monospace; font-size: 10px; color: var(--muted); min-width: 55px; text-align: right; }
+  .mom-badge { display: inline-flex; align-items: center; gap: 5px; font-family: 'DM Mono', monospace; font-size: 10px; padding: 3px 10px; border-radius: 12px; letter-spacing: 0.05em; margin-left: 8px; }
+  .mom-growing { background: rgba(0,229,160,0.12); color: var(--green); border: 1px solid rgba(0,229,160,0.25); }
+  .mom-declining { background: rgba(255,77,106,0.12); color: var(--red); border: 1px solid rgba(255,77,106,0.25); }
+  .mom-stable { background: rgba(255,209,102,0.1); color: var(--yellow); border: 1px solid rgba(255,209,102,0.2); }
+  .b-partner { background: rgba(245,158,11,0.12); color: #FCD34D; border: 1px solid rgba(245,158,11,0.25); }
 
   * { box-sizing: border-box; margin: 0; padding: 0; }
   body { font-family: 'DM Sans', sans-serif; background: var(--dark); color: var(--text); min-height: 100vh; }
@@ -377,6 +410,7 @@
   <button class="mode-tab active" id="tab-pre" onclick="setMode('pre')">⚡ Pre-Call</button>
   <button class="mode-tab live-tab" id="tab-live" onclick="setMode('live')">🛡 Live Assist</button>
   <button class="mode-tab" id="tab-post" onclick="setMode('post')">📋 Post-Call</button>
+  <button class="mode-tab" id="tab-partner" onclick="setMode('partner')" style="border-bottom-color:var(--gold);">📊 Partner Health</button>
 </div>
 
 <div class="layout" id="layout">
@@ -486,6 +520,25 @@
       <div class="err" id="live-err"></div>
     </div>
 
+    <!-- ── PARTNER HEALTH ── -->
+    <div id="pane-partner" style="display:none;flex-direction:column;gap:20px;">
+      <div class="panel-title">Partner <span style="color:var(--gold);">Health</span></div>
+      <div class="panel-hint">Type a partner name or ERP code — pulls their real activation and revenue data from BigQuery.</div>
+      <input class="big-input" type="text" id="ph-input" placeholder="e.g. TELU01 or Telus or Rush Transport..." onkeydown="if(event.key==='Enter')runPartnerHealth()" />
+      <div class="err" id="ph-err"></div>
+      <button class="main-btn" id="ph-btn" onclick="runPartnerHealth()" style="background:var(--gold);color:#080C14;">
+        <div class="spin" style="border-top-color:#080C14;"></div>
+        <span class="btn-label">📊 Get Partner Health</span>
+      </button>
+      <div style="font-size:11px;color:var(--muted);line-height:1.6;padding:10px 14px;background:var(--surface);border-radius:10px;border:1px solid var(--border);">
+        💡 <strong>Tip:</strong> Use the ERP code (e.g. <code style="color:var(--teal)">TELU01</code>) for an exact match, or type part of the partner name for a search.
+      </div>
+      <div style="display:flex;align-items:center;justify-content:space-between;font-size:11px;">
+        <span id="ph-api-status" style="color:var(--muted);" class="ph-api-status-init"></span>
+        <button onclick="configurePartnerApi()" style="background:none;border:none;color:var(--muted);font-size:11px;cursor:pointer;text-decoration:underline;padding:0;">⚙ Configure API URL</button>
+      </div>
+    </div>
+
     <!-- ── POST-CALL ── -->
     <div id="pane-post" style="display:none;display:flex;flex-direction:column;gap:16px;">
       <div class="panel-title">Post-Call <span class="g">Follow-Ups</span></div>
@@ -521,6 +574,55 @@
       <div class="empty-icon">📋</div>
       <div class="empty-text">Paste your Gemini notes and hit Extract Follow-Ups.</div>
       <div class="empty-hint">Action items appear here</div>
+    </div>
+
+    <div class="empty" id="empty-partner" style="display:none;">
+      <div class="empty-icon">📊</div>
+      <div class="empty-text">Enter a partner name or ERP code to see their real revenue and activation data.</div>
+      <div class="empty-hint">Powered by live BigQuery data</div>
+    </div>
+
+    <!-- PARTNER HEALTH RESULT -->
+    <div id="partner-result" style="display:none;">
+      <div class="result-hdr">
+        <div>
+          <div class="result-name" id="ph-name"></div>
+          <div style="display:flex;align-items:center;gap:6px;margin-top:6px;">
+            <div class="result-badge b-partner" id="ph-erp"></div>
+            <div class="mom-badge" id="ph-momentum"></div>
+          </div>
+        </div>
+        <div class="result-time" id="ph-time"></div>
+      </div>
+
+      <!-- 4 STAT TILES -->
+      <div class="stat-grid" id="ph-stats"></div>
+
+      <!-- REVENUE WATERFALL -->
+      <div class="card" style="--c:var(--gold);margin-bottom:12px;">
+        <div class="card-label">💧 This Month's Revenue Movement</div>
+        <div class="waterfall" id="ph-waterfall"></div>
+      </div>
+
+      <!-- 6-MONTH TREND -->
+      <div class="card" style="--c:var(--teal);margin-bottom:12px;">
+        <div class="card-label">📈 6-Month Trend</div>
+        <table class="trend-table" id="ph-trend"></table>
+      </div>
+
+      <!-- TOP CUSTOMERS -->
+      <div class="card" style="--c:var(--purple);margin-bottom:12px;">
+        <div class="card-label">🏆 Top Customers (Last Month)</div>
+        <div class="top-cust" id="ph-topcust"></div>
+      </div>
+
+      <!-- AI HEALTH COMMENTARY -->
+      <div class="card" style="--c:var(--blue);margin-bottom:12px;" id="ph-ai-card">
+        <div class="card-label">🤖 AI Health Assessment</div>
+        <div class="card-body" id="ph-ai-text" style="color:var(--muted);font-size:12px;">Generating assessment...</div>
+      </div>
+
+      <button class="btn-ghost" onclick="resetPartner()">↩ Search Another Partner</button>
     </div>
 
     <!-- RESULT AREA -->
@@ -581,20 +683,32 @@ async function ai(sys, usr, tokens) {
   return JSON.parse(raw.replace(/```json|```/g, '').trim());
 }
 
+async function aiRaw(sys, usr, tokens) {
+  const r = await fetch(GW, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json', 'api-key': GK },
+    body: JSON.stringify({ model: 'claude-sonnet-4.6', max_tokens: tokens || 300,
+      messages: [{ role: 'system', content: sys }, { role: 'user', content: usr }] })
+  });
+  const d = await r.json();
+  return d.choices?.[0]?.message?.content || '';
+}
+
 // ── MODE SWITCHING ────────────────────────────────────────────
 function setMode(m) {
   mode = m;
-  ['pre','live','post'].forEach(x => {
+  ['pre','live','post','partner'].forEach(x => {
     document.getElementById('tab-'+x).classList.toggle('active', x === m);
     document.getElementById('pane-'+x).style.display = x === m ? 'flex' : 'none';
-    if (x === m) document.getElementById('pane-'+x).style.flexDirection = 'column';
-    if (x === m) document.getElementById('pane-'+x).style.gap = '20px';
+    if (x === m) { document.getElementById('pane-'+x).style.flexDirection = 'column'; document.getElementById('pane-'+x).style.gap = '20px'; }
   });
   document.getElementById('empty-pre').style.display = m === 'pre' ? 'flex' : 'none';
   document.getElementById('empty-live').style.display = m === 'live' ? 'flex' : 'none';
   document.getElementById('empty-post').style.display = m === 'post' ? 'flex' : 'none';
+  document.getElementById('empty-partner').style.display = m === 'partner' ? 'flex' : 'none';
   document.getElementById('result').style.display = 'none';
   document.getElementById('post-result').style.display = 'none';
+  document.getElementById('partner-result').style.display = 'none';
 }
 
 // ── CALL TYPE ─────────────────────────────────────────────────
@@ -853,6 +967,150 @@ function copyFups() {
   });
 }
 
+// ── PARTNER HEALTH ────────────────────────────────────────────
+let PARTNER_API = localStorage.getItem('gia_partner_api') || '';
+const PARTNER_KEY = 'gia-geotab-2026';
+
+function configurePartnerApi() {
+  const current = localStorage.getItem('gia_partner_api') || '';
+  const url = prompt('Paste your Apps Script Partner Health API URL:', current);
+  if (url && url.startsWith('https://script.google.com')) {
+    PARTNER_API = url.trim();
+    localStorage.setItem('gia_partner_api', PARTNER_API);
+    document.getElementById('ph-api-status').textContent = '✓ API configured';
+    document.getElementById('ph-api-status').style.color = 'var(--green)';
+  }
+}
+
+async function runPartnerHealth() {
+  noErr('ph-err');
+  const q = document.getElementById('ph-input').value.trim();
+  if (!q) { err('ph-err', 'Please enter a partner name or ERP code.'); return; }
+  if (!PARTNER_API) {
+    const url = prompt('First-time setup: Paste your Apps Script Partner Health API URL\n(from script.google.com → Deploy → Manage deployments → copy the Web app URL):');
+    if (!url || !url.startsWith('https://')) { err('ph-err', 'API URL required to fetch live data. Use the configure link below.'); return; }
+    PARTNER_API = url.trim();
+    localStorage.setItem('gia_partner_api', PARTNER_API);
+    document.getElementById('ph-api-status').textContent = '✓ API configured';
+    document.getElementById('ph-api-status').style.color = 'var(--green)';
+  }
+  loading('ph-btn', true);
+  try {
+    const url = `${PARTNER_API}?key=${PARTNER_KEY}&q=${encodeURIComponent(q)}`;
+    const resp = await fetch(url);
+    const data = await resp.json();
+    if (data.error) { err('ph-err', data.error); loading('ph-btn', false); return; }
+    renderPartnerHealth(data);
+  } catch(e) {
+    err('ph-err', 'Could not reach the Partner Health API. Check the URL is correct.');
+  }
+  loading('ph-btn', false);
+}
+
+function fmt(n) {
+  if (n == null) return '—';
+  const num = parseFloat(n);
+  if (Math.abs(num) >= 1000000) return '$' + (num/1000000).toFixed(1) + 'M';
+  if (Math.abs(num) >= 1000) return '$' + (num/1000).toFixed(1) + 'K';
+  return '$' + num.toFixed(0);
+}
+function fmtNum(n) { return n == null ? '—' : parseInt(n).toLocaleString(); }
+function arrow(n) { return parseFloat(n) > 0 ? '▲' : parseFloat(n) < 0 ? '▼' : '→'; }
+function arrowClass(n) { return parseFloat(n) > 0 ? 'stat-up' : parseFloat(n) < 0 ? 'stat-down' : ''; }
+
+function renderPartnerHealth(d) {
+  const p = d.partner, s = d.snapshot, y = d.yoy;
+
+  // Header
+  document.getElementById('ph-name').textContent = p.name || p.group || p.erp;
+  document.getElementById('ph-erp').textContent = p.erp;
+  document.getElementById('ph-time').textContent = new Date().toLocaleTimeString([], {hour:'2-digit',minute:'2-digit'});
+
+  const momClass = { growing: 'mom-growing', declining: 'mom-declining', stable: 'mom-stable' }[d.momentum] || 'mom-stable';
+  const momText = { growing: '▲ Growing', declining: '▼ Declining', stable: '→ Stable' }[d.momentum] || 'Stable';
+  const momEl = document.getElementById('ph-momentum');
+  momEl.className = 'mom-badge ' + momClass;
+  momEl.textContent = momText;
+
+  // 4 Stat tiles
+  const stats = document.getElementById('ph-stats');
+  stats.innerHTML = `
+    <div class="stat-tile">
+      <div class="stat-label">Monthly Revenue</div>
+      <div class="stat-value">${fmt(s.revenue)}</div>
+      <div class="stat-sub ${arrowClass(y.revenue_growth)}">${arrow(y.revenue_growth)} ${Math.abs(y.revenue_growth)}% vs last year</div>
+    </div>
+    <div class="stat-tile">
+      <div class="stat-label">Subscriptions</div>
+      <div class="stat-value">${fmtNum(s.subs)}</div>
+      <div class="stat-sub ${arrowClass(y.subs_growth)}">${arrow(y.subs_growth)} ${Math.abs(y.subs_growth)}% vs last year</div>
+    </div>
+    <div class="stat-tile">
+      <div class="stat-label">Active Customers</div>
+      <div class="stat-value">${fmtNum(s.customers)}</div>
+      <div class="stat-sub" style="color:var(--muted);">as of ${s.month || 'last month'}</div>
+    </div>
+    <div class="stat-tile">
+      <div class="stat-label">YoY Revenue Growth</div>
+      <div class="stat-value ${arrowClass(y.revenue_growth)}">${y.revenue_growth > 0 ? '+' : ''}${y.revenue_growth}%</div>
+      <div class="stat-sub" style="color:var(--muted);">${fmt(y.revenue_prev)} → ${fmt(y.revenue_now)}</div>
+    </div>`;
+
+  // Waterfall
+  const wf = document.getElementById('ph-waterfall');
+  const newR = parseFloat(s.new_rev||0), exp = parseFloat(s.expansion||0), churn = parseFloat(s.churn||0);
+  const net = newR + exp + churn;
+  wf.innerHTML = `
+    <div class="wf-item"><div class="wf-label">New</div><div class="wf-val stat-up">+${fmt(newR)}</div></div>
+    <div class="wf-item"><div class="wf-label">Expansion</div><div class="wf-val stat-up">+${fmt(exp)}</div></div>
+    <div class="wf-item"><div class="wf-label">Churn</div><div class="wf-val stat-down">${fmt(churn)}</div></div>
+    <div class="wf-item" style="border-color:rgba(255,255,255,0.15);"><div class="wf-label">Net Change</div><div class="wf-val ${arrowClass(net)}">${net >= 0 ? '+' : ''}${fmt(net)}</div></div>`;
+
+  // 6-month trend table
+  const trend = document.getElementById('ph-trend');
+  trend.innerHTML = `<tr><th>Month</th><th>Revenue</th><th>Subs</th><th>Customers</th></tr>`;
+  (d.trend || []).forEach(r => {
+    const tr = document.createElement('tr');
+    tr.innerHTML = `<td>${r.month}</td><td>${fmt(r.revenue)}</td><td>${fmtNum(r.subs)}</td><td>${fmtNum(r.customers)}</td>`;
+    trend.appendChild(tr);
+  });
+
+  // Top customers
+  const tc = document.getElementById('ph-topcust');
+  tc.innerHTML = '';
+  (d.top_customers || []).forEach((c, i) => {
+    const row = document.createElement('div');
+    row.className = 'top-cust-row';
+    row.innerHTML = `<span class="top-cust-rank">${i+1}</span><span class="top-cust-name">${c.name}</span><span class="top-cust-subs">${fmtNum(c.subs)} dev</span><span class="top-cust-rev">${fmt(c.revenue)}</span>`;
+    tc.appendChild(row);
+  });
+
+  // Show results
+  document.getElementById('empty-partner').style.display = 'none';
+  document.getElementById('partner-result').style.display = 'block';
+
+  // AI assessment (async, non-blocking)
+  generateAIAssessment(d);
+}
+
+async function generateAIAssessment(d) {
+  const p = d.partner, s = d.snapshot, y = d.yoy;
+  const sys = `You are GIA — Geotab's AI sales assistant. Given real partner health data, write a 3-sentence PAM coaching note. Sentence 1: what's going well. Sentence 2: biggest risk or gap. Sentence 3: the ONE thing the PAM should focus on in their next call. Be specific, use the numbers. No fluff.`;
+  const usr = `Partner: ${p.name} (${p.erp})\nMRR: ${fmt(s.revenue)}, Subscriptions: ${fmtNum(s.subs)}, Customers: ${fmtNum(s.customers)}\nYoY Revenue Growth: ${y.revenue_growth}%, YoY Subs Growth: ${y.subs_growth}%\nThis month: New Revenue ${fmt(s.new_rev)}, Expansion ${fmt(s.expansion)}, Churn ${fmt(s.churn)}\nMomentum: ${d.momentum}\nTop customers: ${(d.top_customers||[]).slice(0,3).map(c=>c.name).join(', ')}`;
+  try {
+    const result = await aiRaw(sys, usr, 250);
+    document.getElementById('ph-ai-text').innerHTML = result.replace(/\*\*(.*?)\*\*/g,'<strong>$1</strong>');
+  } catch(e) {
+    document.getElementById('ph-ai-text').textContent = 'Could not generate assessment.';
+  }
+}
+
+function resetPartner() {
+  document.getElementById('partner-result').style.display = 'none';
+  document.getElementById('empty-partner').style.display = 'flex';
+  document.getElementById('ph-input').value = '';
+}
+
 function resetPost() {
   document.getElementById('post-co').value = '';
   document.getElementById('post-notes').value = '';
@@ -861,6 +1119,18 @@ function resetPost() {
   document.getElementById('fup-list').innerHTML = '';
   document.getElementById('empty-post').style.display = 'flex';
 }
+
+// ── INIT ──────────────────────────────────────────────────────
+(function init() {
+  const status = document.getElementById('ph-api-status');
+  if (PARTNER_API) {
+    status.textContent = '✓ API configured';
+    status.style.color = 'var(--green)';
+  } else {
+    status.textContent = '⚠ API not configured — click "Configure API URL" after deploying the backend';
+    status.style.color = 'var(--orange)';
+  }
+})();
 </script>
 </body>
 </html>
