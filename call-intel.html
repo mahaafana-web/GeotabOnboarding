@@ -968,6 +968,17 @@ function copyFups() {
 }
 
 // ── PARTNER HEALTH ────────────────────────────────────────────
+function fetchJsonp(url) {
+  return new Promise((resolve, reject) => {
+    const cb = 'gia_cb_' + Date.now();
+    window[cb] = (data) => { delete window[cb]; document.head.removeChild(script); resolve(data); };
+    const script = document.createElement('script');
+    script.src = url + '&callback=' + cb;
+    script.onerror = () => { delete window[cb]; document.head.removeChild(script); reject(new Error('Request failed')); };
+    document.head.appendChild(script);
+  });
+}
+
 let PARTNER_API = localStorage.getItem('gia_partner_api') || '';
 const PARTNER_KEY = 'gia-geotab-2026';
 
@@ -997,8 +1008,7 @@ async function runPartnerHealth() {
   loading('ph-btn', true);
   try {
     const url = `${PARTNER_API}?key=${PARTNER_KEY}&q=${encodeURIComponent(q)}`;
-    const resp = await fetch(url);
-    const data = await resp.json();
+    const data = await fetchJsonp(url);
     if (data.error) { err('ph-err', data.error); loading('ph-btn', false); return; }
     renderPartnerHealth(data);
   } catch(e) {
