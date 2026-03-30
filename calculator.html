@@ -633,11 +633,10 @@ function resetAll() {
     recalcAll();
 }
 
-// Init
+// Init — always start fresh, clear any saved state
+try { localStorage.removeItem('geotab-calc'); } catch(e) {}
 document.getElementById('quoteDate').value = new Date().toISOString().split('T')[0];
-if (!loadState()) {
-    addLineItem('', '', '20', '');
-}
+addLineItem('', '', '20', '');
 </script>
 </body>
 </html>
