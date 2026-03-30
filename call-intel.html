@@ -417,6 +417,7 @@
   <button class="mode-tab" id="tab-post" onclick="setMode('post')">📋 Post-Call</button>
   <button class="mode-tab" id="tab-partner" onclick="setMode('partner')" style="border-bottom-color:var(--gold);">📊 Partner Health</button>
   <button class="mode-tab" id="tab-kb" onclick="setMode('kb')" style="border-bottom-color:var(--teal);">📦 Product Knowledge</button>
+  <button class="mode-tab" id="tab-news" onclick="setMode('news')" style="border-bottom-color:#10B981;">📰 Weekly Briefing</button>
 </div>
 
 <div class="layout" id="layout">
@@ -569,6 +570,18 @@
       </button>
     </div>
 
+    <!-- ── WEEKLY BRIEFING ── -->
+    <div id="pane-news" style="display:none;flex-direction:column;gap:18px;">
+      <div class="panel-title">Weekly <span style="color:#10B981;">Product Briefing</span></div>
+      <div class="panel-hint">Auto-refreshed every Sunday evening. Covers the latest product updates and top SME Q&As — so you're always ready on Monday.</div>
+      <div id="news-status" style="font-size:12px;color:var(--muted);line-height:1.6;"></div>
+      <div class="err" id="news-err"></div>
+      <button class="main-btn" id="news-btn" onclick="loadNews()" style="background:#10B981;color:#080C14;">
+        <div class="spin" style="border-top-color:#080C14;"></div>
+        <span class="btn-label">🔄 Load This Week's Briefing</span>
+      </button>
+    </div>
+
     <!-- ── POST-CALL ── -->
     <div id="pane-post" style="display:none;display:flex;flex-direction:column;gap:16px;">
       <div class="panel-title">Post-Call <span class="g">Follow-Ups</span></div>
@@ -617,6 +630,15 @@
       <div class="empty-text">Select a category, ask your question — answers come straight from Geotab's approved team docs.</div>
       <div class="empty-hint">Ctrl+Enter to submit</div>
     </div>
+
+    <div class="empty" id="empty-news" style="display:none;">
+      <div class="empty-icon">📰</div>
+      <div class="empty-text">Your weekly Geotab product briefing — latest news and top SME Q&As, auto-refreshed every Sunday evening.</div>
+      <div class="empty-hint">Click "Load This Week's Briefing" to fetch</div>
+    </div>
+
+    <!-- NEWS RESULT -->
+    <div id="news-result" style="display:none;flex-direction:column;gap:16px;overflow-y:auto;max-height:calc(100vh - 140px);"></div>
 
     <!-- KB RESULT -->
     <div id="kb-result" style="display:none;flex-direction:column;gap:16px;">
@@ -750,7 +772,7 @@ async function aiRaw(sys, usr, tokens) {
 // ── MODE SWITCHING ────────────────────────────────────────────
 function setMode(m) {
   mode = m;
-  ['pre','live','post','partner','kb'].forEach(x => {
+  ['pre','live','post','partner','kb','news'].forEach(x => {
     document.getElementById('tab-'+x).classList.toggle('active', x === m);
     document.getElementById('pane-'+x).style.display = x === m ? 'flex' : 'none';
     if (x === m) { document.getElementById('pane-'+x).style.flexDirection = 'column'; document.getElementById('pane-'+x).style.gap = '20px'; }
@@ -760,10 +782,12 @@ function setMode(m) {
   document.getElementById('empty-post').style.display = m === 'post' ? 'flex' : 'none';
   document.getElementById('empty-partner').style.display = m === 'partner' ? 'flex' : 'none';
   document.getElementById('empty-kb').style.display = m === 'kb' ? 'flex' : 'none';
+  document.getElementById('empty-news').style.display = m === 'news' ? 'flex' : 'none';
   document.getElementById('result').style.display = 'none';
   document.getElementById('post-result').style.display = 'none';
   document.getElementById('partner-result').style.display = 'none';
   document.getElementById('kb-result').style.display = 'none';
+  document.getElementById('news-result').style.display = 'none';
 }
 
 // ── CALL TYPE ─────────────────────────────────────────────────
@@ -1247,6 +1271,97 @@ function resetKb() {
   document.getElementById('kb-result').style.display = 'none';
   document.getElementById('empty-kb').style.display = 'flex';
   document.getElementById('kb-q').value = '';
+}
+
+// ── WEEKLY BRIEFING ──────────────────────────────────────────
+async function loadNews() {
+  noErr('news-err');
+  if (!PARTNER_API) { err('news-err', 'API not configured. Set up the local server first (start.bat).'); return; }
+  loading('news-btn', true);
+  document.getElementById('news-status').textContent = 'Fetching this week\'s briefing…';
+  try {
+    const resp = await fetch(`${PARTNER_API}/news?key=${PARTNER_KEY}`);
+    const data = await resp.json();
+    if (data.error) { err('news-err', data.error); loading('news-btn', false); return; }
+    const raw = (data.content || '').trim();
+    if (!raw || raw.startsWith('GIA Weekly Product Digest — auto-generated')) {
+      // No digest yet — generate locally from KB docs
+      document.getElementById('news-status').textContent = 'No digest found — generating now (takes ~30s)…';
+      await generateDigestLocally();
+    } else {
+      renderNews(raw, data.fetched_at);
+    }
+  } catch(e) {
+    err('news-err', 'Could not reach the server. Make sure start.bat is running.');
+  }
+  loading('news-btn', false);
+}
+
+async function generateDigestLocally() {
+  const cats = { cameras:'Cameras', asset_trackers:'Asset Trackers', go_devices:'GO Devices', iox:'IOX Accessories' };
+  let allDocs = '';
+  for (const [cat, label] of Object.entries(cats)) {
+    try {
+      const r = await fetch(`${PARTNER_API}/kb?key=${PARTNER_KEY}&category=${cat}`);
+      const d = await r.json();
+      if (d.content) allDocs += `\n\n=== ${label} ===\n${d.content.slice(0, 4500)}`;
+    } catch {}
+  }
+  const today = new Date().toLocaleDateString('en-US', {month:'long', day:'numeric', year:'numeric'});
+  const sys = `You are GIA, Geotab's internal AI briefing assistant for Partner Account Managers. Using ONLY the provided Geotab documentation, write a concise weekly product briefing in this exact format:
+
+# 📰 GIA Weekly Product Briefing — ${today}
+
+## 📦 Product Highlights
+- [5 key product facts or differentiators a PAM should know]
+
+## 💬 Top SME Q&As
+**Q: [question]**
+A: [concise answer]
+(repeat for 8 most common questions)
+
+## 🏆 Top Selling Points This Week
+- [3 compelling reasons to choose Geotab over competitors]
+
+Keep answers short, factual, and sales-focused. Never guess or invent details.`;
+  const usr = `GEOTAB PRODUCT DOCUMENTATION:\n${allDocs}\n\nWrite the weekly briefing now.`;
+  const digest = await aiRaw(sys, usr, 1800);
+  renderNews(digest, null);
+  document.getElementById('news-status').textContent = '✓ Generated now — Sunday schedule will persist it for next week';
+}
+
+function renderNews(content, fetchedAt) {
+  let updated = fetchedAt ? new Date(fetchedAt * 1000).toLocaleString('en-US', {weekday:'long', month:'long', day:'numeric', hour:'2-digit', minute:'2-digit'}) : '';
+
+  // Markdown → HTML
+  const lines = content.split('\n');
+  let html = '';
+  for (const line of lines) {
+    const t = line.trim();
+    if (!t) { html += '<div style="height:6px;"></div>'; continue; }
+    if (t.startsWith('# '))      { html += `<div style="font-size:16px;font-weight:700;color:var(--text);margin-bottom:6px;">${t.slice(2)}</div>`; }
+    else if (t.startsWith('## ')){ html += `<div style="font-size:11px;font-weight:700;color:#10B981;text-transform:uppercase;letter-spacing:.6px;margin-top:18px;margin-bottom:8px;">${t.slice(3)}</div>`; }
+    else if (t.startsWith('**Q:')){ html += `<div style="font-weight:600;color:var(--text);margin-top:12px;font-size:13.5px;">${t.replace(/\*\*/g,'')}</div>`; }
+    else if (t.startsWith('A:')){ html += `<div style="color:var(--muted);font-size:13px;margin-top:2px;padding-left:12px;">${t}</div>`; }
+    else if (t.startsWith('- ')){ html += `<div style="padding:3px 0 3px 16px;position:relative;font-size:13.5px;"><span style="position:absolute;left:0;color:#10B981;">•</span>${t.slice(2).replace(/\*\*(.+?)\*\*/g,'<strong>$1</strong>')}</div>`; }
+    else { html += `<div style="font-size:13.5px;line-height:1.7;">${t.replace(/\*\*(.+?)\*\*/g,'<strong>$1</strong>')}</div>`; }
+  }
+
+  document.getElementById('news-result').innerHTML = `
+    <div class="result-hdr">
+      <div><div class="result-name">📰 Weekly Product Briefing</div>
+        <div style="font-size:12px;color:var(--muted);margin-top:4px;">${updated ? 'Updated ' + updated : 'Generated ' + new Date().toLocaleTimeString([],{hour:'2-digit',minute:'2-digit'})}</div>
+      </div>
+    </div>
+    <div class="card" style="--c:#10B981;"><div style="font-size:13.5px;line-height:1.8;color:var(--text);">${html}</div></div>
+    <div style="font-size:11px;color:var(--muted);padding:10px 12px;background:var(--surface);border-radius:8px;border:1px solid var(--border);">
+      🔒 Generated from Geotab internal Q&As and approved product docs only. Auto-refreshes every Sunday evening via scheduled remote agent.
+    </div>
+    <button class="btn-ghost" onclick="loadNews()">🔄 Refresh</button>`;
+
+  document.getElementById('empty-news').style.display = 'none';
+  document.getElementById('news-result').style.display = 'flex';
+  if (updated) document.getElementById('news-status').textContent = `✓ Last updated ${updated}`;
 }
 
 // ── INIT ──────────────────────────────────────────────────────
