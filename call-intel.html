@@ -983,9 +983,9 @@ let PARTNER_API = localStorage.getItem('gia_partner_api') || '';
 const PARTNER_KEY = 'gia-geotab-2026';
 
 function configurePartnerApi() {
-  const current = localStorage.getItem('gia_partner_api') || '';
-  const url = prompt('Paste your Apps Script Partner Health API URL:', current);
-  if (url && url.startsWith('https://script.google.com')) {
+  const current = localStorage.getItem('gia_partner_api') || 'http://localhost:8080';
+  const url = prompt('Enter Partner Health API URL:\n(Default: http://localhost:8080 — run start.bat first)', current);
+  if (url && url.trim()) {
     PARTNER_API = url.trim();
     localStorage.setItem('gia_partner_api', PARTNER_API);
     document.getElementById('ph-api-status').textContent = '✓ API configured';
@@ -998,8 +998,8 @@ async function runPartnerHealth() {
   const q = document.getElementById('ph-input').value.trim();
   if (!q) { err('ph-err', 'Please enter a partner name or ERP code.'); return; }
   if (!PARTNER_API) {
-    const url = prompt('First-time setup: Paste your Apps Script Partner Health API URL\n(from script.google.com → Deploy → Manage deployments → copy the Web app URL):');
-    if (!url || !url.startsWith('https://')) { err('ph-err', 'API URL required to fetch live data. Use the configure link below.'); return; }
+    const url = prompt('First-time setup: Enter API URL\n(Default: http://localhost:8080 — run start.bat in GIATools/partner-health-api first):');
+    if (!url || !url.trim()) { err('ph-err', 'API URL required. Click "Configure API URL" below and enter http://localhost:8080'); return; }
     PARTNER_API = url.trim();
     localStorage.setItem('gia_partner_api', PARTNER_API);
     document.getElementById('ph-api-status').textContent = '✓ API configured';
