@@ -24,6 +24,11 @@
     --gold: #F59E0B;
   }
 
+  /* ── PRODUCT KNOWLEDGE ── */
+  .kb-chip { background: var(--surface); border: 1px solid var(--border); border-radius: 8px; padding: 10px 12px; cursor: pointer; color: var(--muted); font-family: 'DM Sans', sans-serif; font-size: 13px; text-align: left; transition: all 0.15s; }
+  .kb-chip:hover { border-color: var(--teal); color: var(--text); }
+  .kb-chip.active { border-color: var(--teal); background: rgba(0,201,201,0.08); color: var(--teal); font-weight: 600; }
+
   /* ── PARTNER HEALTH ── */
   .stat-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 14px; }
   .stat-tile { background: var(--surface); border: 1px solid var(--border); border-radius: 12px; padding: 14px 16px; }
@@ -411,6 +416,7 @@
   <button class="mode-tab live-tab" id="tab-live" onclick="setMode('live')">🛡 Live Assist</button>
   <button class="mode-tab" id="tab-post" onclick="setMode('post')">📋 Post-Call</button>
   <button class="mode-tab" id="tab-partner" onclick="setMode('partner')" style="border-bottom-color:var(--gold);">📊 Partner Health</button>
+  <button class="mode-tab" id="tab-kb" onclick="setMode('kb')" style="border-bottom-color:var(--teal);">📦 Product Knowledge</button>
 </div>
 
 <div class="layout" id="layout">
@@ -539,6 +545,30 @@
       </div>
     </div>
 
+    <!-- ── PRODUCT KNOWLEDGE ── -->
+    <div id="pane-kb" style="display:none;flex-direction:column;gap:18px;">
+      <div class="panel-title">Product <span style="color:var(--teal);">Knowledge</span></div>
+      <div class="panel-hint">Ask anything about Geotab products — answers come directly from approved team docs and SME Q&As.</div>
+      <div class="field">
+        <label>Category</label>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;">
+          <button class="kb-chip active" id="kb-cameras" onclick="setKbCat('cameras',this)">📷 Cameras</button>
+          <button class="kb-chip" id="kb-asset_trackers" onclick="setKbCat('asset_trackers',this)">📡 Asset Trackers</button>
+          <button class="kb-chip" id="kb-go_devices" onclick="setKbCat('go_devices',this)">📟 GO Devices</button>
+          <button class="kb-chip" id="kb-iox" onclick="setKbCat('iox',this)">🔌 IOX</button>
+        </div>
+      </div>
+      <div class="field">
+        <label>Your Question</label>
+        <textarea class="big-input" id="kb-q" style="min-height:100px;" placeholder="e.g. What's the difference between GO Focus and GO Focus Plus? Can it work without a GO device?" onkeydown="if(event.key==='Enter'&&event.ctrlKey)runKb()"></textarea>
+      </div>
+      <div class="err" id="kb-err"></div>
+      <button class="main-btn" id="kb-btn" onclick="runKb()" style="background:var(--teal);color:#080C14;">
+        <div class="spin" style="border-top-color:#080C14;"></div>
+        <span class="btn-label">📦 Get Answer</span>
+      </button>
+    </div>
+
     <!-- ── POST-CALL ── -->
     <div id="pane-post" style="display:none;display:flex;flex-direction:column;gap:16px;">
       <div class="panel-title">Post-Call <span class="g">Follow-Ups</span></div>
@@ -580,6 +610,31 @@
       <div class="empty-icon">📊</div>
       <div class="empty-text">Enter a partner name or ERP code to see their real revenue and activation data.</div>
       <div class="empty-hint">Powered by live BigQuery data</div>
+    </div>
+
+    <div class="empty" id="empty-kb" style="display:none;">
+      <div class="empty-icon">📦</div>
+      <div class="empty-text">Select a category, ask your question — answers come straight from Geotab's approved team docs.</div>
+      <div class="empty-hint">Ctrl+Enter to submit</div>
+    </div>
+
+    <!-- KB RESULT -->
+    <div id="kb-result" style="display:none;flex-direction:column;gap:16px;">
+      <div class="result-hdr">
+        <div>
+          <div class="result-name" id="kb-cat-label"></div>
+          <div style="font-size:12px;color:var(--muted);margin-top:4px;" id="kb-q-label"></div>
+        </div>
+        <div class="result-time" id="kb-time"></div>
+      </div>
+      <div class="card" style="--c:var(--teal);">
+        <div class="card-label">📦 Answer — from approved Geotab docs</div>
+        <div id="kb-answer" style="font-size:13.5px;line-height:1.7;color:var(--text);"></div>
+      </div>
+      <div style="font-size:11px;color:var(--muted);padding:8px 12px;background:var(--surface);border-radius:8px;border:1px solid var(--border);">
+        🔒 Answers sourced strictly from Geotab internal Q&As and SME-approved documentation. If the answer isn't in the docs, GIA will say so.
+      </div>
+      <button class="btn-ghost" onclick="resetKb()">↩ Ask Another Question</button>
     </div>
 
     <!-- PARTNER HEALTH RESULT -->
@@ -697,7 +752,7 @@ async function aiRaw(sys, usr, tokens) {
 // ── MODE SWITCHING ────────────────────────────────────────────
 function setMode(m) {
   mode = m;
-  ['pre','live','post','partner'].forEach(x => {
+  ['pre','live','post','partner','kb'].forEach(x => {
     document.getElementById('tab-'+x).classList.toggle('active', x === m);
     document.getElementById('pane-'+x).style.display = x === m ? 'flex' : 'none';
     if (x === m) { document.getElementById('pane-'+x).style.flexDirection = 'column'; document.getElementById('pane-'+x).style.gap = '20px'; }
@@ -706,9 +761,11 @@ function setMode(m) {
   document.getElementById('empty-live').style.display = m === 'live' ? 'flex' : 'none';
   document.getElementById('empty-post').style.display = m === 'post' ? 'flex' : 'none';
   document.getElementById('empty-partner').style.display = m === 'partner' ? 'flex' : 'none';
+  document.getElementById('empty-kb').style.display = m === 'kb' ? 'flex' : 'none';
   document.getElementById('result').style.display = 'none';
   document.getElementById('post-result').style.display = 'none';
   document.getElementById('partner-result').style.display = 'none';
+  document.getElementById('kb-result').style.display = 'none';
 }
 
 // ── CALL TYPE ─────────────────────────────────────────────────
@@ -1128,6 +1185,63 @@ function resetPost() {
   document.getElementById('pr-summary').style.display = 'none';
   document.getElementById('fup-list').innerHTML = '';
   document.getElementById('empty-post').style.display = 'flex';
+}
+
+// ── PRODUCT KNOWLEDGE ─────────────────────────────────────────
+let kbCategory = 'cameras';
+
+function setKbCat(cat, el) {
+  kbCategory = cat;
+  document.querySelectorAll('.kb-chip').forEach(c => c.classList.remove('active'));
+  el.classList.add('active');
+}
+
+async function runKb() {
+  noErr('kb-err');
+  const q = document.getElementById('kb-q').value.trim();
+  if (!q) { err('kb-err', 'Please enter a question.'); return; }
+  if (!PARTNER_API) { err('kb-err', 'API not configured. Set up the local server first.'); return; }
+
+  loading('kb-btn', true);
+
+  try {
+    // Step 1: fetch doc content from local server
+    const kbUrl = `${PARTNER_API}/kb?key=${PARTNER_KEY}&category=${kbCategory}`;
+    const kbResp = await fetch(kbUrl);
+    const kbData = await kbResp.json();
+    if (kbData.error) { err('kb-err', kbData.error); loading('kb-btn', false); return; }
+
+    const docContent = kbData.content || '';
+    if (!docContent.trim()) { err('kb-err', 'Could not load product documentation. Make sure the server is running.'); loading('kb-btn', false); return; }
+
+    // Step 2: ask Claude, strictly from the docs
+    const catLabels = { cameras: 'Cameras', asset_trackers: 'Asset Trackers', go_devices: 'GO Devices', iox: 'IOX Accessories' };
+    const sys = `You are GIA, Geotab's internal AI sales assistant. You have been given approved Geotab product documentation and SME Q&A records. Answer the PAM's question STRICTLY from this documentation. Be concise and direct — sales-focused, not technical. If the answer is not in the docs, say exactly: "I don't have that information in the approved docs — contact your Geotab SME or check the support center." Never guess or make up product details.`;
+    const usr = `APPROVED GEOTAB DOCUMENTATION — ${catLabels[kbCategory]}:\n\n${docContent}\n\n---\n\nPAM QUESTION: ${q}`;
+
+    const answer = await aiRaw(sys, usr, 500);
+    renderKbResult(q, answer);
+
+  } catch(e) {
+    err('kb-err', 'Could not load documentation. Make sure the local server is running (start.bat).');
+  }
+  loading('kb-btn', false);
+}
+
+function renderKbResult(q, answer) {
+  const catLabels = { cameras: '📷 Cameras', asset_trackers: '📡 Asset Trackers', go_devices: '📟 GO Devices', iox: '🔌 IOX Accessories' };
+  document.getElementById('kb-cat-label').textContent = catLabels[kbCategory];
+  document.getElementById('kb-q-label').textContent = `"${q}"`;
+  document.getElementById('kb-time').textContent = new Date().toLocaleTimeString([], {hour:'2-digit',minute:'2-digit'});
+  document.getElementById('kb-answer').innerHTML = answer.replace(/\*\*(.*?)\*\*/g,'<strong>$1</strong>').replace(/\n/g,'<br>');
+  document.getElementById('empty-kb').style.display = 'none';
+  document.getElementById('kb-result').style.display = 'flex';
+}
+
+function resetKb() {
+  document.getElementById('kb-result').style.display = 'none';
+  document.getElementById('empty-kb').style.display = 'flex';
+  document.getElementById('kb-q').value = '';
 }
 
 // ── INIT ──────────────────────────────────────────────────────
