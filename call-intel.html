@@ -631,9 +631,7 @@
         <div class="card-label">📦 Answer — from approved Geotab docs</div>
         <div id="kb-answer" style="font-size:13.5px;line-height:1.7;color:var(--text);"></div>
       </div>
-      <div style="font-size:11px;color:var(--muted);padding:8px 12px;background:var(--surface);border-radius:8px;border:1px solid var(--border);">
-        🔒 Answers sourced strictly from Geotab internal Q&As and SME-approved documentation. If the answer isn't in the docs, GIA will say so.
-      </div>
+      <div id="kb-sources" style="font-size:11px;color:var(--muted);padding:10px 12px;background:var(--surface);border-radius:8px;border:1px solid var(--border);line-height:1.7;"></div>
       <button class="btn-ghost" onclick="resetKb()">↩ Ask Another Question</button>
     </div>
 
@@ -1212,6 +1210,7 @@ async function runKb() {
     if (kbData.error) { err('kb-err', kbData.error); loading('kb-btn', false); return; }
 
     const docContent = kbData.content || '';
+    const kbSources = kbData.sources || [];
     if (!docContent.trim()) { err('kb-err', 'Could not load product documentation. Make sure the server is running.'); loading('kb-btn', false); return; }
 
     // Step 2: ask Claude, strictly from the docs
@@ -1220,7 +1219,7 @@ async function runKb() {
     const usr = `APPROVED GEOTAB DOCUMENTATION — ${catLabels[kbCategory]}:\n\n${docContent}\n\n---\n\nPAM QUESTION: ${q}`;
 
     const answer = await aiRaw(sys, usr, 500);
-    renderKbResult(q, answer);
+    renderKbResult(q, answer, kbSources);
 
   } catch(e) {
     err('kb-err', 'Could not load documentation. Make sure the local server is running (start.bat).');
@@ -1228,12 +1227,18 @@ async function runKb() {
   loading('kb-btn', false);
 }
 
-function renderKbResult(q, answer) {
+function renderKbResult(q, answer, sources) {
   const catLabels = { cameras: '📷 Cameras', asset_trackers: '📡 Asset Trackers', go_devices: '📟 GO Devices', iox: '🔌 IOX Accessories' };
   document.getElementById('kb-cat-label').textContent = catLabels[kbCategory];
   document.getElementById('kb-q-label').textContent = `"${q}"`;
   document.getElementById('kb-time').textContent = new Date().toLocaleTimeString([], {hour:'2-digit',minute:'2-digit'});
   document.getElementById('kb-answer').innerHTML = answer.replace(/\*\*(.*?)\*\*/g,'<strong>$1</strong>').replace(/\n/g,'<br>');
+  const srcDiv = document.getElementById('kb-sources');
+  if (sources && sources.length) {
+    srcDiv.innerHTML = '🔒 <strong>Sources consulted:</strong><br>' + sources.map(s => `&nbsp;&nbsp;• ${s}`).join('<br>');
+  } else {
+    srcDiv.innerHTML = '🔒 Answers sourced strictly from Geotab internal Q&As and SME-approved documentation. If the answer isn\'t in the docs, GIA will say so.';
+  }
   document.getElementById('empty-kb').style.display = 'none';
   document.getElementById('kb-result').style.display = 'flex';
 }
