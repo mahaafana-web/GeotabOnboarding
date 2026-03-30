@@ -80,6 +80,8 @@
   .logo-sub { font-size: 11px; color: var(--muted); }
   .dot-wrap { display: flex; align-items: center; gap: 7px; font-size: 11px; color: var(--muted); }
   .dot { width: 7px; height: 7px; border-radius: 50%; background: var(--green); box-shadow: 0 0 6px var(--green); animation: pulse 2s infinite; }
+  .dot.offline { background: var(--orange); box-shadow: 0 0 6px var(--orange); }
+  .dot.checking { background: var(--muted); box-shadow: none; animation: none; }
   @keyframes pulse { 0%,100%{opacity:1}50%{opacity:.4} }
 
   /* ── MODE TABS ── */
@@ -91,17 +93,18 @@
     gap: 0;
   }
   .mode-tab {
-    padding: 14px 24px;
-    font-family: 'Syne', sans-serif;
-    font-weight: 700;
-    font-size: 13px;
+    padding: 13px 18px;
+    font-family: 'DM Sans', sans-serif;
+    font-weight: 600;
+    font-size: 13.5px;
     cursor: pointer;
     border: none;
     background: transparent;
     color: var(--muted);
     border-bottom: 3px solid transparent;
     transition: all 0.2s;
-    letter-spacing: 0.01em;
+    letter-spacing: 0;
+    white-space: nowrap;
   }
   .mode-tab:hover { color: var(--text); }
   .mode-tab.active { color: var(--text); border-bottom-color: var(--blue); }
@@ -407,7 +410,7 @@
       <div class="logo-sub">Powered by Geotab AI</div>
     </div>
   </div>
-  <div class="dot-wrap"><div class="dot"></div> Connected</div>
+  <div class="dot-wrap"><div class="dot" id="status-dot"></div> <span id="status-text">Connected</span></div>
 </div>
 
 <!-- MODE TABS -->
@@ -550,19 +553,13 @@
     <div id="pane-kb" style="display:none;flex-direction:column;gap:18px;">
       <div class="panel-title">Product <span style="color:var(--teal);">Knowledge</span></div>
       <div class="panel-hint">Ask anything about Geotab products — answers come directly from approved team docs and SME Q&As.</div>
-      <div class="field">
-        <label>Category</label>
-        <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;">
-          <button class="kb-chip active" id="kb-cameras" onclick="setKbCat('cameras',this)">📷 Cameras</button>
-          <button class="kb-chip" id="kb-asset_trackers" onclick="setKbCat('asset_trackers',this)">📡 Asset Trackers</button>
-          <button class="kb-chip" id="kb-go_devices" onclick="setKbCat('go_devices',this)">📟 GO Devices</button>
-          <button class="kb-chip" id="kb-iox" onclick="setKbCat('iox',this)">🔌 IOX</button>
-        </div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;">
+        <button class="kb-chip active" id="kb-cameras" onclick="setKbCat('cameras',this)">📷 Cameras</button>
+        <button class="kb-chip" id="kb-asset_trackers" onclick="setKbCat('asset_trackers',this)">📡 Asset Trackers</button>
+        <button class="kb-chip" id="kb-go_devices" onclick="setKbCat('go_devices',this)">📟 GO Devices</button>
+        <button class="kb-chip" id="kb-iox" onclick="setKbCat('iox',this)">🔌 IOX</button>
       </div>
-      <div class="field">
-        <label>Your Question</label>
-        <textarea class="big-input" id="kb-q" style="min-height:100px;" placeholder="e.g. What's the difference between GO Focus and GO Focus Plus? Can it work without a GO device?" onkeydown="if(event.key==='Enter'&&event.ctrlKey)runKb()"></textarea>
-      </div>
+      <textarea class="big-input" id="kb-q" style="min-height:100px;" placeholder="Ask anything about this product — e.g. Does GO Focus Plus need a GO device? What's the range on IOX-BT?" onkeydown="if(event.key==='Enter'&&event.ctrlKey)runKb()"></textarea>
       <div class="err" id="kb-err"></div>
       <button class="main-btn" id="kb-btn" onclick="runKb()" style="background:var(--teal);color:#080C14;">
         <div class="spin" style="border-top-color:#080C14;"></div>
@@ -585,9 +582,9 @@
     <!-- ── POST-CALL ── -->
     <div id="pane-post" style="display:none;display:flex;flex-direction:column;gap:16px;">
       <div class="panel-title">Post-Call <span class="g">Follow-Ups</span></div>
-      <div class="panel-hint">Paste your Gemini notes. GIA pulls out every action item.</div>
+      <div class="panel-hint">Paste any meeting notes or AI summary — GIA pulls out every action item with owner and timeline.</div>
       <input class="big-input" type="text" id="post-co" placeholder="Company name..." />
-      <textarea class="big-input" id="post-notes" style="min-height:220px;" placeholder="Paste your Gemini meeting summary here..."></textarea>
+      <textarea class="big-input" id="post-notes" style="min-height:220px;" placeholder="Paste your meeting notes or AI-generated summary here..."></textarea>
       <div class="err" id="post-err"></div>
       <button class="main-btn" id="post-btn" onclick="runPost()">
         <div class="spin"></div>
@@ -783,6 +780,8 @@ function setMode(m) {
   document.getElementById('empty-partner').style.display = m === 'partner' ? 'flex' : 'none';
   document.getElementById('empty-kb').style.display = m === 'kb' ? 'flex' : 'none';
   document.getElementById('empty-news').style.display = m === 'news' ? 'flex' : 'none';
+  if (m === 'news' && document.getElementById('news-result').style.display === 'none') { setTimeout(loadNews, 100); }
+  if (['partner','kb','news'].includes(m)) checkServerStatus();
   document.getElementById('result').style.display = 'none';
   document.getElementById('post-result').style.display = 'none';
   document.getElementById('partner-result').style.display = 'none';
@@ -1362,6 +1361,21 @@ function renderNews(content, fetchedAt) {
   document.getElementById('empty-news').style.display = 'none';
   document.getElementById('news-result').style.display = 'flex';
   if (updated) document.getElementById('news-status').textContent = `✓ Last updated ${updated}`;
+}
+
+// ── SERVER STATUS ─────────────────────────────────────────────
+async function checkServerStatus() {
+  if (!PARTNER_API) return;
+  const dot = document.getElementById('status-dot');
+  const txt = document.getElementById('status-text');
+  dot.className = 'dot checking'; txt.textContent = 'Checking…';
+  try {
+    const r = await fetch(`${PARTNER_API}/news?key=${PARTNER_KEY}`, { signal: AbortSignal.timeout(4000) });
+    if (r.ok) { dot.className = 'dot'; txt.textContent = 'Server online'; }
+    else { dot.className = 'dot offline'; txt.textContent = 'Server error'; }
+  } catch {
+    dot.className = 'dot offline'; txt.textContent = 'Server offline — start.bat needed';
+  }
 }
 
 // ── INIT ──────────────────────────────────────────────────────
