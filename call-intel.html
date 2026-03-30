@@ -723,13 +723,28 @@
         <div class="summary-lbl">Call Summary</div>
         <div id="pr-summary-text"></div>
       </div>
+
       <div class="fups-label">Action Items</div>
       <div id="fup-list" style="display:flex;flex-direction:column;gap:8px;"></div>
       <div class="add-row">
         <input type="text" id="add-fup" placeholder="Add a follow-up manually..." onkeydown="if(event.key==='Enter')addFup()" />
         <button onclick="addFup()">+ Add</button>
       </div>
-      <button class="btn-ghost tight" onclick="copyFups()">⎘ Copy All</button>
+      <button class="btn-ghost tight" onclick="copyFups()">⎘ Copy Action Items</button>
+
+      <div class="fups-label" style="margin-top:24px;">✉ Follow-Up Email</div>
+      <div id="pr-email" style="display:none;flex-direction:column;gap:8px;">
+        <div style="font-size:11px;color:var(--muted);font-family:'DM Mono',monospace;">SUBJECT: <span id="pr-email-subject" style="color:var(--text);font-weight:600;"></span></div>
+        <div id="pr-email-body" style="font-size:13px;line-height:1.75;background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:16px;white-space:pre-wrap;color:var(--text);"></div>
+        <button class="btn-ghost tight" onclick="copyEmail()">⎘ Copy Email</button>
+      </div>
+
+      <div class="fups-label" style="margin-top:24px;">📋 Salesforce Log Note</div>
+      <div id="pr-sfdc" style="display:none;flex-direction:column;gap:8px;">
+        <div id="pr-sfdc-text" style="font-size:13px;line-height:1.65;background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:14px;color:var(--text);"></div>
+        <button class="btn-ghost tight" onclick="copySfdc()">⎘ Copy to SFDC</button>
+      </div>
+
       <button class="btn-ghost" onclick="resetPost()">↩ New Notes</button>
     </div>
 
@@ -979,9 +994,19 @@ async function runPost() {
   if (!notes) { err('post-err', 'Please paste your meeting notes.'); return; }
   loading('post-btn', true);
   const company = document.getElementById('post-co').value.trim();
-  const sys = `You are GIA. Analyze meeting notes. Return JSON: {summary, followups:[{action,owner("PAM"|"Partner"|"Both"),timeline("24 hours"|"This week"|"2 weeks"|"Next month"),priority("high"|"medium"|"low")}]}. Return ONLY JSON.`;
+  const sys = `You are GIA, an AI assistant for Geotab Partner Account Managers. Analyze the meeting notes and return ONLY a JSON object with these fields:
+{
+  "summary": "2-3 sentence recap of the call",
+  "followups": [{"action": "...", "owner": "PAM"|"Partner"|"Both", "timeline": "24 hours"|"This week"|"2 weeks"|"Next month", "priority": "high"|"medium"|"low"}],
+  "email": {
+    "subject": "concise email subject line",
+    "body": "professional but warm follow-up email from the PAM to the partner contact. Reference specific things discussed. Include action items. Sign off as the PAM. 150-200 words."
+  },
+  "sfdc_note": "2-3 sentence Salesforce activity log entry. Past tense. Include who attended, key topics, outcomes, and next steps. No bullet points."
+}
+Return ONLY valid JSON. No extra text.`;
   try {
-    const r = await ai(sys, `Company: ${company||'Unknown'}\nNotes:\n${notes}`, 900);
+    const r = await ai(sys, `Company: ${company||'Unknown'}\nMeeting Notes:\n${notes}`, 1400);
     renderPost(company, r);
   } catch(e) {
     err('post-err', 'Something went wrong. Please try again.');
@@ -996,6 +1021,24 @@ function renderPost(company, r) {
   if (r.summary) { document.getElementById('pr-summary-text').textContent = r.summary; document.getElementById('pr-summary').style.display = 'block'; }
   document.getElementById('fup-list').innerHTML = '';
   (r.followups || []).forEach((f,i) => appendFup(f, i));
+
+  // Follow-up email
+  if (r.email) {
+    document.getElementById('pr-email-subject').textContent = r.email.subject || '';
+    document.getElementById('pr-email-body').textContent = r.email.body || '';
+    const emailDiv = document.getElementById('pr-email');
+    emailDiv.style.display = 'flex';
+    emailDiv.style.flexDirection = 'column';
+  }
+
+  // Salesforce note
+  if (r.sfdc_note) {
+    document.getElementById('pr-sfdc-text').textContent = r.sfdc_note;
+    const sfdcDiv = document.getElementById('pr-sfdc');
+    sfdcDiv.style.display = 'flex';
+    sfdcDiv.style.flexDirection = 'column';
+  }
+
   document.getElementById('post-result').style.display = 'block';
 }
 
@@ -1042,6 +1085,23 @@ function copyFups() {
     const b = document.querySelector('.btn-ghost.tight');
     b.textContent = '✓ Copied!';
     setTimeout(() => b.textContent = '⎘ Copy All', 2000);
+  });
+}
+
+function copyEmail() {
+  const subj = document.getElementById('pr-email-subject').textContent;
+  const body = document.getElementById('pr-email-body').textContent;
+  navigator.clipboard.writeText(`Subject: ${subj}\n\n${body}`).then(() => {
+    const b = event.target; b.textContent = '✓ Copied!';
+    setTimeout(() => b.textContent = '⎘ Copy Email', 2000);
+  });
+}
+
+function copySfdc() {
+  const txt = document.getElementById('pr-sfdc-text').textContent;
+  navigator.clipboard.writeText(txt).then(() => {
+    const b = event.target; b.textContent = '✓ Copied!';
+    setTimeout(() => b.textContent = '⎘ Copy to SFDC', 2000);
   });
 }
 
@@ -1205,6 +1265,8 @@ function resetPost() {
   document.getElementById('post-result').style.display = 'none';
   document.getElementById('pr-summary').style.display = 'none';
   document.getElementById('fup-list').innerHTML = '';
+  document.getElementById('pr-email').style.display = 'none';
+  document.getElementById('pr-sfdc').style.display = 'none';
   document.getElementById('empty-post').style.display = 'flex';
 }
 
