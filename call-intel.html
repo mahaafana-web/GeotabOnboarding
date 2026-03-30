@@ -573,12 +573,12 @@
     <!-- ── WEEKLY BRIEFING ── -->
     <div id="pane-news" style="display:none;flex-direction:column;gap:18px;">
       <div class="panel-title">Weekly <span style="color:#10B981;">Product Briefing</span></div>
-      <div class="panel-hint">Auto-refreshed every Sunday evening. Covers the latest product updates and top SME Q&As — so you're always ready on Monday.</div>
+      <div class="panel-hint">Latest Geotab product updates and top SME Q&As — pull anytime for a fresh briefing.</div>
       <div id="news-status" style="font-size:12px;color:var(--muted);line-height:1.6;"></div>
       <div class="err" id="news-err"></div>
       <button class="main-btn" id="news-btn" onclick="loadNews()" style="background:#10B981;color:#080C14;">
         <div class="spin" style="border-top-color:#080C14;"></div>
-        <span class="btn-label">🔄 Load This Week's Briefing</span>
+        <span class="btn-label">📰 Get Weekly Briefing</span>
       </button>
     </div>
 
@@ -633,8 +633,8 @@
 
     <div class="empty" id="empty-news" style="display:none;">
       <div class="empty-icon">📰</div>
-      <div class="empty-text">Your weekly Geotab product briefing — latest news and top SME Q&As, auto-refreshed every Sunday evening.</div>
-      <div class="empty-hint">Click "Load This Week's Briefing" to fetch</div>
+      <div class="empty-text">Your weekly Geotab product briefing — latest product updates and top SME Q&As, ready whenever you need it.</div>
+      <div class="empty-hint">Click "Get Weekly Briefing" to fetch</div>
     </div>
 
     <!-- NEWS RESULT -->
@@ -1327,7 +1327,7 @@ Keep answers short, factual, and sales-focused. Never guess or invent details.`;
   const usr = `GEOTAB PRODUCT DOCUMENTATION:\n${allDocs}\n\nWrite the weekly briefing now.`;
   const digest = await aiRaw(sys, usr, 1800);
   renderNews(digest, null);
-  document.getElementById('news-status').textContent = '✓ Generated now — Sunday schedule will persist it for next week';
+  document.getElementById('news-status').textContent = '✓ Generated from latest approved docs';
 }
 
 function renderNews(content, fetchedAt) {
@@ -1355,9 +1355,9 @@ function renderNews(content, fetchedAt) {
     </div>
     <div class="card" style="--c:#10B981;"><div style="font-size:13.5px;line-height:1.8;color:var(--text);">${html}</div></div>
     <div style="font-size:11px;color:var(--muted);padding:10px 12px;background:var(--surface);border-radius:8px;border:1px solid var(--border);">
-      🔒 Generated from Geotab internal Q&As and approved product docs only. Auto-refreshes every Sunday evening via scheduled remote agent.
+      🔒 Generated from Geotab internal Q&As and approved product documentation only.
     </div>
-    <button class="btn-ghost" onclick="loadNews()">🔄 Refresh</button>`;
+    <button class="btn-ghost" onclick="loadNews()">📰 Get Weekly Briefing</button>`;
 
   document.getElementById('empty-news').style.display = 'none';
   document.getElementById('news-result').style.display = 'flex';
