@@ -13,6 +13,7 @@
     --dark: #080C14;
     --mid: #0F1520;
     --surface: #141C2E;
+    --surface2: #1A2338;
     --border: rgba(255,255,255,0.07);
     --border-hover: rgba(255,255,255,0.14);
     --text: #E8EDF5;
@@ -22,6 +23,7 @@
     --yellow: #FFD166;
     --red: #FF4D6A;
     --purple: #A78BFA;
+    --teal: #00C9C9;
   }
 
   * { box-sizing: border-box; margin: 0; padding: 0; }
@@ -39,8 +41,9 @@
 
   /* MODE TOGGLE */
   .mode-toggle { display: flex; background: var(--surface); border: 1px solid var(--border); border-radius: 8px; overflow: hidden; }
-  .mode-btn { padding: 7px 16px; font-family: 'DM Mono', monospace; font-size: 11px; letter-spacing: 0.05em; cursor: pointer; border: none; background: transparent; color: var(--muted); transition: all 0.2s; }
+  .mode-btn { padding: 7px 14px; font-family: 'DM Mono', monospace; font-size: 11px; letter-spacing: 0.04em; cursor: pointer; border: none; background: transparent; color: var(--muted); transition: all 0.2s; }
   .mode-btn.active { background: var(--blue); color: #fff; }
+  .mode-btn.active.live { background: var(--teal); color: #fff; }
 
   /* LAYOUT */
   .app { flex: 1; display: grid; grid-template-columns: 400px 1fr; min-height: calc(100vh - 53px); }
@@ -81,30 +84,22 @@
   /* SFDC LOOKUP */
   .sfdc-box { background: var(--surface); border: 1px solid var(--border); border-radius: 10px; padding: 14px; display: flex; flex-direction: column; gap: 10px; }
   .sfdc-btn-row { display: flex; gap: 8px; }
-  .sfdc-btn {
-    flex: 1; padding: 9px 12px; border-radius: 8px; font-family: 'DM Mono', monospace;
-    font-size: 10px; letter-spacing: 0.05em; cursor: pointer; border: 1px solid; transition: all 0.2s; text-align: center;
-  }
+  .sfdc-btn { flex: 1; padding: 9px 12px; border-radius: 8px; font-family: 'DM Mono', monospace; font-size: 10px; letter-spacing: 0.05em; cursor: pointer; border: 1px solid; transition: all 0.2s; text-align: center; }
   .sfdc-btn-sf { background: rgba(0,161,224,0.1); border-color: rgba(0,161,224,0.3); color: #4DB8FF; }
   .sfdc-btn-sf:hover { background: rgba(0,161,224,0.2); }
   .sfdc-btn-px { background: rgba(167,139,250,0.1); border-color: rgba(167,139,250,0.3); color: var(--purple); }
   .sfdc-btn-px:hover { background: rgba(167,139,250,0.2); }
-  .sfdc-opp-found { background: rgba(0,229,160,0.08); border: 1px solid rgba(0,229,160,0.2); border-radius: 8px; padding: 10px 12px; font-size: 12px; line-height: 1.6; display: none; }
-  .sfdc-opp-found.visible { display: block; }
-  .sfdc-opp-label { font-family: 'DM Mono', monospace; font-size: 10px; color: var(--green); text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 4px; }
 
   /* GO BUTTON */
   .go-btn { background: var(--blue); color: #fff; border: none; border-radius: 12px; padding: 14px; font-family: 'Syne', sans-serif; font-weight: 700; font-size: 14px; cursor: pointer; transition: all 0.2s; letter-spacing: 0.02em; display: flex; align-items: center; justify-content: center; gap: 10px; }
   .go-btn:hover { background: var(--blue-light); transform: translateY(-1px); }
   .go-btn:disabled { opacity: 0.5; cursor: not-allowed; transform: none; }
+  .go-btn.live-btn { background: var(--teal); }
+  .go-btn.live-btn:hover { background: #00AEAE; }
   .go-btn .spinner { width: 15px; height: 15px; border: 2px solid rgba(255,255,255,0.3); border-top-color: #fff; border-radius: 50%; animation: spin 0.8s linear infinite; display: none; }
   .go-btn.loading .spinner { display: block; }
   .go-btn.loading .btn-text { display: none; }
   @keyframes spin { to { transform: rotate(360deg); } }
-
-  /* POST-CALL PANEL */
-  .postcall-panel { display: none; flex-direction: column; gap: 18px; flex: 1; }
-  .postcall-panel.visible { display: flex; }
 
   /* ERROR */
   .error-box { background: rgba(255,77,106,0.08); border: 1px solid rgba(255,77,106,0.2); border-radius: 10px; padding: 14px 16px; font-size: 12px; color: var(--red); line-height: 1.6; display: none; }
@@ -125,6 +120,7 @@
   .result-type-badge { font-family: 'DM Mono', monospace; font-size: 10px; padding: 4px 10px; border-radius: 4px; letter-spacing: 0.06em; margin-top: 6px; display: inline-block; }
   .badge-existing { background: rgba(0,87,255,0.15); color: #6B9FFF; border: 1px solid rgba(0,87,255,0.25); }
   .badge-prospect { background: rgba(255,107,53,0.12); color: var(--orange); border: 1px solid rgba(255,107,53,0.25); }
+  .badge-live { background: rgba(0,201,201,0.12); color: var(--teal); border: 1px solid rgba(0,201,201,0.25); }
   .result-time { font-family: 'DM Mono', monospace; font-size: 11px; color: var(--muted); }
 
   /* INTEL CARDS */
@@ -136,15 +132,6 @@
   .intel-card-title { font-family: 'DM Mono', monospace; font-size: 10px; letter-spacing: 0.07em; color: var(--muted); text-transform: uppercase; }
   .intel-card-body { font-size: 13px; line-height: 1.65; color: var(--text); }
   .intel-card-body strong { color: var(--green); font-weight: 600; }
-
-  /* SFDC OPP CARD */
-  .sfdc-card { background: rgba(0,161,224,0.06); border-color: rgba(0,161,224,0.2); }
-  .sfdc-card::before { background: #4DB8FF; }
-  .sfdc-field { display: flex; justify-content: space-between; align-items: center; padding: 5px 0; border-bottom: 1px solid var(--border); font-size: 12px; }
-  .sfdc-field:last-child { border-bottom: none; }
-  .sfdc-field-label { color: var(--muted); font-family: 'DM Mono', monospace; font-size: 10px; }
-  .sfdc-field-value { color: var(--text); font-weight: 500; }
-  .sfdc-stage-badge { padding: 2px 8px; border-radius: 4px; font-size: 10px; font-family: 'DM Mono', monospace; }
 
   /* OPENER CARD */
   .opener-card { background: linear-gradient(135deg, rgba(0,87,255,0.12) 0%, rgba(0,87,255,0.05) 100%); border-color: rgba(0,87,255,0.25); }
@@ -181,6 +168,198 @@
   .copy-all-btn:hover { border-color: var(--border-hover); color: var(--text); }
   .call-summary { background: var(--surface); border: 1px solid var(--border); border-left: 3px solid var(--blue); border-radius: 12px; padding: 14px 16px; font-size: 13px; line-height: 1.65; }
   .call-summary-label { font-family: 'DM Mono', monospace; font-size: 10px; letter-spacing: 0.07em; color: var(--muted); text-transform: uppercase; margin-bottom: 8px; }
+
+  /* ══════════════════════════════════════════════
+     LIVE ASSIST STYLES
+  ══════════════════════════════════════════════ */
+  .live-panel { display: none; flex-direction: column; gap: 20px; }
+  .live-panel.visible { display: flex; }
+
+  /* Live section cards */
+  .live-section {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    padding: 16px 18px;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+  }
+  .live-section-header {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+  .live-section-icon { font-size: 18px; }
+  .live-section-title {
+    font-family: 'Syne', sans-serif;
+    font-weight: 700;
+    font-size: 13px;
+  }
+  .live-section-sub {
+    font-size: 11px;
+    color: var(--muted);
+    line-height: 1.4;
+    margin-top: -6px;
+  }
+
+  /* Chip buttons */
+  .chip-row { display: flex; flex-wrap: wrap; gap: 6px; }
+  .chip {
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    border-radius: 20px;
+    padding: 6px 13px;
+    font-size: 11px;
+    color: var(--text);
+    cursor: pointer;
+    transition: all 0.18s;
+    white-space: nowrap;
+    font-family: 'DM Sans', sans-serif;
+  }
+  .chip:hover { border-color: var(--teal); color: var(--teal); }
+  .chip.selected { background: rgba(0,201,201,0.12); border-color: var(--teal); color: var(--teal); }
+  .chip.competitor-chip:hover { border-color: var(--orange); color: var(--orange); }
+  .chip.competitor-chip.selected { background: rgba(255,107,53,0.1); border-color: var(--orange); color: var(--orange); }
+  .chip.topic-chip:hover { border-color: var(--purple); color: var(--purple); }
+  .chip.topic-chip.selected { background: rgba(167,139,250,0.1); border-color: var(--purple); color: var(--purple); }
+
+  /* Live go button (smaller) */
+  .live-go {
+    background: var(--teal);
+    color: #080C14;
+    border: none;
+    border-radius: 10px;
+    padding: 11px 16px;
+    font-family: 'Syne', sans-serif;
+    font-weight: 700;
+    font-size: 12px;
+    cursor: pointer;
+    transition: all 0.2s;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    letter-spacing: 0.02em;
+  }
+  .live-go:hover { background: #00AEAE; transform: translateY(-1px); }
+  .live-go:disabled { opacity: 0.5; cursor: not-allowed; transform: none; }
+  .live-go .spinner { width: 13px; height: 13px; border: 2px solid rgba(0,0,0,0.2); border-top-color: #080C14; border-radius: 50%; animation: spin 0.8s linear infinite; display: none; }
+  .live-go.loading .spinner { display: block; }
+  .live-go.loading .btn-text { display: none; }
+
+  /* Live result panel */
+  .live-result-panel {
+    display: none;
+    flex-direction: column;
+    gap: 0;
+    padding: 32px;
+    overflow-y: auto;
+  }
+  .live-result-panel.visible { display: flex; }
+
+  /* Live result cards */
+  .live-result-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 20px;
+    padding-bottom: 16px;
+    border-bottom: 1px solid var(--border);
+  }
+  .live-result-title {
+    font-family: 'Syne', sans-serif;
+    font-weight: 800;
+    font-size: 18px;
+  }
+  .live-result-sub {
+    font-size: 12px;
+    color: var(--muted);
+    margin-top: 4px;
+  }
+  .live-cards { display: flex; flex-direction: column; gap: 12px; }
+  .live-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    padding: 18px 20px;
+    position: relative;
+    overflow: hidden;
+  }
+  .live-card::before { content: ''; position: absolute; left: 0; top: 0; bottom: 0; width: 3px; background: var(--card-color, var(--teal)); }
+  .live-card-label {
+    font-family: 'DM Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 0.07em;
+    color: var(--muted);
+    text-transform: uppercase;
+    margin-bottom: 8px;
+  }
+  .live-card-body {
+    font-size: 14px;
+    line-height: 1.7;
+    color: var(--text);
+  }
+  .live-card-body strong { color: var(--teal); font-weight: 600; }
+  .live-card-body .warn { color: var(--yellow); }
+  .live-card-body .go { color: var(--green); }
+
+  /* Counter script box */
+  .counter-script {
+    font-size: 14px;
+    line-height: 1.65;
+    font-style: italic;
+    color: #A8C4FF;
+    padding: 14px 16px;
+    background: rgba(0,87,255,0.08);
+    border-radius: 10px;
+    border-left: 3px solid var(--blue);
+  }
+
+  /* Bridge question */
+  .bridge-q {
+    font-size: 14px;
+    line-height: 1.65;
+    font-style: italic;
+    color: #B8F5E0;
+    padding: 14px 16px;
+    background: rgba(0,229,160,0.06);
+    border-radius: 10px;
+    border-left: 3px solid var(--green);
+    margin-top: 2px;
+  }
+
+  /* Competitor comparison table */
+  .compare-table { width: 100%; border-collapse: collapse; margin-top: 4px; }
+  .compare-table th { font-family: 'DM Mono', monospace; font-size: 10px; letter-spacing: 0.05em; color: var(--muted); text-transform: uppercase; padding: 6px 10px; text-align: left; border-bottom: 1px solid var(--border); }
+  .compare-table td { font-size: 12px; padding: 8px 10px; border-bottom: 1px solid var(--border); vertical-align: top; line-height: 1.5; }
+  .compare-table tr:last-child td { border-bottom: none; }
+  .compare-table .geotab-col { color: var(--green); }
+  .compare-table .comp-col { color: var(--muted); }
+
+  /* Discovery live list */
+  .live-q-list { list-style: none; display: flex; flex-direction: column; gap: 10px; }
+  .live-q-list li { display: flex; gap: 12px; align-items: flex-start; }
+  .live-q-num { font-family: 'DM Mono', monospace; font-size: 11px; color: var(--purple); min-width: 20px; margin-top: 2px; font-weight: 700; }
+  .live-q-text { font-size: 14px; line-height: 1.55; }
+
+  /* Copy button for live results */
+  .copy-btn {
+    background: transparent;
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 8px 14px;
+    color: var(--muted);
+    font-family: 'DM Mono', monospace;
+    font-size: 10px;
+    cursor: pointer;
+    transition: all 0.2s;
+    letter-spacing: 0.04em;
+  }
+  .copy-btn:hover { border-color: var(--border-hover); color: var(--text); }
+
+  /* Live empty state */
+  .live-empty { flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 14px; color: var(--muted); text-align: center; padding: 32px; }
 </style>
 </head>
 <body>
@@ -196,6 +375,7 @@
   <div style="display:flex;align-items:center;gap:16px;">
     <div class="mode-toggle">
       <button class="mode-btn active" id="mode-pre" onclick="switchMode('pre')">⚡ Pre-Call</button>
+      <button class="mode-btn live" id="mode-live" onclick="switchMode('live')">🛡 Live Assist</button>
       <button class="mode-btn" id="mode-post" onclick="switchMode('post')">📋 Post-Call</button>
     </div>
     <div class="status-dot"><div class="dot"></div><span>Connected</span></div>
@@ -204,7 +384,7 @@
 
 <div class="app" id="app">
 
-  <!-- INPUT PANEL -->
+  <!-- ══════════════════════ INPUT PANEL ══════════════════════ -->
   <div class="input-panel">
 
     <!-- PRE-CALL FORM -->
@@ -212,7 +392,6 @@
       <div style="font-family:'Syne',sans-serif;font-weight:800;font-size:18px;line-height:1.2;">Who are you<br>calling <span style="color:var(--blue);">today?</span></div>
       <div style="font-size:12px;color:var(--muted);margin-top:-10px;">Get a full brief before you dial — in under 60 seconds.</div>
 
-      <!-- CALL TYPE TABS -->
       <div>
         <div class="section-header"><span class="section-label">Call Type</span><div class="section-divider"></div></div>
         <div class="call-type-tabs" style="margin-top:10px;">
@@ -229,7 +408,6 @@
         </div>
       </div>
 
-      <!-- SHARED FIELDS -->
       <div class="section-header"><span class="section-label">Company</span><div class="section-divider"></div></div>
       <div class="field"><label>Company Name</label><input type="text" id="company-name" placeholder="e.g. Rush Transport, ABC Logistics..." /></div>
       <div class="field"><label>Industry</label>
@@ -249,7 +427,6 @@
         </select>
       </div>
 
-      <!-- EXISTING CUSTOMER FIELDS -->
       <div id="existing-fields">
         <div class="section-header"><span class="section-label">Account Context</span><div class="section-divider"></div></div>
         <div class="field"><label>Additional Context (optional)</label>
@@ -257,14 +434,12 @@
         </div>
       </div>
 
-      <!-- NEW PROSPECT FIELDS -->
       <div id="prospect-fields" style="display:none;">
         <div class="section-header"><span class="section-label">Contact</span><div class="section-divider"></div></div>
         <div class="field-row">
           <div class="field"><label>Contact Name</label><input type="text" id="contact-name" placeholder="e.g. John Smith" /></div>
           <div class="field"><label>Title / Role</label><input type="text" id="contact-title" placeholder="e.g. VP Operations" /></div>
         </div>
-
         <div class="section-header" style="margin-top:6px;"><span class="section-label">Prospect Details</span><div class="section-divider"></div></div>
         <div class="field-row">
           <div class="field"><label>Est. Fleet Size</label><input type="number" id="fleet-size" placeholder="e.g. 45" min="1" /></div>
@@ -296,8 +471,6 @@
         <div class="field"><label>Additional Context (optional)</label>
           <textarea id="prospect-context" placeholder="e.g. They mentioned budget constraints, expanding fleet, interested in ELD compliance..."></textarea>
         </div>
-
-        <!-- SFDC / PX HUB LOOKUP -->
         <div class="section-header" style="margin-top:6px;"><span class="section-label">Salesforce / PX Hub</span><div class="section-divider"></div></div>
         <div class="sfdc-box">
           <div style="font-size:11px;color:var(--muted);line-height:1.5;">Search for an existing opportunity, then paste the details below.</div>
@@ -306,7 +479,7 @@
             <button class="sfdc-btn sfdc-btn-px" onclick="openPXHub()">🔍 Search PX Hub</button>
           </div>
           <div class="field"><label>Paste Opportunity Details (optional)</label>
-            <textarea id="sfdc-opp-details" style="min-height:70px;" placeholder="e.g. Stage: Proposal, Amount: $12,000, Close date: Q2, Owner: Jane D. — paste anything from SFDC or PX Hub..."></textarea>
+            <textarea id="sfdc-opp-details" style="min-height:70px;" placeholder="e.g. Stage: Proposal, Amount: $12,000, Close date: Q2, Owner: Jane D."></textarea>
           </div>
         </div>
       </div>
@@ -318,8 +491,105 @@
       </button>
     </div>
 
+    <!-- ══════════════════════ LIVE ASSIST PANEL ══════════════════════ -->
+    <div class="live-panel" id="live-panel">
+      <div style="font-family:'Syne',sans-serif;font-weight:800;font-size:18px;line-height:1.2;">Live <span style="color:var(--teal);">Assist</span></div>
+      <div style="font-size:12px;color:var(--muted);margin-top:-12px;">Real-time help while you're on the call. Tap, click, get an answer.</div>
+
+      <!-- OBJECTION HANDLER -->
+      <div class="live-section">
+        <div class="live-section-header">
+          <div class="live-section-icon">🛡</div>
+          <div>
+            <div class="live-section-title">Objection Handler</div>
+          </div>
+        </div>
+        <div class="live-section-sub">Tap a common objection or type your own — get a counter and a bridge question.</div>
+        <div class="chip-row" id="objection-chips">
+          <div class="chip" onclick="selectChip(this,'objection','Too expensive / price is too high')">Too expensive</div>
+          <div class="chip" onclick="selectChip(this,'objection','Happy with our current provider')">Happy with current</div>
+          <div class="chip" onclick="selectChip(this,'objection','Not the right time / budget frozen')">Wrong timing</div>
+          <div class="chip" onclick="selectChip(this,'objection','Need to talk to IT / procurement / my boss')">Need approval</div>
+          <div class="chip" onclick="selectChip(this,'objection','We are too small / don't need telematics yet')">Too small</div>
+          <div class="chip" onclick="selectChip(this,'objection','We already tried telematics and it didn't work')">Bad past experience</div>
+          <div class="chip" onclick="selectChip(this,'objection','Your contract is too long / we want month to month')">Contract length</div>
+          <div class="chip" onclick="selectChip(this,'objection','We are already locked in with a competitor contract')">Locked in contract</div>
+        </div>
+        <div class="field">
+          <label>Or type the exact objection</label>
+          <input type="text" id="objection-text" placeholder="e.g. Your hardware cost is higher than Samsara..." />
+        </div>
+        <div class="field">
+          <label>Industry context (optional)</label>
+          <input type="text" id="live-industry" placeholder="e.g. Trucking, Construction, Field Services..." />
+        </div>
+        <button class="live-go" id="obj-go-btn" onclick="runObjectionHandler()">
+          <div class="spinner"></div>
+          <span class="btn-text">🛡 Handle This Objection</span>
+        </button>
+      </div>
+
+      <!-- COMPETITOR BATTLE CARD -->
+      <div class="live-section">
+        <div class="live-section-header">
+          <div class="live-section-icon">⚔️</div>
+          <div>
+            <div class="live-section-title">Competitor Battle Card</div>
+          </div>
+        </div>
+        <div class="live-section-sub">They mentioned a competitor. Get Geotab's winning talking points instantly.</div>
+        <div class="chip-row" id="competitor-chips">
+          <div class="chip competitor-chip" onclick="selectChip(this,'competitor','Samsara')">Samsara</div>
+          <div class="chip competitor-chip" onclick="selectChip(this,'competitor','Verizon Connect')">Verizon Connect</div>
+          <div class="chip competitor-chip" onclick="selectChip(this,'competitor','Motive (KeepTruckin)')">Motive</div>
+          <div class="chip competitor-chip" onclick="selectChip(this,'competitor','Teletrac Navman')">Teletrac Navman</div>
+          <div class="chip competitor-chip" onclick="selectChip(this,'competitor','Azuga')">Azuga</div>
+          <div class="chip competitor-chip" onclick="selectChip(this,'competitor','Lytx')">Lytx</div>
+          <div class="chip competitor-chip" onclick="selectChip(this,'competitor','Fleet Complete')">Fleet Complete</div>
+          <div class="chip competitor-chip" onclick="selectChip(this,'competitor','Mix Telematics')">Mix Telematics</div>
+        </div>
+        <button class="live-go" id="battle-go-btn" onclick="runBattleCard()">
+          <div class="spinner"></div>
+          <span class="btn-text">⚔️ Get Battle Card</span>
+        </button>
+      </div>
+
+      <!-- DISCOVERY PROMPTS -->
+      <div class="live-section">
+        <div class="live-section-header">
+          <div class="live-section-icon">💡</div>
+          <div>
+            <div class="live-section-title">Discovery Prompts</div>
+          </div>
+        </div>
+        <div class="live-section-sub">Hit a lull or want to go deeper? Tap a topic for sharp probing questions.</div>
+        <div class="chip-row" id="topic-chips">
+          <div class="chip topic-chip" onclick="selectChip(this,'topic','Safety & accident prevention')">Safety</div>
+          <div class="chip topic-chip" onclick="selectChip(this,'topic','ELD & HOS compliance')">ELD / Compliance</div>
+          <div class="chip topic-chip" onclick="selectChip(this,'topic','Fuel cost reduction')">Fuel Costs</div>
+          <div class="chip topic-chip" onclick="selectChip(this,'topic','Driver behavior & coaching')">Driver Behavior</div>
+          <div class="chip topic-chip" onclick="selectChip(this,'topic','Camera & video evidence')">Cameras / Video</div>
+          <div class="chip topic-chip" onclick="selectChip(this,'topic','Fleet visibility & tracking')">Visibility</div>
+          <div class="chip topic-chip" onclick="selectChip(this,'topic','Maintenance & vehicle health')">Maintenance</div>
+          <div class="chip topic-chip" onclick="selectChip(this,'topic','ROI & business case')">ROI / Budget</div>
+          <div class="chip topic-chip" onclick="selectChip(this,'topic','Dispatch & routing efficiency')">Dispatch</div>
+          <div class="chip topic-chip" onclick="selectChip(this,'topic','Insurance cost reduction')">Insurance</div>
+        </div>
+        <div class="field">
+          <label>Industry context (optional)</label>
+          <input type="text" id="disc-industry" placeholder="e.g. Construction, Food Distribution..." />
+        </div>
+        <button class="live-go" id="disc-go-btn" onclick="runDiscovery()">
+          <div class="spinner"></div>
+          <span class="btn-text">💡 Get Discovery Questions</span>
+        </button>
+      </div>
+
+      <div class="error-box" id="live-error-box"></div>
+    </div>
+
     <!-- POST-CALL PANEL -->
-    <div class="postcall-panel" id="postcall-panel">
+    <div id="postcall-panel" style="display:none;flex-direction:column;gap:18px;flex:1;">
       <div style="font-family:'Syne',sans-serif;font-weight:800;font-size:18px;line-height:1.2;">Post-Call<br><span style="color:var(--green);">Follow-Ups</span></div>
       <div style="font-size:12px;color:var(--muted);margin-top:-10px;">Paste your Gemini notes — GIA extracts every action item.</div>
       <div class="field"><label>Company / Partner</label><input type="text" id="post-company" placeholder="e.g. Rush Transport..." /></div>
@@ -334,7 +604,7 @@
     </div>
   </div>
 
-  <!-- RESULT PANEL -->
+  <!-- ══════════════════════ RESULT PANEL ══════════════════════ -->
   <div class="result-panel" id="result-panel">
 
     <!-- PRE-CALL EMPTY STATE -->
@@ -387,6 +657,25 @@
       </div>
     </div>
 
+    <!-- LIVE ASSIST RESULTS -->
+    <div class="live-result-panel" id="live-result-panel">
+      <div class="live-empty" id="live-empty">
+        <div style="font-size:48px;opacity:0.3;">🛡</div>
+        <div style="font-size:14px;line-height:1.6;max-width:280px;">Select an objection, competitor, or discovery topic — your response will appear here instantly.</div>
+        <div style="font-family:'DM Mono',monospace;font-size:11px;color:rgba(123,139,170,0.5);">One tap, instant answer</div>
+      </div>
+      <div id="live-result-content" style="display:none;">
+        <div class="live-result-header">
+          <div>
+            <div class="live-result-title" id="live-result-title"></div>
+            <div class="live-result-sub" id="live-result-sub"></div>
+          </div>
+          <button class="copy-btn" id="live-copy-btn" onclick="copyLiveResult()">⎘ Copy</button>
+        </div>
+        <div class="live-cards" id="live-cards"></div>
+      </div>
+    </div>
+
   </div>
 </div>
 
@@ -396,6 +685,19 @@
 
   let callType = 'existing';
   let currentMode = 'pre';
+  const liveSelections = { objection: null, competitor: null, topic: null };
+
+  // ─── CHIP SELECTION ───────────────────────────────────────────
+  function selectChip(el, group, value) {
+    const groupMap = { objection: 'objection-chips', competitor: 'competitor-chips', topic: 'topic-chips' };
+    const chipClass = { objection: 'chip', competitor: 'chip competitor-chip', topic: 'chip topic-chip' };
+    document.querySelectorAll('#' + groupMap[group] + ' .chip').forEach(c => c.classList.remove('selected'));
+    el.classList.add('selected');
+    liveSelections[group] = value;
+    if (group === 'objection') document.getElementById('objection-text').value = '';
+    if (group === 'competitor') document.getElementById('live-error-box').classList.remove('visible');
+    if (group === 'topic') document.getElementById('live-error-box').classList.remove('visible');
+  }
 
   // ─── CALL TYPE TABS ───────────────────────────────────────────
   function selectCallType(type) {
@@ -411,32 +713,55 @@
   function switchMode(mode) {
     currentMode = mode;
     document.getElementById('mode-pre').classList.toggle('active', mode === 'pre');
+    document.getElementById('mode-live').classList.toggle('active', mode === 'live');
     document.getElementById('mode-post').classList.toggle('active', mode === 'post');
+
     document.getElementById('precall-form').style.display = mode === 'pre' ? '' : 'none';
-    document.getElementById('postcall-panel').classList.toggle('visible', mode === 'post');
+    document.getElementById('live-panel').classList.toggle('visible', mode === 'live');
+    document.getElementById('postcall-panel').style.display = mode === 'post' ? 'flex' : 'none';
+
+    // Result panel switching
     document.getElementById('result-content').classList.remove('visible');
     document.getElementById('result-empty').style.display = mode === 'pre' ? 'flex' : 'none';
     document.getElementById('postcall-results').style.display = mode === 'post' ? 'flex' : 'none';
     document.getElementById('postcall-content').style.display = 'none';
     document.getElementById('postcall-empty').style.display = mode === 'post' ? 'flex' : 'none';
+    document.getElementById('live-result-panel').classList.toggle('visible', mode === 'live');
+    document.getElementById('result-panel').style.display = mode === 'live' ? 'none' : '';
+    document.getElementById('live-result-panel').style.display = mode === 'live' ? 'flex' : 'none';
+    document.getElementById('live-empty').style.display = mode === 'live' ? 'flex' : 'none';
+    document.getElementById('live-result-content').style.display = 'none';
   }
 
-  // ─── SFDC / PX HUB LOOKUP ────────────────────────────────────
+  // ─── SFDC ─────────────────────────────────────────────────────
   function openSFDC() {
     const company = document.getElementById('company-name').value.trim();
-    const base = 'https://geotab.lightning.force.com/lightning/o/Opportunity/list?filterName=All_Opportunities';
-    window.open(company ? `https://geotab.lightning.force.com/_ui/search/ui/UnifiedSearchResults?str=${encodeURIComponent(company)}` : base, '_blank');
+    window.open(company ? `https://geotab.lightning.force.com/_ui/search/ui/UnifiedSearchResults?str=${encodeURIComponent(company)}` : 'https://geotab.lightning.force.com/lightning/o/Opportunity/list', '_blank');
   }
+  function openPXHub() { window.open('https://partner.geotab.com', '_blank'); }
 
-  function openPXHub() {
-    const company = document.getElementById('company-name').value.trim();
-    window.open('https://partner.geotab.com', '_blank');
-  }
-
-  // ─── PRE-CALL INTEL ───────────────────────────────────────────
+  // ─── HELPERS ──────────────────────────────────────────────────
   function showError(id, msg) { const b = document.getElementById(id); b.textContent = msg; b.classList.add('visible'); }
   function hideError(id) { document.getElementById(id).classList.remove('visible'); }
 
+  async function callGateway(system, user, maxTokens) {
+    const response = await fetch(GATEWAY_URL, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json', 'api-key': GATEWAY_KEY },
+      body: JSON.stringify({ model: 'claude-sonnet-4.6', max_tokens: maxTokens || 1000, messages: [{ role: 'system', content: system }, { role: 'user', content: user }] })
+    });
+    const data = await response.json();
+    const raw = data.choices?.[0]?.message?.content || '';
+    return JSON.parse(raw.replace(/```json|```/g, '').trim());
+  }
+
+  function setLiveLoading(btnId, on) {
+    const btn = document.getElementById(btnId);
+    btn.disabled = on;
+    btn.classList.toggle('loading', on);
+  }
+
+  // ─── PRE-CALL INTEL ───────────────────────────────────────────
   async function runIntel() {
     hideError('pre-error-box');
     const company = document.getElementById('company-name').value.trim();
@@ -448,32 +773,10 @@
     btn.disabled = true; btn.classList.add('loading');
 
     let systemPrompt, userPrompt;
-
     if (callType === 'existing') {
       const extra = document.getElementById('existing-context').value.trim();
-      systemPrompt = `You are GIA — Geotab's internal AI sales assistant helping PAMs prepare for calls with existing Geotab customers. Be sharp, specific, and direct. No fluff.
-
-Return a JSON array of intel cards. Each card:
-- id: snapshot | gap | opportunity | opener | watchout
-- icon: single emoji
-- title: short section title
-- color: hex (#0057FF blue | #00E5A0 green | #FFD166 yellow | #FF6B35 orange | #FF4D6A red)
-- body: content as plain text. Use **text** for highlights.
-
-Return ONLY the JSON array.`;
-
-      userPrompt = `Existing Geotab customer pre-call brief.
-Company: ${company}
-Industry: ${industry}
-${extra ? `Context: ${extra}` : ''}
-
-Cards needed:
-1. SNAPSHOT — Who they are, current industry pressures
-2. ACCOUNT GAP — Likely product gaps, especially cameras. If no cameras, calculate revenue opportunity with Go Focus Plus at $25/vehicle for typical ${industry} fleet size.
-3. BIGGEST OPPORTUNITY — One sentence, the single most important thing to raise.
-4. CALL OPENER — Exact first sentence after pleasantries that leads naturally to the opportunity.
-5. WATCH OUT FOR — One risk or sensitivity before dialing.`;
-
+      systemPrompt = `You are GIA — Geotab's internal AI sales assistant. Return a JSON array of intel cards. Each card: id (snapshot|gap|opportunity|opener|watchout), icon, title, color (#0057FF|#00E5A0|#FFD166|#FF6B35|#FF4D6A), body (plain text, **bold** for highlights). Return ONLY the JSON array.`;
+      userPrompt = `Existing customer pre-call brief.\nCompany: ${company}\nIndustry: ${industry}\n${extra ? `Context: ${extra}` : ''}\n\nCards: 1.SNAPSHOT 2.ACCOUNT GAP (cameras? Go Focus Plus $25/vehicle) 3.BIGGEST OPPORTUNITY 4.CALL OPENER (exact first sentence) 5.WATCH OUT FOR`;
     } else {
       const contact = document.getElementById('contact-name').value.trim();
       const title = document.getElementById('contact-title').value.trim();
@@ -482,54 +785,15 @@ Cards needed:
       const sourced = document.getElementById('how-sourced').value;
       const extra = document.getElementById('prospect-context').value.trim();
       const sfdcDetails = document.getElementById('sfdc-opp-details').value.trim();
-
-      systemPrompt = `You are GIA — Geotab's internal AI sales assistant helping reps prepare for calls with NEW PROSPECTS who are not yet Geotab customers. Be sharp, specific, and tactical.
-
-Return a JSON array of intel cards. Each card:
-- id: snapshot | entry | discovery | roi | objection | opener | nextstep
-- icon: single emoji
-- title: short section title
-- color: hex (#0057FF blue | #00E5A0 green | #FFD166 yellow | #FF6B35 orange | #FF4D6A red | #A78BFA purple)
-- body: content as plain text. Use **text** for highlights.
-- For discovery card: body should be a numbered list of 3 sharp discovery questions.
-
-Return ONLY the JSON array.`;
-
-      userPrompt = `New prospect pre-call brief.
-Company: ${company}
-Industry: ${industry}
-${contact ? `Contact: ${contact}${title ? `, ${title}` : ''}` : ''}
-${fleetSize ? `Estimated fleet size: ${fleetSize} vehicles` : ''}
-${telematics ? `Current telematics: ${telematics}` : ''}
-${sourced ? `How sourced: ${sourced}` : ''}
-${extra ? `Context: ${extra}` : ''}
-${sfdcDetails ? `Salesforce/PX Hub opportunity details: ${sfdcDetails}` : ''}
-
-Cards needed:
-1. SNAPSHOT — Who they are, likely fleet profile, current pain points in ${industry} right now
-2. ENTRY POINT — Which Geotab product to lead with and why. If cameras fit, pitch Go Focus Plus at $25/month.${telematics && telematics !== 'None — no telematics' ? ` They are currently on ${telematics} — include a specific displacement angle.` : ''}
-3. DISCOVERY QUESTIONS — 3 sharp questions specific to ${industry} that uncover pain without sounding like a pitch. Number them 1. 2. 3.
-4. ROI HOOK — One specific, memorable ROI stat or outcome for ${industry} fleets using Geotab. Include a number.
-5. OBJECTION PREP — The #1 most likely objection on a first call with a ${industry} company, and a one-sentence response.
-6. CALL OPENER — The exact first sentence after pleasantries that creates curiosity and feels natural.
-7. SUGGESTED NEXT STEP — What to ask for at the end of this call (specific — not just "a demo").
-${sfdcDetails ? '8. SFDC OPP — Summarize the existing opportunity and what it means for this call.' : ''}`;
+      systemPrompt = `You are GIA — Geotab's internal AI sales assistant for new prospect calls. Return JSON array. Cards: id (snapshot|entry|discovery|roi|objection|opener|nextstep), icon, title, color, body. Discovery card body = numbered list 1. 2. 3. Return ONLY the JSON array.`;
+      userPrompt = `New prospect brief.\nCompany: ${company}\nIndustry: ${industry}\n${contact ? `Contact: ${contact}${title ? `, ${title}` : ''}` : ''}${fleetSize ? `\nFleet: ${fleetSize}` : ''}${telematics ? `\nCurrent telematics: ${telematics}` : ''}${sourced ? `\nSourced via: ${sourced}` : ''}${extra ? `\nContext: ${extra}` : ''}${sfdcDetails ? `\nSFDC opp: ${sfdcDetails}` : ''}\n\nCards: 1.SNAPSHOT 2.ENTRY POINT${telematics && telematics !== 'None — no telematics' ? ` (vs ${telematics})` : ''} 3.DISCOVERY QUESTIONS (3 numbered) 4.ROI HOOK (with number) 5.OBJECTION PREP 6.CALL OPENER 7.SUGGESTED NEXT STEP${sfdcDetails ? ' 8.SFDC OPP' : ''}`;
     }
 
     try {
-      const response = await fetch(GATEWAY_URL, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json', 'api-key': GATEWAY_KEY },
-        body: JSON.stringify({ model: 'claude-sonnet-4.6', max_tokens: 1200, messages: [{ role: 'system', content: systemPrompt }, { role: 'user', content: userPrompt }] })
-      });
-      const data = await response.json();
-      const raw = data.choices?.[0]?.message?.content || '';
-      let cards;
-      try { cards = JSON.parse(raw.replace(/```json|```/g, '').trim()); }
-      catch { showError('pre-error-box', 'Unexpected response. Please try again.'); btn.disabled = false; btn.classList.remove('loading'); return; }
+      const cards = await callGateway(systemPrompt, userPrompt, 1200);
       renderResult(company, cards);
     } catch(err) {
-      showError('pre-error-box', 'Connection error. Check your network and try again.');
+      showError('pre-error-box', 'Connection error or unexpected response. Please try again.');
     }
     btn.disabled = false; btn.classList.remove('loading');
   }
@@ -540,17 +804,14 @@ ${sfdcDetails ? '8. SFDC OPP — Summarize the existing opportunity and what it 
     badge.textContent = callType === 'existing' ? 'EXISTING CUSTOMER' : 'NEW PROSPECT';
     badge.className = 'result-type-badge ' + (callType === 'existing' ? 'badge-existing' : 'badge-prospect');
     document.getElementById('result-time').textContent = new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
-
     const grid = document.getElementById('intel-grid');
     grid.innerHTML = '';
-
     cards.forEach(card => {
       const el = document.createElement('div');
       const isOpener = card.id === 'opener';
       const isDiscovery = card.id === 'discovery';
       el.className = 'intel-card' + (isOpener ? ' opener-card' : '');
       el.style.setProperty('--card-color', card.color || '#0057FF');
-
       let bodyHtml = '';
       if (isOpener) {
         bodyHtml = `<div class="opener-text">"${card.body}"</div>`;
@@ -561,16 +822,9 @@ ${sfdcDetails ? '8. SFDC OPP — Summarize the existing opportunity and what it 
       } else {
         bodyHtml = `<div class="intel-card-body">${(card.body||'').replace(/\*\*(.*?)\*\*/g,'<strong>$1</strong>')}</div>`;
       }
-
-      el.innerHTML = `
-        <div class="intel-card-header">
-          <div class="intel-card-icon">${card.icon}</div>
-          <div class="intel-card-title">${card.title}</div>
-        </div>
-        ${bodyHtml}`;
+      el.innerHTML = `<div class="intel-card-header"><div class="intel-card-icon">${card.icon}</div><div class="intel-card-title">${card.title}</div></div>${bodyHtml}`;
       grid.appendChild(el);
     });
-
     document.getElementById('result-empty').style.display = 'none';
     document.getElementById('result-content').classList.add('visible');
     document.getElementById('app').classList.add('has-result');
@@ -582,39 +836,234 @@ ${sfdcDetails ? '8. SFDC OPP — Summarize the existing opportunity and what it 
     document.getElementById('app').classList.remove('has-result');
   }
 
+  // ─── LIVE ASSIST: OBJECTION HANDLER ───────────────────────────
+  async function runObjectionHandler() {
+    hideError('live-error-box');
+    const typed = document.getElementById('objection-text').value.trim();
+    const objection = typed || liveSelections.objection;
+    const industry = document.getElementById('live-industry').value.trim();
+    if (!objection) { showError('live-error-box', 'Please select or type an objection.'); return; }
+
+    setLiveLoading('obj-go-btn', true);
+
+    const system = `You are GIA — Geotab's expert sales coach. When given a sales objection, return a JSON object with:
+- reframe: one sentence that reframes or validates the concern without agreeing (empathy + pivot)
+- counter: 2-3 sentences that directly address the objection with a specific Geotab advantage, stat, or proof point. Use **bold** for key phrases.
+- bridge: one short, natural question that moves the conversation forward
+- tip: one insider tip or thing to avoid when handling this objection (1 sentence)
+Return ONLY the JSON object.`;
+
+    const user = `Objection: "${objection}"${industry ? `\nIndustry: ${industry}` : ''}\n\nGeotab context: Go devices, Go Focus Plus camera bundle at $25/month all-in (hardware included, 3-year commit), open platform with 200+ integrations, largest commercial telematics company in the world with 4M+ devices, strong ROI data across all industries.`;
+
+    try {
+      const result = await callGateway(system, user, 600);
+      renderObjectionResult(objection, result);
+    } catch(err) {
+      showError('live-error-box', 'Error getting response. Please try again.');
+    }
+    setLiveLoading('obj-go-btn', false);
+  }
+
+  function renderObjectionResult(objection, result) {
+    document.getElementById('live-result-title').textContent = 'Objection Response';
+    document.getElementById('live-result-sub').textContent = `"${objection.length > 60 ? objection.substring(0,60) + '...' : objection}"`;
+    const cards = document.getElementById('live-cards');
+    cards.innerHTML = '';
+
+    if (result.reframe) {
+      cards.innerHTML += `
+        <div class="live-card" style="--card-color:var(--yellow);">
+          <div class="live-card-label">🤝 Acknowledge First</div>
+          <div class="live-card-body">${result.reframe}</div>
+        </div>`;
+    }
+    if (result.counter) {
+      cards.innerHTML += `
+        <div class="live-card" style="--card-color:var(--teal);">
+          <div class="live-card-label">⚡ Your Counter</div>
+          <div class="counter-script">${result.counter.replace(/\*\*(.*?)\*\*/g,'<strong>$1</strong>')}</div>
+        </div>`;
+    }
+    if (result.bridge) {
+      cards.innerHTML += `
+        <div class="live-card" style="--card-color:var(--green);">
+          <div class="live-card-label">🔗 Bridge Question</div>
+          <div class="bridge-q">"${result.bridge}"</div>
+        </div>`;
+    }
+    if (result.tip) {
+      cards.innerHTML += `
+        <div class="live-card" style="--card-color:var(--purple);">
+          <div class="live-card-label">💜 Coach's Tip</div>
+          <div class="live-card-body">${result.tip}</div>
+        </div>`;
+    }
+
+    showLiveResult();
+  }
+
+  // ─── LIVE ASSIST: BATTLE CARD ──────────────────────────────────
+  async function runBattleCard() {
+    hideError('live-error-box');
+    const competitor = liveSelections.competitor;
+    if (!competitor) { showError('live-error-box', 'Please select a competitor.'); return; }
+
+    setLiveLoading('battle-go-btn', true);
+
+    const system = `You are GIA — Geotab's competitive intelligence expert. Return a JSON object:
+- summary: 1 sentence on how Geotab positions vs this competitor
+- geotab_wins: array of 3 specific Geotab advantages over this competitor (each < 20 words, factual, sharp)
+- competitor_strengths: array of 2 things this competitor does well (be honest — reps need to know)
+- displacement_angle: 1-2 sentence approach for converting a customer from this competitor to Geotab
+- trap_question: one discovery question that surfaces this competitor's weakness naturally, without naming Geotab
+Return ONLY the JSON object.`;
+
+    const user = `Competitor: ${competitor}\n\nGeotab: world's largest commercial telematics company, 4M+ vehicles, open platform with 200+ integrations, Go devices, MyGeotab software, Go Focus Plus camera at $25/month all-in, strong SDK for custom development, reseller/partner channel model.`;
+
+    try {
+      const result = await callGateway(system, user, 700);
+      renderBattleCard(competitor, result);
+    } catch(err) {
+      showError('live-error-box', 'Error getting response. Please try again.');
+    }
+    setLiveLoading('battle-go-btn', false);
+  }
+
+  function renderBattleCard(competitor, result) {
+    document.getElementById('live-result-title').textContent = `Geotab vs ${competitor}`;
+    document.getElementById('live-result-sub').textContent = result.summary || '';
+    const cards = document.getElementById('live-cards');
+    cards.innerHTML = '';
+
+    if (result.geotab_wins && result.geotab_wins.length) {
+      const wins = result.geotab_wins.map(w => `<li style="display:flex;gap:10px;align-items:flex-start;font-size:13px;line-height:1.5;margin-bottom:8px;"><span style="color:var(--green);font-weight:700;min-width:16px;">✓</span><span>${w}</span></li>`).join('');
+      cards.innerHTML += `
+        <div class="live-card" style="--card-color:var(--green);">
+          <div class="live-card-label">✅ Geotab Wins</div>
+          <ul style="list-style:none;">${wins}</ul>
+        </div>`;
+    }
+    if (result.displacement_angle) {
+      cards.innerHTML += `
+        <div class="live-card" style="--card-color:var(--teal);">
+          <div class="live-card-label">🎯 Displacement Angle</div>
+          <div class="counter-script">${result.displacement_angle}</div>
+        </div>`;
+    }
+    if (result.trap_question) {
+      cards.innerHTML += `
+        <div class="live-card" style="--card-color:var(--purple);">
+          <div class="live-card-label">💡 Trap Question (ask this)</div>
+          <div class="bridge-q">"${result.trap_question}"</div>
+        </div>`;
+    }
+    if (result.competitor_strengths && result.competitor_strengths.length) {
+      const warns = result.competitor_strengths.map(w => `<li style="display:flex;gap:10px;align-items:flex-start;font-size:13px;line-height:1.5;margin-bottom:6px;"><span style="color:var(--yellow);min-width:16px;">⚠</span><span>${w}</span></li>`).join('');
+      cards.innerHTML += `
+        <div class="live-card" style="--card-color:var(--yellow);">
+          <div class="live-card-label">⚠ Know Their Strengths</div>
+          <ul style="list-style:none;">${warns}</ul>
+        </div>`;
+    }
+
+    showLiveResult();
+  }
+
+  // ─── LIVE ASSIST: DISCOVERY PROMPTS ───────────────────────────
+  async function runDiscovery() {
+    hideError('live-error-box');
+    const topic = liveSelections.topic;
+    if (!topic) { showError('live-error-box', 'Please select a discovery topic.'); return; }
+    const industry = document.getElementById('disc-industry').value.trim();
+
+    setLiveLoading('disc-go-btn', true);
+
+    const system = `You are GIA — Geotab's expert sales coach. Return a JSON object:
+- questions: array of exactly 4 sharp discovery questions on the given topic. Questions should:
+  * Be open-ended (start with "What", "How", "Tell me", "Walk me through", "When was the last time")
+  * Uncover real pain without sounding like a pitch
+  * Be specific to the industry if provided
+  * Vary in depth — start light, go deeper
+- follow_up: one powerful follow-up question to ask after any answer to go deeper
+Return ONLY the JSON object.`;
+
+    const user = `Discovery topic: ${topic}${industry ? `\nIndustry: ${industry}` : ''}\n\nContext: Geotab PAM on a sales call with a fleet operator.`;
+
+    try {
+      const result = await callGateway(system, user, 500);
+      renderDiscovery(topic, industry, result);
+    } catch(err) {
+      showError('live-error-box', 'Error getting response. Please try again.');
+    }
+    setLiveLoading('disc-go-btn', false);
+  }
+
+  function renderDiscovery(topic, industry, result) {
+    document.getElementById('live-result-title').textContent = 'Discovery Questions';
+    document.getElementById('live-result-sub').textContent = `${topic}${industry ? ' · ' + industry : ''}`;
+    const cards = document.getElementById('live-cards');
+    cards.innerHTML = '';
+
+    if (result.questions && result.questions.length) {
+      const items = result.questions.map((q, i) => `
+        <li>
+          <span class="live-q-num">${i+1}.</span>
+          <span class="live-q-text">"${q}"</span>
+        </li>`).join('');
+      cards.innerHTML += `
+        <div class="live-card" style="--card-color:var(--purple);">
+          <div class="live-card-label">💡 Ask These</div>
+          <ul class="live-q-list">${items}</ul>
+        </div>`;
+    }
+    if (result.follow_up) {
+      cards.innerHTML += `
+        <div class="live-card" style="--card-color:var(--teal);">
+          <div class="live-card-label">🔗 Go Deeper (after any answer)</div>
+          <div class="bridge-q">"${result.follow_up}"</div>
+        </div>`;
+    }
+
+    showLiveResult();
+  }
+
+  function showLiveResult() {
+    document.getElementById('live-empty').style.display = 'none';
+    document.getElementById('live-result-content').style.display = 'block';
+  }
+
+  // ─── COPY LIVE RESULT ─────────────────────────────────────────
+  function copyLiveResult() {
+    const title = document.getElementById('live-result-title').textContent;
+    const sub = document.getElementById('live-result-sub').textContent;
+    let text = `${title}\n${sub}\n\n`;
+    document.querySelectorAll('#live-cards .live-card').forEach(card => {
+      const label = card.querySelector('.live-card-label')?.textContent || '';
+      const body = card.querySelector('.live-card-body, .counter-script, .bridge-q')?.textContent || '';
+      const list = Array.from(card.querySelectorAll('li')).map(li => li.textContent.trim()).join('\n');
+      text += `${label}\n${body || list}\n\n`;
+    });
+    navigator.clipboard.writeText(text.trim()).then(() => {
+      const btn = document.getElementById('live-copy-btn');
+      btn.textContent = '✓ Copied!';
+      setTimeout(() => btn.textContent = '⎘ Copy', 2000);
+    });
+  }
+
   // ─── POST-CALL ────────────────────────────────────────────────
   async function runPostCall() {
     hideError('post-error-box');
     const notes = document.getElementById('post-notes').value.trim();
     if (!notes) { showError('post-error-box', 'Please paste your Gemini meeting notes.'); return; }
-
     const btn = document.getElementById('post-go-btn');
     btn.disabled = true; btn.classList.add('loading');
-
     const company = document.getElementById('post-company').value.trim();
-    const systemPrompt = `You are GIA — Geotab's internal AI sales assistant. Analyze post-call meeting notes and extract clear, actionable follow-ups for a Geotab PAM.
-
-Return a JSON object:
-- summary: 2-3 sentence call recap
-- followups: array of { action (start with verb), owner ("PAM"|"Partner"|"Both"), timeline ("24 hours"|"This week"|"2 weeks"|"Next month"), priority ("high"|"medium"|"low") }
-- next_step: single most important next step
-
-Return ONLY the JSON object.`;
-
+    const system = `You are GIA. Analyze meeting notes and return JSON: { summary: "2-3 sentence recap", followups: [{action, owner ("PAM"|"Partner"|"Both"), timeline ("24 hours"|"This week"|"2 weeks"|"Next month"), priority ("high"|"medium"|"low")}], next_step: "most important next step" }. Return ONLY the JSON.`;
     try {
-      const response = await fetch(GATEWAY_URL, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json', 'api-key': GATEWAY_KEY },
-        body: JSON.stringify({ model: 'claude-sonnet-4.6', max_tokens: 1000, messages: [{ role: 'system', content: systemPrompt }, { role: 'user', content: `Company: ${company || 'Not specified'}\n\nMeeting Notes:\n${notes}` }] })
-      });
-      const data = await response.json();
-      const raw = data.choices?.[0]?.message?.content || '';
-      let result;
-      try { result = JSON.parse(raw.replace(/```json|```/g, '').trim()); }
-      catch { showError('post-error-box', 'Could not parse response. Please try again.'); btn.disabled = false; btn.classList.remove('loading'); return; }
+      const result = await callGateway(system, `Company: ${company || 'Not specified'}\n\nNotes:\n${notes}`, 1000);
       renderPostCall(company, result);
     } catch(err) {
-      showError('post-error-box', 'Connection error. Check your network and try again.');
+      showError('post-error-box', 'Connection error. Please try again.');
     }
     btn.disabled = false; btn.classList.remove('loading');
   }
