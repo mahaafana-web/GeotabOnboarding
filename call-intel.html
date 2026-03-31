@@ -1745,66 +1745,135 @@ async function loadNews() {
 }
 
 async function generateDigestLocally() {
-  const cats = { cameras:'Cameras', asset_trackers:'Asset Trackers', go_devices:'GO Devices', iox:'IOX Accessories' };
+  const cats = { cameras:'Cameras', asset_trackers:'Asset Trackers', go_devices:'GO Devices', iox:'IOX Accessories', rate_plans:'Rate Plans', partner_program:'Partner Program' };
   let allDocs = '';
   for (const [cat, label] of Object.entries(cats)) {
     try {
       const r = await fetch(`${PARTNER_API}/kb?key=${PARTNER_KEY}&category=${cat}`);
       const d = await r.json();
-      if (d.content) allDocs += `\n\n=== ${label} ===\n${d.content.slice(0, 4500)}`;
+      if (d.content) allDocs += `\n\n=== ${label} ===\n${d.content.slice(0, 3000)}`;
     } catch {}
   }
   const today = new Date().toLocaleDateString('en-US', {month:'long', day:'numeric', year:'numeric'});
-  const sys = `You are GIA, Geotab's internal AI briefing assistant for Partner Account Managers. Using ONLY the provided Geotab documentation, write a concise weekly product briefing in this exact format:
+  const sys = `You are GIA, Geotab's internal AI briefing assistant for Partner Account Managers. Using ONLY the provided Geotab documentation, write the weekly briefing in this EXACT format with these EXACT section headers:
 
-# 📰 GIA Weekly Product Briefing — ${today}
+# GIA Weekly Product Briefing — ${today}
+
+## 🔥 Top Asked Questions
+**Q: [question from the docs]**
+A: [concise, accurate answer from docs]
+(repeat for 6 of the most commonly asked or important questions — use real questions from the Q&A docs)
 
 ## 📦 Product Highlights
-- [5 key product facts or differentiators a PAM should know]
+- [key product fact, spec, or differentiator PAMs should know — be specific]
+(5 bullets — include product names, pricing if known, real specs)
 
-## 💬 Top SME Q&As
-**Q: [question]**
-A: [concise answer]
-(repeat for 8 most common questions)
+## 🎯 What PAM Needs to Know
+- [sales coaching point, talking point, or strategy tip for the PAM]
+(5 bullets — frame as coaching for the PAM: what to say, what to watch for, how to position)
 
-## 🏆 Top Selling Points This Week
-- [3 compelling reasons to choose Geotab over competitors]
+## 🤝 What to Tell Your Partner
+- [simple, plain-English point the PAM can relay directly to their reseller partner]
+(5 bullets — frame as what the partner needs to understand to sell effectively)
 
-Keep answers short, factual, and sales-focused. Never guess or invent details.`;
+Keep all answers short, factual, and sales-focused. Never invent details not in the documentation.`;
   const usr = `GEOTAB PRODUCT DOCUMENTATION:\n${allDocs}\n\nWrite the weekly briefing now.`;
-  const digest = await aiRaw(sys, usr, 1800);
+  const digest = await aiRaw(sys, usr, 2200);
   renderNews(digest, null);
   document.getElementById('news-status').textContent = '✓ Generated from latest approved docs';
 }
 
 function renderNews(content, fetchedAt) {
-  let updated = fetchedAt ? new Date(fetchedAt * 1000).toLocaleString('en-US', {weekday:'long', month:'long', day:'numeric', hour:'2-digit', minute:'2-digit'}) : '';
+  const updated = fetchedAt ? new Date(fetchedAt * 1000).toLocaleString('en-US', {weekday:'long', month:'long', day:'numeric', hour:'2-digit', minute:'2-digit'}) : '';
 
-  // Markdown → HTML
-  const lines = content.split('\n');
-  let html = '';
-  for (const line of lines) {
-    const t = line.trim();
-    if (!t) { html += '<div style="height:6px;"></div>'; continue; }
-    if (t.startsWith('# '))      { html += `<div style="font-size:16px;font-weight:700;color:var(--text);margin-bottom:6px;">${t.slice(2)}</div>`; }
-    else if (t.startsWith('## ')){ html += `<div style="font-size:11px;font-weight:700;color:#10B981;text-transform:uppercase;letter-spacing:.6px;margin-top:18px;margin-bottom:8px;">${t.slice(3)}</div>`; }
-    else if (t.startsWith('**Q:')){ html += `<div style="font-weight:600;color:var(--text);margin-top:12px;font-size:13.5px;">${t.replace(/\*\*/g,'')}</div>`; }
-    else if (t.startsWith('A:')){ html += `<div style="color:var(--muted);font-size:13px;margin-top:2px;padding-left:12px;">${t}</div>`; }
-    else if (t.startsWith('- ')){ html += `<div style="padding:3px 0 3px 16px;position:relative;font-size:13.5px;"><span style="position:absolute;left:0;color:#10B981;">•</span>${t.slice(2).replace(/\*\*(.+?)\*\*/g,'<strong>$1</strong>')}</div>`; }
-    else { html += `<div style="font-size:13.5px;line-height:1.7;">${t.replace(/\*\*(.+?)\*\*/g,'<strong>$1</strong>')}</div>`; }
+  // Split into sections on ## headers
+  const sectionConfig = {
+    'Top Asked Questions':  { color: 'var(--orange)', icon: '🔥', qa: true },
+    'Product Highlights':   { color: 'var(--blue)',   icon: '📦', qa: false },
+    'What PAM Needs to Know':  { color: 'var(--purple)', icon: '🎯', qa: false },
+    'What to Tell Your Partner': { color: 'var(--teal)', icon: '🤝', qa: false },
+    // legacy fallbacks
+    'Top SME Q&As':         { color: 'var(--orange)', icon: '🔥', qa: true },
+    'Top Selling Points':   { color: 'var(--green)',  icon: '🏆', qa: false },
+  };
+
+  // Extract title (# line)
+  const titleMatch = content.match(/^#\s+(.+)/m);
+  const titleText = titleMatch ? titleMatch[1].replace(/[📰]/g,'').trim() : 'Weekly Product Briefing';
+
+  // Split raw content into sections
+  const rawSections = content.split(/\n##\s+/);
+  const parsedSections = rawSections.slice(1).map(block => {
+    const firstLine = block.split('\n')[0].trim();
+    const body = block.split('\n').slice(1).join('\n');
+    // find matching config by partial match
+    const key = Object.keys(sectionConfig).find(k => firstLine.toLowerCase().includes(k.toLowerCase().slice(0,12)));
+    const cfg = sectionConfig[key] || { color: '#10B981', icon: '📋', qa: false };
+    return { title: firstLine.replace(/[🔥📦🎯🤝💬📰🏆]/g,'').trim(), body, ...cfg };
+  });
+
+  function renderSectionBody(body, isQA) {
+    const lines = body.split('\n');
+    let html = '';
+    if (isQA) {
+      let inQ = false;
+      for (const line of lines) {
+        const t = line.trim();
+        if (!t) continue;
+        if (t.startsWith('**Q:') || t.startsWith('Q:')) {
+          const q = t.replace(/^\*\*Q:\*\*|^\*\*Q:|^Q:/,'').replace(/\*\*/g,'').trim();
+          html += `<div style="font-weight:600;color:var(--text);font-size:13px;margin-top:12px;padding-top:10px;border-top:1px solid rgba(255,255,255,0.06);">Q: ${q}</div>`;
+          inQ = true;
+        } else if (t.startsWith('A:') || (inQ && !t.startsWith('-'))) {
+          const a = t.replace(/^A:/,'').trim();
+          html += `<div style="color:var(--muted);font-size:12.5px;margin-top:3px;padding-left:14px;line-height:1.6;">${a.replace(/\*\*(.+?)\*\*/g,'<strong style="color:var(--text)">$1</strong>')}</div>`;
+          inQ = false;
+        }
+      }
+    } else {
+      for (const line of lines) {
+        const t = line.trim();
+        if (!t) continue;
+        if (t.startsWith('- ') || t.startsWith('• ')) {
+          const txt = t.slice(2).replace(/\*\*(.+?)\*\*/g,'<strong>$1</strong>');
+          html += `<div style="display:flex;gap:8px;padding:5px 0;font-size:13px;line-height:1.55;border-bottom:1px solid rgba(255,255,255,0.04);"><span style="color:var(--green);flex-shrink:0;margin-top:1px;">•</span><span>${txt}</span></div>`;
+        } else if (t.match(/^\d+\./)) {
+          const txt = t.replace(/^\d+\.\s*/,'').replace(/\*\*(.+?)\*\*/g,'<strong>$1</strong>');
+          html += `<div style="display:flex;gap:8px;padding:5px 0;font-size:13px;line-height:1.55;border-bottom:1px solid rgba(255,255,255,0.04);"><span style="color:var(--green);flex-shrink:0;margin-top:1px;">•</span><span>${txt}</span></div>`;
+        }
+      }
+    }
+    return html || `<div style="color:var(--muted);font-size:13px;">${body.trim().slice(0,300)}</div>`;
+  }
+
+  // Build section cards HTML
+  let cardsHtml = '';
+  for (const sec of parsedSections) {
+    const bodyHtml = renderSectionBody(sec.body, sec.qa);
+    cardsHtml += `
+      <div class="card" style="--c:${sec.color};">
+        <div class="card-label" style="color:${sec.color};">${sec.icon} ${sec.title}</div>
+        <div>${bodyHtml}</div>
+      </div>`;
+  }
+
+  // If no sections parsed, fall back to raw text in one card
+  if (!parsedSections.length) {
+    cardsHtml = `<div class="card" style="--c:#10B981;"><div style="font-size:13px;line-height:1.8;white-space:pre-wrap;color:var(--text);">${content.replace(/</g,'&lt;')}</div></div>`;
   }
 
   document.getElementById('news-result').innerHTML = `
     <div class="result-hdr">
-      <div><div class="result-name">📰 Weekly Product Briefing</div>
+      <div>
+        <div class="result-name">📰 Weekly Briefing</div>
         <div style="font-size:12px;color:var(--muted);margin-top:4px;">${updated ? 'Updated ' + updated : 'Generated ' + new Date().toLocaleTimeString([],{hour:'2-digit',minute:'2-digit'})}</div>
       </div>
     </div>
-    <div class="card" style="--c:#10B981;"><div style="font-size:13.5px;line-height:1.8;color:var(--text);">${html}</div></div>
+    ${cardsHtml}
     <div style="font-size:11px;color:var(--muted);padding:10px 12px;background:var(--surface);border-radius:8px;border:1px solid var(--border);">
       🔒 Generated from Geotab internal Q&As and approved product documentation only.
     </div>
-    <button class="btn-ghost" onclick="loadNews()">📰 Get Weekly Briefing</button>`;
+    <button class="btn-ghost" onclick="loadNews()">🔄 Refresh Briefing</button>`;
 
   document.getElementById('empty-news').style.display = 'none';
   document.getElementById('news-result').style.display = 'flex';
