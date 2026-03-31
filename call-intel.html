@@ -193,8 +193,10 @@
   .type-btn .t-icon { font-size: 20px; display: block; margin-bottom: 6px; }
   .type-btn .t-sub { font-family: 'DM Sans', sans-serif; font-weight: 400; font-size: 11px; color: var(--muted); margin-top: 4px; display: block; }
   .type-btn:hover { border-color: rgba(255,255,255,0.22); background: rgba(255,255,255,0.05); }
-  .type-btn.on-existing { border-color: var(--blue); background: rgba(37,99,235,0.12); box-shadow: 0 0 20px rgba(37,99,235,0.12); }
-  .type-btn.on-prospect { border-color: var(--orange); background: rgba(249,115,22,0.1); box-shadow: 0 0 20px rgba(249,115,22,0.08); }
+  .type-btn.on-existing, .type-btn.on-onboarding { border-color: var(--green); background: rgba(0,212,138,0.1); box-shadow: 0 0 20px rgba(0,212,138,0.1); }
+  .type-btn.on-prospect, .type-btn.on-growth { border-color: var(--blue); background: rgba(37,99,235,0.12); box-shadow: 0 0 20px rgba(37,99,235,0.12); }
+  .type-btn.on-atrisk { border-color: var(--red); background: rgba(244,63,94,0.1); box-shadow: 0 0 20px rgba(244,63,94,0.1); }
+  .type-btn.on-qbr { border-color: var(--gold); background: rgba(245,158,11,0.1); box-shadow: 0 0 20px rgba(245,158,11,0.08); }
 
   /* ── MAIN BUTTON ── */
   .main-btn {
@@ -451,72 +453,85 @@
     <!-- ── PRE-CALL ── -->
     <div id="pane-pre" style="display:flex;flex-direction:column;gap:14px;">
       <div class="panel-title">Who are you calling <span>today?</span></div>
-      <div class="panel-hint">Type the company name and hit Go — brief ready in seconds.</div>
+      <div class="panel-hint">Enter the partner name and call type — your brief is ready in seconds.</div>
 
-      <input class="big-input" type="text" id="company" placeholder="Company name, e.g. ABC Trucking..." />
+      <input class="big-input" type="text" id="company" placeholder="Partner name, e.g. Rush Transport, ABC Logistics..." />
 
-      <div class="type-toggle">
-        <button class="type-btn on-existing" id="t-existing" onclick="setType('existing')">
-          <span class="t-icon">📡</span>
-          Existing Customer
-          <span class="t-sub">They're already on Geotab</span>
+      <div class="type-toggle" style="grid-template-columns:1fr 1fr;">
+        <button class="type-btn on-onboarding" id="t-onboarding" onclick="setCallType('onboarding')">
+          <span class="t-icon">🟢</span>
+          New Partner
+          <span class="t-sub">Onboarding (months 1–6)</span>
         </button>
-        <button class="type-btn" id="t-prospect" onclick="setType('prospect')">
-          <span class="t-icon">🎯</span>
-          New Prospect
-          <span class="t-sub">First time talking to them</span>
+        <button class="type-btn" id="t-growth" onclick="setCallType('growth')">
+          <span class="t-icon">📈</span>
+          Growth Check-In
+          <span class="t-sub">Established partner</span>
+        </button>
+        <button class="type-btn" id="t-atrisk" onclick="setCallType('atrisk')">
+          <span class="t-icon">🚨</span>
+          At-Risk
+          <span class="t-sub">Stalled or declining</span>
+        </button>
+        <button class="type-btn" id="t-qbr" onclick="setCallType('qbr')">
+          <span class="t-icon">📊</span>
+          QBR
+          <span class="t-sub">Quarterly business review</span>
         </button>
       </div>
 
-      <div id="prospect-extra" style="display:none;">
-        <input class="big-input" type="text" id="p-fleet" placeholder="Approx. fleet size (e.g. 40 trucks)" style="margin-bottom:10px;" />
-        <select class="big-input" id="p-comp" style="font-size:13px;">
-          <option value="">Current telematics? (optional)</option>
-          <option>None — no telematics yet</option>
-          <option>Samsara</option>
-          <option>Verizon Connect</option>
-          <option>Motive (KeepTruckin)</option>
-          <option>Teletrac Navman</option>
-          <option>Other competitor</option>
-        </select>
-      </div>
+      <input class="big-input" type="text" id="p-erp" placeholder="ERP code (optional) — e.g. TELU01, for live data in brief" />
 
-      <textarea class="big-input" id="context" placeholder="Any extra context? (optional) — e.g. renewal coming up, they mentioned cameras, Samsara was mentioned..."></textarea>
+      <select class="big-input" id="p-vertical" style="font-size:13px;">
+        <option value="">Partner's primary vertical (optional)</option>
+        <option>Fleet / Transportation</option>
+        <option>Construction / Vocational</option>
+        <option>Oil & Gas / Energy</option>
+        <option>Government / Public Sector</option>
+        <option>Healthcare / Medical</option>
+        <option>Utilities / Field Service</option>
+        <option>Food & Beverage / Distribution</option>
+        <option>People Transportation / Transit</option>
+        <option>IT / Technology VAR</option>
+        <option>Mixed / General</option>
+      </select>
+
+      <textarea class="big-input" id="context" placeholder="Any extra context? (optional) — e.g. last call they mentioned training struggles, customer churned, about to hit first sale..."></textarea>
 
       <div class="err" id="pre-err"></div>
       <button class="main-btn" id="pre-btn" onclick="runPreCall()">
         <div class="spin"></div>
-        <span class="btn-label" id="pre-label">⚡ Get My Brief</span>
+        <span class="btn-label" id="pre-label">⚡ Get Partner Brief</span>
       </button>
     </div>
 
     <!-- ── LIVE ASSIST ── -->
     <div id="pane-live" style="display:none;display:flex;flex-direction:column;gap:22px;">
 
-      <!-- OBJECTION HANDLER -->
+      <!-- PARTNER OBJECTION HANDLER -->
       <div class="live-section">
-        <div class="live-heading"><span class="live-heading-icon">🛡</span> Handle an Objection</div>
-        <div class="live-subtext">Tap the objection you just heard — get your response instantly.</div>
+        <div class="live-heading"><span class="live-heading-icon">🛡</span> Partner Pushback</div>
+        <div class="live-subtext">Tap what your partner just said — get your response instantly.</div>
         <div class="chips" id="obj-chips">
-          <div class="chip obj" onclick="handleObj(this,'Too expensive / price is too high')">Too expensive</div>
-          <div class="chip obj" onclick="handleObj(this,'Happy with our current provider')">Happy with current</div>
-          <div class="chip obj" onclick="handleObj(this,'Not the right time / budget is frozen')">Wrong timing</div>
-          <div class="chip obj" onclick="handleObj(this,'Need to talk to IT, procurement, or my boss first')">Need approval</div>
-          <div class="chip obj" onclick="handleObj(this,'We are too small / don&apos;t think we need this')">Too small</div>
-          <div class="chip obj" onclick="handleObj(this,'We tried telematics before and it didn&apos;t work out')">Bad experience</div>
-          <div class="chip obj" onclick="handleObj(this,'Your contract length is too long / we want flexibility')">Contract length</div>
-          <div class="chip obj" onclick="handleObj(this,'We are locked into a competitor contract right now')">Locked in</div>
+          <div class="chip obj" onclick="handleObj(this,'We can&apos;t make enough margin reselling Geotab')">Can't make margin</div>
+          <div class="chip obj" onclick="handleObj(this,'Our sales team doesn&apos;t understand telematics well enough to sell it')">Team not confident</div>
+          <div class="chip obj" onclick="handleObj(this,'Our customers are specifically asking for Samsara or another competitor')">Customers want competitor</div>
+          <div class="chip obj" onclick="handleObj(this,'We had a bad support or onboarding experience with Geotab')">Bad experience</div>
+          <div class="chip obj" onclick="handleObj(this,'The platform is too complex for our team to demo and support')">Too complex to support</div>
+          <div class="chip obj" onclick="handleObj(this,'We already have a telematics partnership with another vendor')">Already partnered elsewhere</div>
+          <div class="chip obj" onclick="handleObj(this,'We activated accounts 6 months ago but growth has completely stalled')">Growth stalled</div>
+          <div class="chip obj" onclick="handleObj(this,'Our salespeople aren&apos;t selling it — they don&apos;t feel confident enough')">Reps not selling</div>
         </div>
       </div>
 
       <div class="live-divider"></div>
 
-      <!-- COMPETITOR BATTLE CARD -->
+      <!-- COMPETITOR PARTNER PROGRAM -->
       <div class="live-section">
-        <div class="live-heading"><span class="live-heading-icon">⚔️</span> They Mentioned a Competitor</div>
-        <div class="live-subtext">Tap it — get Geotab's winning talking points and a trap question.</div>
+        <div class="live-heading"><span class="live-heading-icon">⚔️</span> Competing Program or Customer Objection</div>
+        <div class="live-subtext">Tap it — arm yourself or your partner with the right response.</div>
         <div class="chips" id="comp-chips">
-          <div class="chip comp" onclick="handleComp(this,'Samsara')">Samsara</div>
+          <div class="chip comp" onclick="handleComp(this,'Samsara')">Samsara program</div>
           <div class="chip comp" onclick="handleComp(this,'Verizon Connect')">Verizon Connect</div>
           <div class="chip comp" onclick="handleComp(this,'Motive / KeepTruckin')">Motive</div>
           <div class="chip comp" onclick="handleComp(this,'Teletrac Navman')">Teletrac Navman</div>
@@ -529,21 +544,21 @@
 
       <div class="live-divider"></div>
 
-      <!-- DISCOVERY PROMPTS -->
+      <!-- PAM DISCOVERY PROMPTS -->
       <div class="live-section">
-        <div class="live-heading"><span class="live-heading-icon">💡</span> Need a Good Question?</div>
-        <div class="live-subtext">Tap a topic — get 4 sharp questions to ask right now.</div>
+        <div class="live-heading"><span class="live-heading-icon">💡</span> Uncover What's Really Going On</div>
+        <div class="live-subtext">Tap a topic — get 4 questions to ask your partner right now.</div>
         <div class="chips" id="disc-chips">
-          <div class="chip disc" onclick="handleDisc(this,'Safety & accident prevention')">Safety</div>
-          <div class="chip disc" onclick="handleDisc(this,'ELD & HOS compliance')">ELD / Compliance</div>
-          <div class="chip disc" onclick="handleDisc(this,'Fuel cost reduction')">Fuel Costs</div>
-          <div class="chip disc" onclick="handleDisc(this,'Driver behavior & coaching')">Driver Behavior</div>
-          <div class="chip disc" onclick="handleDisc(this,'Camera & video evidence')">Cameras</div>
-          <div class="chip disc" onclick="handleDisc(this,'Fleet visibility & real-time tracking')">Visibility</div>
-          <div class="chip disc" onclick="handleDisc(this,'Vehicle maintenance & health alerts')">Maintenance</div>
-          <div class="chip disc" onclick="handleDisc(this,'ROI and building a business case')">ROI / Budget</div>
-          <div class="chip disc" onclick="handleDisc(this,'Insurance cost reduction')">Insurance</div>
-          <div class="chip disc" onclick="handleDisc(this,'Dispatch & routing efficiency')">Dispatch</div>
+          <div class="chip disc" onclick="handleDisc(this,'Understanding the partner&apos;s target verticals and ideal customer profile')">Target verticals</div>
+          <div class="chip disc" onclick="handleDisc(this,'Sales team size, telematics confidence level, and current selling activity')">Sales team readiness</div>
+          <div class="chip disc" onclick="handleDisc(this,'Pipeline health — how many proposals submitted, demos run, deals in progress')">Pipeline & proposals</div>
+          <div class="chip disc" onclick="handleDisc(this,'What is blocking them from closing their next deal or activating more accounts')">Growth blockers</div>
+          <div class="chip disc" onclick="handleDisc(this,'Training completion, product knowledge gaps, and what they need to feel confident selling')">Training gaps</div>
+          <div class="chip disc" onclick="handleDisc(this,'Customer retention — are their Geotab customers renewing, churning, or expanding')">Customer retention</div>
+          <div class="chip disc" onclick="handleDisc(this,'Revenue goals, commission motivation, and what success looks like for this partner')">Revenue goals</div>
+          <div class="chip disc" onclick="handleDisc(this,'Which Geotab products they are actively selling and which they are ignoring')">Product mix</div>
+          <div class="chip disc" onclick="handleDisc(this,'Whether they have hit their first sale milestone and what happened during that first deal')">First sale milestone</div>
+          <div class="chip disc" onclick="handleDisc(this,'Co-selling opportunities — can we get on a call with their prospect together')">Co-sell opportunity</div>
         </div>
       </div>
 
@@ -578,8 +593,15 @@
         <button class="kb-chip" id="kb-asset_trackers" onclick="setKbCat('asset_trackers',this)">📡 Asset Trackers</button>
         <button class="kb-chip" id="kb-go_devices" onclick="setKbCat('go_devices',this)">📟 GO Devices</button>
         <button class="kb-chip" id="kb-iox" onclick="setKbCat('iox',this)">🔌 IOX</button>
+        <button class="kb-chip" id="kb-rate_plans" onclick="setKbCat('rate_plans',this)">📋 Rate Plans & Pricing</button>
+        <button class="kb-chip" id="kb-partner_program" onclick="setKbCat('partner_program',this)">🤝 Partner Program</button>
       </div>
-      <textarea class="big-input" id="kb-q" style="min-height:100px;" placeholder="Ask anything about this product — e.g. Does GO Focus Plus need a GO device? What's the range on IOX-BT?" onkeydown="if(event.key==='Enter'&&event.ctrlKey)runKb()"></textarea>
+      <div style="display:flex;gap:8px;align-items:center;">
+        <span style="font-size:11px;color:var(--muted);">Mode:</span>
+        <button class="kb-chip active" id="kb-mode-pam" onclick="setKbMode('pam',this)" style="flex:1;padding:8px;">For me (PAM)</button>
+        <button class="kb-chip" id="kb-mode-partner" onclick="setKbMode('partner',this)" style="flex:1;padding:8px;">Explain to my partner</button>
+      </div>
+      <textarea class="big-input" id="kb-q" style="min-height:90px;" placeholder="Ask anything — e.g. What's the difference between GO and PRO plan? How does deal registration work? What does a partner get in the first 6 months?" onkeydown="if(event.key==='Enter'&&event.ctrlKey)runKb()"></textarea>
       <div class="err" id="kb-err"></div>
       <button class="main-btn" id="kb-btn" onclick="runKb()" style="background:var(--teal);color:#080C14;">
         <div class="spin" style="border-top-color:#080C14;"></div>
@@ -601,10 +623,24 @@
 
     <!-- ── POST-CALL ── -->
     <div id="pane-post" style="display:none;display:flex;flex-direction:column;gap:16px;">
-      <div class="panel-title">Post-Call <span class="g">Follow-Ups</span></div>
-      <div class="panel-hint">Paste any meeting notes or AI summary — GIA pulls out every action item with owner and timeline.</div>
-      <input class="big-input" type="text" id="post-co" placeholder="Company name..." />
-      <textarea class="big-input" id="post-notes" style="min-height:220px;" placeholder="Paste your meeting notes or AI-generated summary here..."></textarea>
+      <div class="panel-title">Post-Call <span class="g">Summary</span></div>
+      <div class="panel-hint">Paste meeting notes — GIA extracts action items, writes your follow-up email, and logs the SFDC note.</div>
+      <input class="big-input" type="text" id="post-co" placeholder="Partner name..." />
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;">
+        <button class="type-btn on-onboarding" id="pt-onboarding" onclick="setPostType('onboarding')" style="padding:10px 8px;">
+          <span class="t-icon" style="font-size:16px;">🟢</span>Onboarding<span class="t-sub">New partner</span>
+        </button>
+        <button class="type-btn" id="pt-growth" onclick="setPostType('growth')" style="padding:10px 8px;">
+          <span class="t-icon" style="font-size:16px;">📈</span>Growth<span class="t-sub">Check-in</span>
+        </button>
+        <button class="type-btn" id="pt-atrisk" onclick="setPostType('atrisk')" style="padding:10px 8px;">
+          <span class="t-icon" style="font-size:16px;">🚨</span>At-Risk<span class="t-sub">Recovery</span>
+        </button>
+        <button class="type-btn" id="pt-qbr" onclick="setPostType('qbr')" style="padding:10px 8px;">
+          <span class="t-icon" style="font-size:16px;">📊</span>QBR<span class="t-sub">Quarterly review</span>
+        </button>
+      </div>
+      <textarea class="big-input" id="post-notes" style="min-height:200px;" placeholder="Paste your meeting notes or AI-generated summary here..."></textarea>
       <div class="err" id="post-err"></div>
       <button class="main-btn" id="post-btn" onclick="runPost()">
         <div class="spin"></div>
@@ -744,6 +780,11 @@
         <div id="pr-summary-text"></div>
       </div>
 
+      <div id="pr-milestones" style="display:none;background:rgba(0,212,138,0.07);border:1px solid rgba(0,212,138,0.25);border-left:4px solid var(--green);border-radius:12px;padding:12px 16px;margin-bottom:4px;">
+        <div class="summary-lbl" style="color:var(--green);margin-bottom:8px;">🏆 Milestones Reached</div>
+        <div id="pr-milestones-list"></div>
+      </div>
+
       <div class="fups-label">Action Items</div>
       <div id="fup-list" style="display:flex;flex-direction:column;gap:8px;"></div>
       <div class="add-row">
@@ -775,7 +816,7 @@
 const GW = 'https://genai-us.geotab.com/api/v2/chat/completions';
 const GK = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6Im1haGFhZmFuYUBnZW90YWIuY29tIiwiZXhwIjoxODA2MDE5MjAwfQ.aR2hIVpYk0X61_ohHX4IcBgTaIkAoIP7cDcuIK43LGw';
 
-let mode = 'pre', callType = 'existing';
+let mode = 'pre', callType = 'onboarding';
 
 // ── GATEWAY CALL ─────────────────────────────────────────────
 async function ai(sys, usr, tokens) {
@@ -825,17 +866,16 @@ function setMode(m) {
 }
 
 // ── CALL TYPE ─────────────────────────────────────────────────
-function setType(t) {
+function setCallType(t) {
   callType = t;
-  document.getElementById('t-existing').className = 'type-btn' + (t === 'existing' ? ' on-existing' : '');
-  document.getElementById('t-prospect').className = 'type-btn' + (t === 'prospect' ? ' on-prospect' : '');
-  document.getElementById('prospect-extra').style.display = t === 'prospect' ? 'flex' : 'none';
-  if (t === 'prospect') {
-    document.getElementById('prospect-extra').style.flexDirection = 'column';
-    document.getElementById('prospect-extra').style.gap = '10px';
-  }
-  document.getElementById('pre-label').textContent = t === 'existing' ? '⚡ Get My Brief' : '🎯 Get Prospect Brief';
+  ['onboarding','growth','atrisk','qbr'].forEach(id => {
+    document.getElementById('t-'+id).className = 'type-btn' + (t === id ? ' on-'+id : '');
+  });
+  const labels = {onboarding:'🟢 Get Onboarding Brief', growth:'📈 Get Growth Brief', atrisk:'🚨 Get At-Risk Brief', qbr:'📊 Get QBR Brief'};
+  document.getElementById('pre-label').textContent = labels[t] || '⚡ Get Partner Brief';
 }
+// Legacy alias
+function setType(t) { setCallType(t === 'existing' ? 'onboarding' : 'growth'); }
 
 // ── HELPERS ───────────────────────────────────────────────────
 function err(id, msg) { const e = document.getElementById(id); e.textContent = msg; e.classList.add('on'); }
@@ -880,38 +920,88 @@ function resetResult() {
 async function runPreCall() {
   noErr('pre-err');
   const company = document.getElementById('company').value.trim();
-  if (!company) { err('pre-err', 'Please enter the company name.'); return; }
+  if (!company) { err('pre-err', 'Please enter the partner name.'); return; }
   loading('pre-btn', true);
 
   const context = document.getElementById('context').value.trim();
-  const fleet = document.getElementById('p-fleet')?.value.trim();
-  const comp = document.getElementById('p-comp')?.value;
+  const erp = document.getElementById('p-erp')?.value.trim();
+  const vertical = document.getElementById('p-vertical')?.value;
+  const type = callType || 'growth';
 
-  const isProspect = callType === 'prospect';
-  const sys = `You are GIA — Geotab's AI sales assistant. Return a JSON array of brief cards. Each: {id,icon,title,color,body}. Colors: #0057FF blue, #00E5A0 green, #FFD166 yellow, #FF6B35 orange, #FF4D6A red. Body: plain text, **bold** for key phrases. Return ONLY the JSON array.`;
+  const callTypeLabels = {
+    onboarding: 'New Partner Onboarding (months 1–6)',
+    growth: 'Growth Check-In (established partner)',
+    atrisk: 'At-Risk Partner Intervention',
+    qbr: 'Quarterly Business Review'
+  };
+  const callTypeBadge = {
+    onboarding: 'ONBOARDING CALL', growth: 'GROWTH CHECK-IN', atrisk: 'AT-RISK CALL', qbr: 'QBR'
+  };
+  const callTypeBadgeClass = {
+    onboarding: 'b-prospect', growth: 'b-existing', atrisk: 'b-live', qbr: 'b-partner'
+  };
 
-  const usr = isProspect
-    ? `New prospect brief for: ${company}${fleet ? `, fleet ~${fleet} vehicles` : ''}${comp && comp !== '' ? `, currently on ${comp}` : ''}${context ? `, context: ${context}` : ''}.\nCards: 1.SNAPSHOT (who they are, their pains) 2.ENTRY POINT (what to lead with${comp && comp !== 'None — no telematics yet' ? `, displacement from ${comp}` : ''}) 3.DISCOVERY QUESTIONS (3 numbered, open-ended, pain-focused) 4.ROI HOOK (one stat with a number) 5.WATCH OUT FOR (top risk) 6.CALL OPENER (exact first sentence, in quotes)`
-    : `Existing Geotab customer brief for: ${company}${context ? `. Context: ${context}` : ''}.\nCards: 1.SNAPSHOT (who they are, industry pressures) 2.GAPS (likely product gaps — cameras? Go Focus Plus $25/month) 3.BIGGEST OPPORTUNITY (one sentence) 4.WATCH OUT FOR (top risk) 5.CALL OPENER (exact first sentence, in quotes)`;
+  const sys = `You are GIA — an AI assistant for Geotab Partner Account Managers (PAMs). The PAM is about to call a Geotab reseller partner. Return a JSON array of brief cards. Each: {id, icon, title, color, body}. Colors: #2563EB blue, #00D48A green, #FBBF24 yellow, #F97316 orange, #F43F5E red, #A78BFA purple. Body: plain text, **bold** key phrases. Return ONLY the JSON array.`;
+
+  const callInstructions = {
+    onboarding: `Cards needed:
+1. id:"snapshot" — PARTNER SNAPSHOT: What kind of business they are, their industry, their likely customer base, what telematics means to their business model.
+2. id:"journey" — WHERE THEY LIKELY ARE: What a new partner typically struggles with in months 1–6 (first demo nerves, product confidence, finding their first customer, internal buy-in).
+3. id:"objective" — CALL OBJECTIVE: The ONE thing this call needs to accomplish to move them forward (e.g., confirm first demo scheduled, unblock a stall, celebrate first activation).
+4. id:"questions" — 3 QUESTIONS TO ASK: Open-ended, relationship-building, about their progress and confidence — not pitching.
+5. id:"watchout" — WATCH OUT FOR: The most common reason new partners stall at this stage.
+6. id:"opener" — CALL OPENER: Exact first sentence in quotes — warm, not transactional.`,
+    growth: `Cards needed:
+1. id:"snapshot" — PARTNER SNAPSHOT: Who they are, what they likely sell, their customer base.
+2. id:"opportunity" — GROWTH OPPORTUNITY: What an established partner at this stage typically has the most potential to expand (upsell to PRO Plus, cameras, new verticals, larger customers).
+3. id:"objective" — CALL OBJECTIVE: What this growth check-in should accomplish — pipeline review, identifying upsell targets, or planning a co-sell.
+4. id:"questions" — 3 QUESTIONS TO ASK: Open-ended, about pipeline health, what their customers are asking for, and what's holding back more deals.
+5. id:"watchout" — WATCH OUT FOR: The most common growth stall pattern for partners at this stage.
+6. id:"opener" — CALL OPENER: Exact first sentence in quotes — peer-to-peer, collegial tone.`,
+    atrisk: `Cards needed:
+1. id:"snapshot" — PARTNER SNAPSHOT: What kind of business they are and what their at-risk status likely means.
+2. id:"diagnosis" — LIKELY ROOT CAUSE: The most common reasons partners stall or decline (loss of internal champion, competing priorities, poor first customer experience, lack of confidence). Be specific.
+3. id:"objective" — CALL OBJECTIVE: Don't open with numbers. This call is about listening and diagnosing before proposing solutions.
+4. id:"questions" — 3 QUESTIONS TO ASK: Empathetic, open-ended, designed to get them talking honestly about what went wrong.
+5. id:"recovery" — RECOVERY OPTIONS: 2-3 concrete things Geotab and the PAM can do to help them get back on track (co-sell, refresher training, executive intro, pricing review).
+6. id:"opener" — CALL OPENER: Exact first sentence in quotes — empathetic, low-pressure, focused on listening.`,
+    qbr: `Cards needed:
+1. id:"snapshot" — PARTNER SNAPSHOT: Who they are and what a QBR with this type of partner typically covers.
+2. id:"agenda" — SUGGESTED QBR AGENDA: 4-bullet suggested structure (what went well, pipeline review, growth focus for next quarter, support or resource needs).
+3. id:"objective" — CALL OBJECTIVE: What a great QBR outcome looks like — a joint commitment on specific next-quarter targets.
+4. id:"questions" — 3 QUESTIONS TO ASK: Strategic, forward-looking questions about their goals for next quarter, what they need from Geotab, and where they want to grow.
+5. id:"watchout" — WATCH OUT FOR: Common QBR pitfalls (one-sided data dump, no joint commitment, no clear next steps).
+6. id:"opener" — CALL OPENER: Exact first sentence in quotes — confident, forward-looking, sets collaborative tone.`
+  };
+
+  const usr = `Partner name: ${company}
+Call type: ${callTypeLabels[type]}
+${erp ? `ERP code: ${erp}` : ''}
+${vertical ? `Primary vertical: ${vertical}` : ''}
+${context ? `Additional context from PAM: ${context}` : ''}
+
+${callInstructions[type]}`;
 
   try {
-    const cards = await ai(sys, usr, 1100);
+    const cards = await ai(sys, usr, 1300);
     const els = cards.map(c => {
-      const isOpener = c.id === 'opener';
-      const isDisc = c.id === 'discovery';
       let body;
-      if (isOpener) {
+      if (c.id === 'opener') {
         body = `<div class="card-quote">"${c.body}"</div>`;
-      } else if (isDisc) {
+      } else if (c.id === 'questions') {
         const lines = (c.body||'').split('\n').filter(l=>l.trim());
         const items = lines.map((l,i)=>`<li><span class="q-num">${i+1}.</span><span class="q-text">${l.replace(/^\d+\.\s*/,'')}</span></li>`).join('');
         body = `<ul class="q-list">${items}</ul>`;
+      } else if (c.id === 'agenda' || c.id === 'recovery') {
+        const lines = (c.body||'').split('\n').filter(l=>l.trim());
+        const items = lines.map(l=>`<li><span class="win-check">→</span><span>${l.replace(/^[-•]\s*/,'')}</span></li>`).join('');
+        body = `<ul class="wins-list">${items}</ul>`;
       } else {
         body = `<div class="card-body">${(c.body||'').replace(/\*\*(.*?)\*\*/g,'<strong>$1</strong>')}</div>`;
       }
       return makeCard(`${c.icon} ${c.title}`, body, c.color);
     });
-    showResult(company, isProspect ? 'NEW PROSPECT' : 'EXISTING CUSTOMER', isProspect ? 'b-prospect' : 'b-existing', els);
+    showResult(company, callTypeBadge[type], callTypeBadgeClass[type], els);
   } catch(e) {
     err('pre-err', 'Something went wrong. Please try again.');
   }
@@ -923,8 +1013,8 @@ async function handleObj(el, objection) {
   setChipLoading('obj-chips', el);
   noErr('live-err');
 
-  const sys = `You are GIA — Geotab's sales coach. Return JSON: {reframe, counter, bridge, tip}. reframe=1 sentence empathy+pivot. counter=2-3 sentences with Geotab's specific advantage, **bold** key phrases. bridge=short follow-up question. tip=1 coaching tip. Return ONLY JSON.`;
-  const usr = `Objection: "${objection}"\nGeotab: world's largest telematics, 4M+ vehicles, Go Focus Plus cameras at $25/month all-in (hardware included), open platform with 200+ integrations.`;
+  const sys = `You are GIA — an AI coach for Geotab Partner Account Managers (PAMs). The PAM is on a call with a Geotab reseller partner, not an end customer. Return JSON: {reframe, counter, bridge, tip}. reframe=1 sentence that shows you genuinely hear their concern. counter=2-3 sentences with a specific, practical response from a PAM's perspective — reference Geotab partner program benefits, support, training, margin structure, or co-sell support. **bold** key phrases. bridge=short follow-up question to keep them talking. tip=1 PAM coaching tip. Return ONLY JSON.`;
+  const usr = `Partner objection: "${objection}"\nContext: PAM managing a Geotab reseller partner. Geotab partner program: dedicated PAM support, co-sell resources, Geotab Academy training, deal registration, marketing funds, Go Focus Plus cameras at $25/month all-in, open platform 200+ integrations, 4M+ active devices, world's largest commercial telematics provider.`;
 
   try {
     const r = await ai(sys, usr, 500);
@@ -945,21 +1035,22 @@ async function handleComp(el, competitor) {
   setChipLoading('comp-chips', el);
   noErr('live-err');
 
-  const sys = `You are GIA — Geotab's competitive expert. Return JSON: {summary, geotab_wins (array of 3), displacement_angle, trap_question, competitor_strengths (array of 2)}. Be specific, factual, sharp. Return ONLY JSON.`;
-  const usr = `Competitor: ${competitor}\nGeotab: world's largest telematics, 4M+ devices, open platform 200+ integrations, Go Focus Plus camera $25/month all-in, strong reseller ecosystem, SDK for custom development.`;
+  const sys = `You are GIA — Geotab's competitive expert for Partner Account Managers. The PAM's partner is facing customer pressure from this competitor OR is considering partnering with them instead. Return JSON: {summary, geotab_wins (array of 3 — why Geotab beats them for partners AND their end customers), partner_program_advantage (1-2 sentences on why the Geotab partner program is stronger than this competitor's reseller program), arm_your_partner (2-3 sentences the partner's salesperson can say to their customer who mentioned this competitor), trap_question (1 question the partner can ask their customer that surfaces this competitor's weakness), competitor_strengths (array of 2 — honest acknowledgment)}. Be specific, factual, sharp. Return ONLY JSON.`;
+  const usr = `Competitor: ${competitor}\nContext: Geotab PAM helping a reseller partner respond to customer interest in ${competitor} OR evaluating whether to stay in the Geotab partner program. Geotab: world's largest commercial telematics, 4M+ devices, open platform 200+ integrations, Go Focus Plus camera $25/month all-in, strong partner program with dedicated PAM, Geotab Academy, SDK for custom development, 30,000+ partners globally.`;
 
   try {
-    const r = await ai(sys, usr, 600);
+    const r = await ai(sys, usr, 750);
     const cards = [];
     if (r.geotab_wins?.length) {
       const items = r.geotab_wins.map(w=>`<li><span class="win-check">✓</span><span>${w}</span></li>`).join('');
-      cards.push(makeCard('✅ Geotab wins', `<ul class="wins-list">${items}</ul>`, 'var(--green)'));
+      cards.push(makeCard('✅ Why Geotab wins', `<ul class="wins-list">${items}</ul>`, 'var(--green)'));
     }
-    if (r.displacement_angle) cards.push(makeCard('🎯 Your angle', `<div class="card-teal">${r.displacement_angle}</div>`, 'var(--teal)'));
-    if (r.trap_question) cards.push(makeCard('💡 Ask this (surfaces their weakness)', `<div class="card-green">"${r.trap_question}"</div>`, 'var(--purple)'));
+    if (r.partner_program_advantage) cards.push(makeCard('🤝 Partner program advantage', `<div class="card-teal">${r.partner_program_advantage}</div>`, 'var(--teal)'));
+    if (r.arm_your_partner) cards.push(makeCard('💬 What to tell your partner to say', `<div class="card-quote">${r.arm_your_partner}</div>`, 'var(--blue)'));
+    if (r.trap_question) cards.push(makeCard('🎯 Question your partner can ask their customer', `<div class="card-green">"${r.trap_question}"</div>`, 'var(--purple)'));
     if (r.competitor_strengths?.length) {
       const warns = r.competitor_strengths.map(w=>`<li><span class="warn-icon">⚠</span><span>${w}</span></li>`).join('');
-      cards.push(makeCard(`⚠ Know ${competitor}'s strengths`, `<ul class="wins-list">${warns}</ul>`, 'var(--yellow)'));
+      cards.push(makeCard(`⚠ ${competitor}'s real strengths (be honest)`, `<ul class="wins-list">${warns}</ul>`, 'var(--yellow)'));
     }
     showResult(`Geotab vs ${competitor}`, r.summary || 'BATTLE CARD', 'b-live', cards);
   } catch(e) {
@@ -973,8 +1064,8 @@ async function handleDisc(el, topic) {
   setChipLoading('disc-chips', el);
   noErr('live-err');
 
-  const sys = `You are GIA — Geotab's sales coach. Return JSON: {questions (array of 4, open-ended, pain-uncovering, no pitching), follow_up (1 universal go-deeper question)}. Return ONLY JSON.`;
-  const usr = `Discovery topic: ${topic}\nContext: Fleet operator call. Questions should start with What, How, Tell me, Walk me through, When was the last time.`;
+  const sys = `You are GIA — an AI coach for Geotab Partner Account Managers. Return JSON: {questions (array of 4, open-ended, insight-uncovering questions for a PAM speaking WITH a reseller partner — not with an end customer), follow_up (1 universal go-deeper follow-up question)}. Questions should feel conversational and relationship-oriented. Start with What, How, Tell me, Walk me through, What would it mean if. Return ONLY JSON.`;
+  const usr = `Discovery topic: ${topic}\nContext: PAM call with a Geotab reseller partner. Goal: understand what's really happening in the partner's business, their confidence level, pipeline, blockers, and what they need from Geotab to succeed.`;
 
   try {
     const r = await ai(sys, usr, 400);
@@ -1007,6 +1098,15 @@ function clearChipLoading(groupId) {
   });
 }
 
+// ── POST-CALL TYPE ─────────────────────────────────────────────
+let postCallType = 'onboarding';
+function setPostType(t) {
+  postCallType = t;
+  ['onboarding','growth','atrisk','qbr'].forEach(id => {
+    document.getElementById('pt-'+id).className = 'type-btn' + (t === id ? ' on-'+id : '');
+  });
+}
+
 // ── POST-CALL ─────────────────────────────────────────────────
 async function runPost() {
   noErr('post-err');
@@ -1014,19 +1114,30 @@ async function runPost() {
   if (!notes) { err('post-err', 'Please paste your meeting notes.'); return; }
   loading('post-btn', true);
   const company = document.getElementById('post-co').value.trim();
-  const sys = `You are GIA, an AI assistant for Geotab Partner Account Managers. Analyze the meeting notes and return ONLY a JSON object with these fields:
+  const pt = postCallType || 'growth';
+
+  const emailToneGuide = {
+    onboarding: 'Warm, encouraging, mentorship tone. Celebrate any progress. Remind them you are here to help them succeed. Focus on next concrete step — not a list of asks.',
+    growth: 'Collegial, peer-to-peer tone. Forward-looking. Reference specific pipeline items or growth opportunities discussed. End with a clear joint commitment.',
+    atrisk: 'Empathetic, low-pressure tone. Acknowledge challenges without judgment. Focus on 1-2 specific things Geotab will do to help, not a list of demands from the partner.',
+    qbr: 'Professional, strategic tone. Recap the quarter objectively. Acknowledge wins clearly. Set forward-looking commitments with specific targets for next quarter.'
+  };
+
+  const sys = `You are GIA, an AI assistant for Geotab Partner Account Managers. The call type was: ${pt}. Analyze the meeting notes and return ONLY a JSON object:
 {
-  "summary": "2-3 sentence recap of the call",
+  "summary": "2-3 sentence recap of the call from a PAM perspective — what was the partner's mood, what was decided, what is the relationship status",
   "followups": [{"action": "...", "owner": "PAM"|"Partner"|"Both", "timeline": "24 hours"|"This week"|"2 weeks"|"Next month", "priority": "high"|"medium"|"low"}],
+  "milestones": ["list any partner milestones mentioned or achieved — e.g. First sale closed, Training completed, First proposal submitted, QBR completed — empty array if none"],
   "email": {
-    "subject": "concise email subject line",
-    "body": "professional but warm follow-up email from the PAM to the partner contact. Reference specific things discussed. Include action items. Sign off as the PAM. 150-200 words."
+    "subject": "concise, specific subject line — reference the partner name and topic",
+    "body": "Follow-up email from PAM to partner. Tone guide: ${emailToneGuide[pt]} Reference specific things discussed. Include only 2-3 key action items, not an exhaustive list. 130-160 words. Do not use bullet points in the email body."
   },
-  "sfdc_note": "2-3 sentence Salesforce activity log entry. Past tense. Include who attended, key topics, outcomes, and next steps. No bullet points."
+  "sfdc_note": "2-3 sentence Salesforce activity log. Past tense. Who attended, call type (${pt}), key topics, outcomes, partner sentiment, clear next step with date if mentioned."
 }
-Return ONLY valid JSON. No extra text.`;
+Return ONLY valid JSON.`;
+
   try {
-    const r = await ai(sys, `Company: ${company||'Unknown'}\nMeeting Notes:\n${notes}`, 1400);
+    const r = await ai(sys, `Partner: ${company||'Unknown'}\nMeeting Notes:\n${notes}`, 1500);
     renderPost(company, r);
   } catch(e) {
     err('post-err', 'Something went wrong. Please try again.');
@@ -1039,6 +1150,12 @@ function renderPost(company, r) {
   document.getElementById('pr-name').textContent = company || 'Call Summary';
   document.getElementById('pr-time').textContent = new Date().toLocaleTimeString([], {hour:'2-digit',minute:'2-digit'});
   if (r.summary) { document.getElementById('pr-summary-text').textContent = r.summary; document.getElementById('pr-summary').style.display = 'block'; }
+  // Milestones
+  const msEl = document.getElementById('pr-milestones');
+  if (r.milestones?.length) {
+    document.getElementById('pr-milestones-list').innerHTML = r.milestones.map(m=>`<div style="display:flex;align-items:center;gap:8px;font-size:13px;padding:5px 0;"><span style="color:var(--green);font-weight:700;">✓</span><span>${m}</span></div>`).join('');
+    msEl.style.display = 'block';
+  } else { msEl.style.display = 'none'; }
   document.getElementById('fup-list').innerHTML = '';
   (r.followups || []).forEach((f,i) => appendFup(f, i));
 
@@ -1287,16 +1404,30 @@ function resetPost() {
   document.getElementById('fup-list').innerHTML = '';
   document.getElementById('pr-email').style.display = 'none';
   document.getElementById('pr-sfdc').style.display = 'none';
+  document.getElementById('pr-milestones').style.display = 'none';
   document.getElementById('empty-post').style.display = 'flex';
 }
 
 // ── PRODUCT KNOWLEDGE ─────────────────────────────────────────
 let kbCategory = 'cameras';
+let kbMode = 'pam';
+
+const KB_LABELS = {
+  cameras: '📷 Cameras', asset_trackers: '📡 Asset Trackers',
+  go_devices: '📟 GO Devices', iox: '🔌 IOX Accessories',
+  rate_plans: '📋 Rate Plans & Pricing', partner_program: '🤝 Partner Program'
+};
 
 function setKbCat(cat, el) {
   kbCategory = cat;
-  document.querySelectorAll('.kb-chip').forEach(c => c.classList.remove('active'));
+  document.querySelectorAll('.kb-chip:not(#kb-mode-pam):not(#kb-mode-partner)').forEach(c => c.classList.remove('active'));
   el.classList.add('active');
+}
+
+function setKbMode(m, el) {
+  kbMode = m;
+  document.getElementById('kb-mode-pam').classList.toggle('active', m === 'pam');
+  document.getElementById('kb-mode-partner').classList.toggle('active', m === 'partner');
 }
 
 async function runKb() {
@@ -1308,7 +1439,6 @@ async function runKb() {
   loading('kb-btn', true);
 
   try {
-    // Step 1: fetch doc content from local server
     const kbUrl = `${PARTNER_API}/kb?key=${PARTNER_KEY}&category=${kbCategory}`;
     const kbResp = await fetch(kbUrl);
     const kbData = await kbResp.json();
@@ -1316,14 +1446,16 @@ async function runKb() {
 
     const docContent = kbData.content || '';
     const kbSources = kbData.sources || [];
-    if (!docContent.trim()) { err('kb-err', 'Could not load product documentation. Make sure the server is running.'); loading('kb-btn', false); return; }
+    if (!docContent.trim()) { err('kb-err', 'Could not load documentation. Make sure the server is running.'); loading('kb-btn', false); return; }
 
-    // Step 2: ask Claude, strictly from the docs
-    const catLabels = { cameras: 'Cameras', asset_trackers: 'Asset Trackers', go_devices: 'GO Devices', iox: 'IOX Accessories' };
-    const sys = `You are GIA, Geotab's internal AI sales assistant. You have been given approved Geotab product documentation and SME Q&A records. Answer the PAM's question STRICTLY from this documentation. Be concise and direct — sales-focused, not technical. If the answer is not in the docs, say exactly: "I don't have that information in the approved docs — contact your Geotab SME or check the support center." Never guess or make up product details.`;
-    const usr = `APPROVED GEOTAB DOCUMENTATION — ${catLabels[kbCategory]}:\n\n${docContent}\n\n---\n\nPAM QUESTION: ${q}`;
+    const modeInstruction = kbMode === 'partner'
+      ? `The PAM needs to EXPLAIN this to their reseller partner or the partner's salesperson — use plain language, a real-world analogy if helpful, and frame it in terms of what it means for their business or their customers. Avoid technical jargon.`
+      : `Answer concisely and directly for the PAM — sales-focused, not technical. Include the key fact, why it matters in a sales context, and any relevant pricing or compatibility note.`;
 
-    const answer = await aiRaw(sys, usr, 500);
+    const sys = `You are GIA, Geotab's internal AI sales assistant. Answer STRICTLY from the provided documentation. ${modeInstruction} If the answer is not in the docs, say: "I don't have that in the approved docs — contact your Geotab SME." Never guess or make up product details.`;
+    const usr = `APPROVED GEOTAB DOCUMENTATION — ${KB_LABELS[kbCategory]}:\n\n${docContent}\n\n---\n\nQUESTION: ${q}`;
+
+    const answer = await aiRaw(sys, usr, 600);
     renderKbResult(q, answer, kbSources);
 
   } catch(e) {
@@ -1333,8 +1465,7 @@ async function runKb() {
 }
 
 function renderKbResult(q, answer, sources) {
-  const catLabels = { cameras: '📷 Cameras', asset_trackers: '📡 Asset Trackers', go_devices: '📟 GO Devices', iox: '🔌 IOX Accessories' };
-  document.getElementById('kb-cat-label').textContent = catLabels[kbCategory];
+  document.getElementById('kb-cat-label').textContent = KB_LABELS[kbCategory] || kbCategory;
   document.getElementById('kb-q-label').textContent = `"${q}"`;
   document.getElementById('kb-time').textContent = new Date().toLocaleTimeString([], {hour:'2-digit',minute:'2-digit'});
   document.getElementById('kb-answer').innerHTML = answer.replace(/\*\*(.*?)\*\*/g,'<strong>$1</strong>').replace(/\n/g,'<br>');
