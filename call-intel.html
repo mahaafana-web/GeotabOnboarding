@@ -456,17 +456,17 @@
     <!-- ── PRE-CALL ── -->
     <div id="pane-pre" style="display:flex;flex-direction:column;gap:14px;">
       <div class="panel-title">Who are you calling <span>today?</span></div>
-      <div class="panel-hint">Enter the partner name and call type — your brief is ready in seconds.</div>
+      <div class="panel-hint">Enter the partner ERP and call type — your brief is ready in seconds.</div>
 
-      <input class="big-input" type="text" id="company" placeholder="Partner name, e.g. Rush Transport, ABC Logistics..." />
+      <div style="position:relative;">
+        <input class="big-input" type="text" id="p-erp" placeholder="Partner ERP code — e.g. TELU01 *" style="padding-right:80px;" />
+        <span style="position:absolute;right:12px;top:50%;transform:translateY(-50%);font-size:10px;font-family:'DM Mono',monospace;color:var(--red);letter-spacing:0.05em;">REQUIRED</span>
+      </div>
 
-      <div class="type-toggle" style="grid-template-columns:1fr 1fr;">
-        <button class="type-btn on-onboarding" id="t-onboarding" onclick="setCallType('onboarding')">
-          <span class="t-icon">🟢</span>
-          New Partner
-          <span class="t-sub">Onboarding (months 1–6)</span>
-        </button>
-        <button class="type-btn" id="t-growth" onclick="setCallType('growth')">
+      <input class="big-input" type="text" id="company" placeholder="Partner name (optional — auto-filled from ERP)" />
+
+      <div class="type-toggle" style="grid-template-columns:1fr 1fr 1fr;">
+        <button class="type-btn on-growth" id="t-growth" onclick="setCallType('growth')">
           <span class="t-icon">📈</span>
           Growth Check-In
           <span class="t-sub">Established partner</span>
@@ -482,8 +482,6 @@
           <span class="t-sub">Quarterly business review</span>
         </button>
       </div>
-
-      <input class="big-input" type="text" id="p-erp" placeholder="ERP code (optional) — e.g. TELU01, for live data in brief" />
 
       <select class="big-input" id="p-vertical" style="font-size:13px;">
         <option value="">Partner's primary vertical (optional)</option>
@@ -511,19 +509,24 @@
     <!-- ── LIVE ASSIST ── -->
     <div id="pane-live" style="display:none;display:flex;flex-direction:column;gap:22px;">
 
+      <div class="live-section">
+        <div class="live-subtext" style="color:var(--muted);font-size:12px;padding:8px 12px;background:rgba(37,99,235,0.07);border:1px solid rgba(37,99,235,0.2);border-radius:10px;">
+          ✦ Select any combination of chips below, then click <strong style="color:var(--text);">Display Results</strong> to get everything at once.
+        </div>
+      </div>
+
       <!-- PARTNER OBJECTION HANDLER -->
       <div class="live-section">
         <div class="live-heading"><span class="live-heading-icon">🛡</span> Partner Pushback</div>
-        <div class="live-subtext">Tap what your partner just said — get your response instantly.</div>
         <div class="chips" id="obj-chips">
-          <div class="chip obj" onclick="handleObj(this,'We can&apos;t make enough margin reselling Geotab')">Can't make margin</div>
-          <div class="chip obj" onclick="handleObj(this,'Our sales team doesn&apos;t understand telematics well enough to sell it')">Team not confident</div>
-          <div class="chip obj" onclick="handleObj(this,'Our customers are specifically asking for Samsara or another competitor')">Customers want competitor</div>
-          <div class="chip obj" onclick="handleObj(this,'We had a bad support or onboarding experience with Geotab')">Bad experience</div>
-          <div class="chip obj" onclick="handleObj(this,'The platform is too complex for our team to demo and support')">Too complex to support</div>
-          <div class="chip obj" onclick="handleObj(this,'We already have a telematics partnership with another vendor')">Already partnered elsewhere</div>
-          <div class="chip obj" onclick="handleObj(this,'We activated accounts 6 months ago but growth has completely stalled')">Growth stalled</div>
-          <div class="chip obj" onclick="handleObj(this,'Our salespeople aren&apos;t selling it — they don&apos;t feel confident enough')">Reps not selling</div>
+          <div class="chip obj" data-handler="obj" data-value="We can't make enough margin reselling Geotab" onclick="toggleLiveChip(this)">Can't make margin</div>
+          <div class="chip obj" data-handler="obj" data-value="Our sales team doesn't understand telematics well enough to sell it" onclick="toggleLiveChip(this)">Team not confident</div>
+          <div class="chip obj" data-handler="obj" data-value="Our customers are specifically asking for Samsara or another competitor" onclick="toggleLiveChip(this)">Customers want competitor</div>
+          <div class="chip obj" data-handler="obj" data-value="We had a bad support or onboarding experience with Geotab" onclick="toggleLiveChip(this)">Bad experience</div>
+          <div class="chip obj" data-handler="obj" data-value="The platform is too complex for our team to demo and support" onclick="toggleLiveChip(this)">Too complex to support</div>
+          <div class="chip obj" data-handler="obj" data-value="We already have a telematics partnership with another vendor" onclick="toggleLiveChip(this)">Already partnered elsewhere</div>
+          <div class="chip obj" data-handler="obj" data-value="We activated accounts 6 months ago but growth has completely stalled" onclick="toggleLiveChip(this)">Growth stalled</div>
+          <div class="chip obj" data-handler="obj" data-value="Our salespeople aren't selling it — they don't feel confident enough" onclick="toggleLiveChip(this)">Reps not selling</div>
         </div>
       </div>
 
@@ -531,17 +534,16 @@
 
       <!-- COMPETITOR PARTNER PROGRAM -->
       <div class="live-section">
-        <div class="live-heading"><span class="live-heading-icon">⚔️</span> Competing Program or Customer Objection</div>
-        <div class="live-subtext">Tap it — arm yourself or your partner with the right response.</div>
+        <div class="live-heading"><span class="live-heading-icon">⚔️</span> Competitor Battle Cards</div>
         <div class="chips" id="comp-chips">
-          <div class="chip comp" onclick="handleComp(this,'Samsara')">Samsara program</div>
-          <div class="chip comp" onclick="handleComp(this,'Verizon Connect')">Verizon Connect</div>
-          <div class="chip comp" onclick="handleComp(this,'Motive / KeepTruckin')">Motive</div>
-          <div class="chip comp" onclick="handleComp(this,'Teletrac Navman')">Teletrac Navman</div>
-          <div class="chip comp" onclick="handleComp(this,'Azuga')">Azuga</div>
-          <div class="chip comp" onclick="handleComp(this,'Lytx')">Lytx</div>
-          <div class="chip comp" onclick="handleComp(this,'Fleet Complete')">Fleet Complete</div>
-          <div class="chip comp" onclick="handleComp(this,'Mix Telematics')">Mix Telematics</div>
+          <div class="chip comp" data-handler="comp" data-value="Samsara" onclick="toggleLiveChip(this)">Samsara</div>
+          <div class="chip comp" data-handler="comp" data-value="Verizon Connect" onclick="toggleLiveChip(this)">Verizon Connect</div>
+          <div class="chip comp" data-handler="comp" data-value="Motive / KeepTruckin" onclick="toggleLiveChip(this)">Motive</div>
+          <div class="chip comp" data-handler="comp" data-value="Teletrac Navman" onclick="toggleLiveChip(this)">Teletrac Navman</div>
+          <div class="chip comp" data-handler="comp" data-value="Azuga" onclick="toggleLiveChip(this)">Azuga</div>
+          <div class="chip comp" data-handler="comp" data-value="Lytx" onclick="toggleLiveChip(this)">Lytx</div>
+          <div class="chip comp" data-handler="comp" data-value="Fleet Complete" onclick="toggleLiveChip(this)">Fleet Complete</div>
+          <div class="chip comp" data-handler="comp" data-value="Mix Telematics" onclick="toggleLiveChip(this)">Mix Telematics</div>
         </div>
       </div>
 
@@ -549,19 +551,18 @@
 
       <!-- PAM DISCOVERY PROMPTS -->
       <div class="live-section">
-        <div class="live-heading"><span class="live-heading-icon">💡</span> Uncover What's Really Going On</div>
-        <div class="live-subtext">Tap a topic — get 4 questions to ask your partner right now.</div>
+        <div class="live-heading"><span class="live-heading-icon">💡</span> Discovery Prompts</div>
         <div class="chips" id="disc-chips">
-          <div class="chip disc" onclick="handleDisc(this,'Understanding the partner&apos;s target verticals and ideal customer profile')">Target verticals</div>
-          <div class="chip disc" onclick="handleDisc(this,'Sales team size, telematics confidence level, and current selling activity')">Sales team readiness</div>
-          <div class="chip disc" onclick="handleDisc(this,'Pipeline health — how many proposals submitted, demos run, deals in progress')">Pipeline & proposals</div>
-          <div class="chip disc" onclick="handleDisc(this,'What is blocking them from closing their next deal or activating more accounts')">Growth blockers</div>
-          <div class="chip disc" onclick="handleDisc(this,'Training completion, product knowledge gaps, and what they need to feel confident selling')">Training gaps</div>
-          <div class="chip disc" onclick="handleDisc(this,'Customer retention — are their Geotab customers renewing, churning, or expanding')">Customer retention</div>
-          <div class="chip disc" onclick="handleDisc(this,'Revenue goals, commission motivation, and what success looks like for this partner')">Revenue goals</div>
-          <div class="chip disc" onclick="handleDisc(this,'Which Geotab products they are actively selling and which they are ignoring')">Product mix</div>
-          <div class="chip disc" onclick="handleDisc(this,'Whether they have hit their first sale milestone and what happened during that first deal')">First sale milestone</div>
-          <div class="chip disc" onclick="handleDisc(this,'Co-selling opportunities — can we get on a call with their prospect together')">Co-sell opportunity</div>
+          <div class="chip disc" data-handler="disc" data-value="Understanding the partner's target verticals and ideal customer profile" onclick="toggleLiveChip(this)">Target verticals</div>
+          <div class="chip disc" data-handler="disc" data-value="Sales team size, telematics confidence level, and current selling activity" onclick="toggleLiveChip(this)">Sales team readiness</div>
+          <div class="chip disc" data-handler="disc" data-value="Pipeline health — how many proposals submitted, demos run, deals in progress" onclick="toggleLiveChip(this)">Pipeline & proposals</div>
+          <div class="chip disc" data-handler="disc" data-value="What is blocking them from closing their next deal or activating more accounts" onclick="toggleLiveChip(this)">Growth blockers</div>
+          <div class="chip disc" data-handler="disc" data-value="Training completion, product knowledge gaps, and what they need to feel confident selling" onclick="toggleLiveChip(this)">Training gaps</div>
+          <div class="chip disc" data-handler="disc" data-value="Customer retention — are their Geotab customers renewing, churning, or expanding" onclick="toggleLiveChip(this)">Customer retention</div>
+          <div class="chip disc" data-handler="disc" data-value="Revenue goals, commission motivation, and what success looks like for this partner" onclick="toggleLiveChip(this)">Revenue goals</div>
+          <div class="chip disc" data-handler="disc" data-value="Which Geotab products they are actively selling and which they are ignoring" onclick="toggleLiveChip(this)">Product mix</div>
+          <div class="chip disc" data-handler="disc" data-value="Whether they have hit their first sale milestone and what happened during that first deal" onclick="toggleLiveChip(this)">First sale milestone</div>
+          <div class="chip disc" data-handler="disc" data-value="Co-selling opportunities — can we get on a call with their prospect together" onclick="toggleLiveChip(this)">Co-sell opportunity</div>
         </div>
       </div>
 
@@ -570,14 +571,13 @@
       <!-- SEGMENT PLAYBOOKS -->
       <div class="live-section">
         <div class="live-heading"><span class="live-heading-icon">🎯</span> Segment Playbooks</div>
-        <div class="live-subtext">Tap a vertical — get Geotab's strategic angle, products to lead with, and BD talking points for your partner.</div>
         <div class="chips" id="seg-chips">
-          <div class="chip seg" onclick="handleSegment(this,'Transportation & Logistics')">Transportation & Logistics</div>
-          <div class="chip seg" onclick="handleSegment(this,'Construction & Vocational')">Construction & Vocational</div>
-          <div class="chip seg" onclick="handleSegment(this,'Field Service & Utilities')">Field Service & Utilities</div>
-          <div class="chip seg" onclick="handleSegment(this,'Government & Public Sector')">Government & Public Sector</div>
-          <div class="chip seg" onclick="handleSegment(this,'Healthcare & EMS')">Healthcare & EMS</div>
-          <div class="chip seg" onclick="handleSegment(this,'People Transportation & Transit')">People Transportation & Transit</div>
+          <div class="chip seg" data-handler="seg" data-value="Transportation & Logistics" onclick="toggleLiveChip(this)">Transportation & Logistics</div>
+          <div class="chip seg" data-handler="seg" data-value="Construction & Vocational" onclick="toggleLiveChip(this)">Construction & Vocational</div>
+          <div class="chip seg" data-handler="seg" data-value="Field Service & Utilities" onclick="toggleLiveChip(this)">Field Service & Utilities</div>
+          <div class="chip seg" data-handler="seg" data-value="Government & Public Sector" onclick="toggleLiveChip(this)">Government & Public Sector</div>
+          <div class="chip seg" data-handler="seg" data-value="Healthcare & EMS" onclick="toggleLiveChip(this)">Healthcare & EMS</div>
+          <div class="chip seg" data-handler="seg" data-value="People Transportation & Transit" onclick="toggleLiveChip(this)">People Transportation & Transit</div>
         </div>
       </div>
 
@@ -586,17 +586,20 @@
       <!-- PARTNER PROGRAM STRATEGY -->
       <div class="live-section">
         <div class="live-heading"><span class="live-heading-icon">🚀</span> Partner Program Strategy</div>
-        <div class="live-subtext">Tap a program — get a partner-facing explanation + why it matters for their business development.</div>
         <div class="chips" id="prog-chips">
-          <div class="chip prog" onclick="handleProgram(this,'Excelerator Program')">Excelerator Program</div>
-          <div class="chip prog" onclick="handleProgram(this,'Deal Registration')">Deal Registration</div>
-          <div class="chip prog" onclick="handleProgram(this,'Order Now / Marketplace')">Order Now / Marketplace</div>
-          <div class="chip prog" onclick="handleProgram(this,'Geotab Academy Training')">Geotab Academy</div>
-          <div class="chip prog" onclick="handleProgram(this,'Partner Portal & Resources')">Partner Portal</div>
+          <div class="chip prog" data-handler="prog" data-value="Excelerator Program" onclick="toggleLiveChip(this)">Excelerator Program</div>
+          <div class="chip prog" data-handler="prog" data-value="Deal Registration" onclick="toggleLiveChip(this)">Deal Registration</div>
+          <div class="chip prog" data-handler="prog" data-value="Order Now / Marketplace" onclick="toggleLiveChip(this)">Order Now / Marketplace</div>
+          <div class="chip prog" data-handler="prog" data-value="Geotab Academy Training" onclick="toggleLiveChip(this)">Geotab Academy</div>
+          <div class="chip prog" data-handler="prog" data-value="Partner Portal & Resources" onclick="toggleLiveChip(this)">Partner Portal</div>
         </div>
       </div>
 
       <div class="err" id="live-err"></div>
+      <button class="main-btn" id="live-display-btn" onclick="runLiveSelections()" disabled style="opacity:0.4;background:var(--blue);color:#fff;">
+        <div class="spin"></div>
+        <span class="btn-label" id="live-display-label">⚡ Display Results</span>
+      </button>
     </div>
 
     <!-- ── PARTNER HEALTH ── -->
@@ -892,7 +895,7 @@
 const GW = 'https://genai-us.geotab.com/api/v2/chat/completions';
 const GK = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6Im1haGFhZmFuYUBnZW90YWIuY29tIiwiZXhwIjoxODA2MDE5MjAwfQ.aR2hIVpYk0X61_ohHX4IcBgTaIkAoIP7cDcuIK43LGw';
 
-let mode = 'pre', callType = 'onboarding';
+let mode = 'pre', callType = 'growth';
 
 // ── GATEWAY CALL ─────────────────────────────────────────────
 async function ai(sys, usr, tokens) {
@@ -951,14 +954,14 @@ function setMode(m) {
 // ── CALL TYPE ─────────────────────────────────────────────────
 function setCallType(t) {
   callType = t;
-  ['onboarding','growth','atrisk','qbr'].forEach(id => {
+  ['growth','atrisk','qbr'].forEach(id => {
     document.getElementById('t-'+id).className = 'type-btn' + (t === id ? ' on-'+id : '');
   });
-  const labels = {onboarding:'🟢 Get Onboarding Brief', growth:'📈 Get Growth Brief', atrisk:'🚨 Get At-Risk Brief', qbr:'📊 Get QBR Brief'};
+  const labels = {growth:'📈 Get Growth Brief', atrisk:'🚨 Get At-Risk Brief', qbr:'📊 Get QBR Brief'};
   document.getElementById('pre-label').textContent = labels[t] || '⚡ Get Partner Brief';
 }
 // Legacy alias
-function setType(t) { setCallType(t === 'existing' ? 'onboarding' : 'growth'); }
+function setType(t) { setCallType('growth'); }
 
 // ── HELPERS ───────────────────────────────────────────────────
 function err(id, msg) { const e = document.getElementById(id); e.textContent = msg; e.classList.add('on'); }
@@ -997,17 +1000,21 @@ function resetResult() {
   document.getElementById('result').style.display = 'none';
   document.getElementById('empty-pre').style.display = mode === 'pre' ? 'flex' : 'none';
   document.getElementById('empty-live').style.display = mode === 'live' ? 'flex' : 'none';
+  // Clear all live chip selections
+  document.querySelectorAll('#pane-live .chip.active').forEach(c => c.classList.remove('active'));
+  const btn = document.getElementById('live-display-btn');
+  if (btn) { btn.disabled = true; btn.style.opacity = '0.4'; document.getElementById('live-display-label').textContent = '⚡ Display Results'; }
 }
 
 // ── PRE-CALL ──────────────────────────────────────────────────
 async function runPreCall() {
   noErr('pre-err');
-  const company = document.getElementById('company').value.trim();
-  if (!company) { err('pre-err', 'Please enter the partner name.'); return; }
+  const erp = document.getElementById('p-erp').value.trim();
+  if (!erp) { err('pre-err', 'Partner ERP code is required.'); document.getElementById('p-erp').focus(); return; }
+  const company = document.getElementById('company').value.trim() || erp;
   loading('pre-btn', true);
 
   const context = document.getElementById('context').value.trim();
-  const erp = document.getElementById('p-erp')?.value.trim();
   const vertical = document.getElementById('p-vertical')?.value;
   const type = callType || 'growth';
 
@@ -1095,132 +1102,133 @@ ${callInstructions[type]}${segmentCard}`;
 }
 
 // ── LIVE: OBJECTION HANDLER ───────────────────────────────────
-async function handleObj(el, objection) {
-  setChipLoading('obj-chips', el);
-  noErr('live-err');
+// ── LIVE: CHIP TOGGLE + MULTI-SELECT DISPLAY ─────────────────
+function toggleLiveChip(el) {
+  el.classList.toggle('active');
+  const count = document.querySelectorAll('#pane-live .chip.active').length;
+  const btn = document.getElementById('live-display-btn');
+  const label = document.getElementById('live-display-label');
+  label.textContent = count > 0 ? `⚡ Display Results (${count} selected)` : '⚡ Display Results';
+  btn.disabled = count === 0;
+  btn.style.opacity = count === 0 ? '0.4' : '1';
+}
 
+async function getObjCards(objection) {
   const sys = `You are GIA — an AI coach for Geotab Partner Account Managers (PAMs). The PAM is on a call with a Geotab reseller partner, not an end customer. Return JSON: {reframe, counter, bridge, tip}. reframe=1 sentence that shows you genuinely hear their concern. counter=2-3 sentences with a specific, practical response from a PAM's perspective — reference Geotab partner program benefits, support, training, margin structure, or co-sell support. **bold** key phrases. bridge=short follow-up question to keep them talking. tip=1 PAM coaching tip. Return ONLY JSON.`;
   const usr = `Partner objection: "${objection}"\nContext: PAM managing a Geotab reseller partner. Geotab partner program: dedicated PAM support, co-sell resources, Geotab Academy training, deal registration, marketing funds, Go Focus Plus cameras at $25/month all-in, open platform 200+ integrations, 4M+ active devices, world's largest commercial telematics provider.`;
-
-  try {
-    const r = await ai(sys, usr, 500);
-    const cards = [];
-    if (r.reframe) cards.push(makeCard('🤝 Acknowledge first', `<div class="card-body">${r.reframe}</div>`, 'var(--yellow)'));
-    if (r.counter) cards.push(makeCard('⚡ Your response', `<div class="card-teal">${r.counter.replace(/\*\*(.*?)\*\*/g,'<strong>$1</strong>')}</div>`, 'var(--teal)'));
-    if (r.bridge) cards.push(makeCard('🔗 Then ask this', `<div class="card-green">"${r.bridge}"</div>`, 'var(--green)'));
-    if (r.tip) cards.push(makeCard('💡 Coach tip', `<div class="card-body">${r.tip}</div>`, 'var(--purple)'));
-    showResult(`"${objection.length > 45 ? objection.substring(0,45)+'…' : objection}"`, 'OBJECTION RESPONSE', 'b-live', cards);
-  } catch(e) {
-    err('live-err', 'Could not get response. Please try again.');
-  }
-  clearChipLoading('obj-chips');
+  const r = await ai(sys, usr, 500);
+  const cards = [];
+  if (r.reframe) cards.push(makeCard('🤝 Acknowledge first', `<div class="card-body">${r.reframe}</div>`, 'var(--yellow)'));
+  if (r.counter) cards.push(makeCard(`⚡ Response — "${objection.length>40?objection.substring(0,40)+'…':objection}"`, `<div class="card-teal">${r.counter.replace(/\*\*(.*?)\*\*/g,'<strong>$1</strong>')}</div>`, 'var(--teal)'));
+  if (r.bridge) cards.push(makeCard('🔗 Then ask', `<div class="card-green">"${r.bridge}"</div>`, 'var(--green)'));
+  if (r.tip) cards.push(makeCard('💡 Coach tip', `<div class="card-body">${r.tip}</div>`, 'var(--purple)'));
+  return cards;
 }
 
-// ── LIVE: COMPETITOR BATTLE CARD ──────────────────────────────
-async function handleComp(el, competitor) {
-  setChipLoading('comp-chips', el);
-  noErr('live-err');
-
+async function getCompCards(competitor) {
   const sys = `You are GIA — Geotab's competitive expert for Partner Account Managers. The PAM's partner is facing customer pressure from this competitor OR is considering partnering with them instead. Return JSON: {summary, geotab_wins (array of 3 — why Geotab beats them for partners AND their end customers), partner_program_advantage (1-2 sentences on why the Geotab partner program is stronger than this competitor's reseller program), arm_your_partner (2-3 sentences the partner's salesperson can say to their customer who mentioned this competitor), trap_question (1 question the partner can ask their customer that surfaces this competitor's weakness), competitor_strengths (array of 2 — honest acknowledgment)}. Be specific, factual, sharp. Return ONLY JSON.`;
   const usr = `Competitor: ${competitor}\nContext: Geotab PAM helping a reseller partner respond to customer interest in ${competitor} OR evaluating whether to stay in the Geotab partner program. Geotab: world's largest commercial telematics, 4M+ devices, open platform 200+ integrations, Go Focus Plus camera $25/month all-in, strong partner program with dedicated PAM, Geotab Academy, SDK for custom development, 30,000+ partners globally.`;
-
-  try {
-    const r = await ai(sys, usr, 750);
-    const cards = [];
-    if (r.geotab_wins?.length) {
-      const items = r.geotab_wins.map(w=>`<li><span class="win-check">✓</span><span>${w}</span></li>`).join('');
-      cards.push(makeCard('✅ Why Geotab wins', `<ul class="wins-list">${items}</ul>`, 'var(--green)'));
-    }
-    if (r.partner_program_advantage) cards.push(makeCard('🤝 Partner program advantage', `<div class="card-teal">${r.partner_program_advantage}</div>`, 'var(--teal)'));
-    if (r.arm_your_partner) cards.push(makeCard('💬 What to tell your partner to say', `<div class="card-quote">${r.arm_your_partner}</div>`, 'var(--blue)'));
-    if (r.trap_question) cards.push(makeCard('🎯 Question your partner can ask their customer', `<div class="card-green">"${r.trap_question}"</div>`, 'var(--purple)'));
-    if (r.competitor_strengths?.length) {
-      const warns = r.competitor_strengths.map(w=>`<li><span class="warn-icon">⚠</span><span>${w}</span></li>`).join('');
-      cards.push(makeCard(`⚠ ${competitor}'s real strengths (be honest)`, `<ul class="wins-list">${warns}</ul>`, 'var(--yellow)'));
-    }
-    showResult(`Geotab vs ${competitor}`, r.summary || 'BATTLE CARD', 'b-live', cards);
-  } catch(e) {
-    err('live-err', 'Could not get response. Please try again.');
+  const r = await ai(sys, usr, 750);
+  const cards = [];
+  const sep = document.createElement('div');
+  sep.style.cssText = 'font-family:"DM Mono",monospace;font-size:10px;letter-spacing:0.08em;color:var(--orange);text-transform:uppercase;padding:6px 0 2px;border-top:1px solid rgba(249,115,22,0.2);margin-top:4px;';
+  sep.textContent = `⚔ vs ${competitor}`;
+  cards.push(sep);
+  if (r.geotab_wins?.length) {
+    const items = r.geotab_wins.map(w=>`<li><span class="win-check">✓</span><span>${w}</span></li>`).join('');
+    cards.push(makeCard(`✅ Geotab vs ${competitor}`, `<ul class="wins-list">${items}</ul>`, 'var(--green)'));
   }
-  clearChipLoading('comp-chips');
+  if (r.partner_program_advantage) cards.push(makeCard('🤝 Partner program edge', `<div class="card-teal">${r.partner_program_advantage}</div>`, 'var(--teal)'));
+  if (r.arm_your_partner) cards.push(makeCard('💬 Tell your partner to say', `<div class="card-quote">${r.arm_your_partner}</div>`, 'var(--blue)'));
+  if (r.trap_question) cards.push(makeCard('🎯 Trap question', `<div class="card-green">"${r.trap_question}"</div>`, 'var(--purple)'));
+  return cards;
 }
 
-// ── LIVE: DISCOVERY PROMPTS ────────────────────────────────────
-async function handleDisc(el, topic) {
-  setChipLoading('disc-chips', el);
-  noErr('live-err');
-
+async function getDiscCards(topic) {
   const sys = `You are GIA — an AI coach for Geotab Partner Account Managers. Return JSON: {questions (array of 4, open-ended, insight-uncovering questions for a PAM speaking WITH a reseller partner — not with an end customer), follow_up (1 universal go-deeper follow-up question)}. Questions should feel conversational and relationship-oriented. Start with What, How, Tell me, Walk me through, What would it mean if. Return ONLY JSON.`;
   const usr = `Discovery topic: ${topic}\nContext: PAM call with a Geotab reseller partner. Goal: understand what's really happening in the partner's business, their confidence level, pipeline, blockers, and what they need from Geotab to succeed.`;
-
-  try {
-    const r = await ai(sys, usr, 400);
-    const cards = [];
-    if (r.questions?.length) {
-      const items = r.questions.map((q,i)=>`<li><span class="q-num">${i+1}.</span><span class="q-text">"${q}"</span></li>`).join('');
-      cards.push(makeCard('💡 Ask these', `<ul class="q-list">${items}</ul>`, 'var(--purple)'));
-    }
-    if (r.follow_up) cards.push(makeCard('🔗 Go deeper (after any answer)', `<div class="card-green">"${r.follow_up}"</div>`, 'var(--teal)'));
-    showResult(topic, 'DISCOVERY QUESTIONS', 'b-live', cards);
-  } catch(e) {
-    err('live-err', 'Could not get response. Please try again.');
+  const r = await ai(sys, usr, 400);
+  const cards = [];
+  const sep = document.createElement('div');
+  sep.style.cssText = 'font-family:"DM Mono",monospace;font-size:10px;letter-spacing:0.08em;color:var(--purple);text-transform:uppercase;padding:6px 0 2px;border-top:1px solid rgba(167,139,250,0.2);margin-top:4px;';
+  sep.textContent = `💡 ${topic}`;
+  cards.push(sep);
+  if (r.questions?.length) {
+    const items = r.questions.map((q,i)=>`<li><span class="q-num">${i+1}.</span><span class="q-text">"${q}"</span></li>`).join('');
+    cards.push(makeCard('Ask these', `<ul class="q-list">${items}</ul>`, 'var(--purple)'));
   }
-  clearChipLoading('disc-chips');
+  if (r.follow_up) cards.push(makeCard('🔗 Go deeper', `<div class="card-green">"${r.follow_up}"</div>`, 'var(--teal)'));
+  return cards;
 }
 
-// ── LIVE: SEGMENT PLAYBOOKS ───────────────────────────────────
-async function handleSegment(el, vertical) {
-  setChipLoading('seg-chips', el);
-  noErr('live-err');
-
+async function getSegCards(vertical) {
   const sys = `You are GIA — Geotab's internal AI for Partner Account Managers. Return JSON: {strategy (Geotab's 2–3 sentence strategic priority in this vertical — why it's a big opportunity), lead_products (array of 3 strings: product name + one-line why it wins in this segment), roi_hooks (array of 3 strings: specific ROI talking points a partner can use with their customers in this vertical), bd_talking_points (array of 3 strings: what the PAM should say to their partner to motivate them to go deeper in this vertical), entry_question (1 question the PAM can ask the partner to open a BD conversation about this vertical)}. Focus on real Geotab strengths: open platform, GO9/GO Focus Plus cameras, asset trackers, ELD, driver safety, integration ecosystem. Return ONLY JSON.`;
   const usr = `Vertical: ${vertical}\nContext: Geotab PAM coaching their reseller partner on how to sell into the ${vertical} segment. Partner is a technology reseller new to or growing in this vertical.`;
-
-  try {
-    const r = await ai(sys, usr, 900);
-    const cards = [];
-    if (r.strategy) cards.push(makeCard('🎯 Geotab\'s strategic angle', `<div class="card-body">${r.strategy.replace(/\*\*(.*?)\*\*/g,'<strong>$1</strong>')}</div>`, 'var(--teal)'));
-    if (r.lead_products?.length) {
-      const items = r.lead_products.map(p=>`<li><span class="win-check">→</span><span>${p}</span></li>`).join('');
-      cards.push(makeCard('📦 Lead with these products', `<ul class="wins-list">${items}</ul>`, 'var(--blue)'));
-    }
-    if (r.roi_hooks?.length) {
-      const items = r.roi_hooks.map(h=>`<li><span class="win-check">💰</span><span>${h}</span></li>`).join('');
-      cards.push(makeCard('💰 ROI hooks for the end customer', `<ul class="wins-list">${items}</ul>`, 'var(--green)'));
-    }
-    if (r.bd_talking_points?.length) {
-      const items = r.bd_talking_points.map(t=>`<li><span class="win-check">✓</span><span>${t}</span></li>`).join('');
-      cards.push(makeCard('🤝 What to say to your partner', `<ul class="wins-list">${items}</ul>`, 'var(--purple)'));
-    }
-    if (r.entry_question) cards.push(makeCard('🔓 Open the BD conversation', `<div class="card-green">"${r.entry_question}"</div>`, 'var(--teal)'));
-    showResult(vertical, 'SEGMENT PLAYBOOK', 'b-live', cards);
-  } catch(e) {
-    err('live-err', 'Could not get response. Please try again.');
+  const r = await ai(sys, usr, 900);
+  const cards = [];
+  const sep = document.createElement('div');
+  sep.style.cssText = 'font-family:"DM Mono",monospace;font-size:10px;letter-spacing:0.08em;color:var(--teal);text-transform:uppercase;padding:6px 0 2px;border-top:1px solid rgba(6,182,212,0.2);margin-top:4px;';
+  sep.textContent = `🎯 ${vertical}`;
+  cards.push(sep);
+  if (r.strategy) cards.push(makeCard('Geotab\'s angle', `<div class="card-body">${r.strategy.replace(/\*\*(.*?)\*\*/g,'<strong>$1</strong>')}</div>`, 'var(--teal)'));
+  if (r.lead_products?.length) {
+    const items = r.lead_products.map(p=>`<li><span class="win-check">→</span><span>${p}</span></li>`).join('');
+    cards.push(makeCard('📦 Lead products', `<ul class="wins-list">${items}</ul>`, 'var(--blue)'));
   }
-  clearChipLoading('seg-chips');
+  if (r.roi_hooks?.length) {
+    const items = r.roi_hooks.map(h=>`<li><span class="win-check">💰</span><span>${h}</span></li>`).join('');
+    cards.push(makeCard('ROI hooks', `<ul class="wins-list">${items}</ul>`, 'var(--green)'));
+  }
+  if (r.bd_talking_points?.length) {
+    const items = r.bd_talking_points.map(t=>`<li><span class="win-check">✓</span><span>${t}</span></li>`).join('');
+    cards.push(makeCard('🤝 Tell your partner', `<ul class="wins-list">${items}</ul>`, 'var(--purple)'));
+  }
+  if (r.entry_question) cards.push(makeCard('🔓 Open the conversation', `<div class="card-green">"${r.entry_question}"</div>`, 'var(--teal)'));
+  return cards;
 }
 
-// ── LIVE: PARTNER PROGRAM STRATEGY ───────────────────────────
-async function handleProgram(el, program) {
-  setChipLoading('prog-chips', el);
-  noErr('live-err');
-
+async function getProgCards(program) {
   const sys = `You are GIA — Geotab's internal AI for Partner Account Managers. Return JSON: {what_it_is (2 sentences: plain-English explanation of this program/resource for a partner), partner_benefit (2–3 sentences: what's in it for the partner — their business outcome, not just features), how_to_explain (a 2–3 sentence script the PAM can say directly to their partner in plain language), call_to_action (1 specific next step the PAM should suggest to the partner right now), common_misconception (1 thing partners often misunderstand about this program)}. Return ONLY JSON.`;
   const usr = `Program: ${program}\nContext: Geotab PAM explaining this program to a reseller partner to help them grow their Geotab business. Programs available: Excelerator (structured 6-month new partner acceleration with dedicated PAM support, weekly contact, milestones), Deal Registration (register a specific opportunity to protect margin and get PAM co-sell support), Order Now/Marketplace (instant online ordering for customers with faster activation), Geotab Academy (free training and certification platform), Partner Portal (resources, co-op funds, marketing materials, performance data).`;
+  const r = await ai(sys, usr, 700);
+  const cards = [];
+  const sep = document.createElement('div');
+  sep.style.cssText = 'font-family:"DM Mono",monospace;font-size:10px;letter-spacing:0.08em;color:var(--green);text-transform:uppercase;padding:6px 0 2px;border-top:1px solid rgba(0,212,138,0.2);margin-top:4px;';
+  sep.textContent = `🚀 ${program}`;
+  cards.push(sep);
+  if (r.what_it_is) cards.push(makeCard(`What is it?`, `<div class="card-body">${r.what_it_is}</div>`, 'var(--blue)'));
+  if (r.partner_benefit) cards.push(makeCard('What\'s in it for them', `<div class="card-teal">${r.partner_benefit.replace(/\*\*(.*?)\*\*/g,'<strong>$1</strong>')}</div>`, 'var(--green)'));
+  if (r.how_to_explain) cards.push(makeCard('💬 Say this to your partner', `<div class="card-quote">"${r.how_to_explain}"</div>`, 'var(--teal)'));
+  if (r.call_to_action) cards.push(makeCard('⚡ Next step', `<div class="card-green"><strong>${r.call_to_action}</strong></div>`, 'var(--yellow)'));
+  return cards;
+}
+
+async function runLiveSelections() {
+  const activeChips = [...document.querySelectorAll('#pane-live .chip.active')];
+  if (!activeChips.length) { err('live-err', 'Select at least one chip first.'); return; }
+  noErr('live-err');
+  loading('live-display-btn', true);
+
+  const labels = activeChips.map(c => c.textContent.trim());
+  const promises = activeChips.map(c => {
+    const h = c.dataset.handler, v = c.dataset.value;
+    if (h === 'obj') return getObjCards(v);
+    if (h === 'comp') return getCompCards(v);
+    if (h === 'disc') return getDiscCards(v);
+    if (h === 'seg') return getSegCards(v);
+    if (h === 'prog') return getProgCards(v);
+    return Promise.resolve([]);
+  });
 
   try {
-    const r = await ai(sys, usr, 700);
-    const cards = [];
-    if (r.what_it_is) cards.push(makeCard(`📋 What is ${program}?`, `<div class="card-body">${r.what_it_is}</div>`, 'var(--blue)'));
-    if (r.partner_benefit) cards.push(makeCard('💼 What\'s in it for your partner', `<div class="card-teal">${r.partner_benefit.replace(/\*\*(.*?)\*\*/g,'<strong>$1</strong>')}</div>`, 'var(--green)'));
-    if (r.how_to_explain) cards.push(makeCard('💬 Say this to your partner', `<div class="card-quote">"${r.how_to_explain}"</div>`, 'var(--teal)'));
-    if (r.call_to_action) cards.push(makeCard('⚡ Next step', `<div class="card-green"><strong>${r.call_to_action}</strong></div>`, 'var(--yellow)'));
-    if (r.common_misconception) cards.push(makeCard('⚠ Common misconception', `<div class="card-body">${r.common_misconception}</div>`, 'var(--orange)'));
-    showResult(program, 'PROGRAM STRATEGY', 'b-live', cards);
+    const results = await Promise.all(promises);
+    const allCards = results.flat();
+    const title = labels.length === 1 ? labels[0] : `${labels.length} topics`;
+    showResult(title, 'LIVE ASSIST', 'b-live', allCards);
   } catch(e) {
-    err('live-err', 'Could not get response. Please try again.');
+    err('live-err', 'Something went wrong. Please try again.');
   }
-  clearChipLoading('prog-chips');
+  loading('live-display-btn', false);
 }
 
 // ── PARTNER JOURNEY ───────────────────────────────────────────
