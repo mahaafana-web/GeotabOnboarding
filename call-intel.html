@@ -828,7 +828,12 @@ async function ai(sys, usr, tokens) {
   });
   const d = await r.json();
   const raw = d.choices?.[0]?.message?.content || '';
-  return JSON.parse(raw.replace(/```json|```/g, '').trim());
+  // Robust JSON extraction — handles markdown fences and surrounding text
+  const cleaned = raw.replace(/```json|```/g, '').trim();
+  const arrMatch = cleaned.match(/\[[\s\S]*\]/);
+  const objMatch = cleaned.match(/\{[\s\S]*\}/);
+  const jsonStr = arrMatch ? arrMatch[0] : objMatch ? objMatch[0] : cleaned;
+  return JSON.parse(jsonStr);
 }
 
 async function aiRaw(sys, usr, tokens) {
@@ -983,7 +988,7 @@ ${context ? `Additional context from PAM: ${context}` : ''}
 ${callInstructions[type]}`;
 
   try {
-    const cards = await ai(sys, usr, 1300);
+    const cards = await ai(sys, usr, 2000);
     const els = cards.map(c => {
       let body;
       if (c.id === 'opener') {
