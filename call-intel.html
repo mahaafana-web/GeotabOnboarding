@@ -258,6 +258,8 @@
   .chip.obj:hover,.chip.obj.active { border-color: var(--red); color: var(--red); background: rgba(244,63,94,0.1); box-shadow: 0 0 14px rgba(244,63,94,0.15); }
   .chip.comp:hover,.chip.comp.active { border-color: var(--orange); color: var(--orange); background: rgba(249,115,22,0.1); box-shadow: 0 0 14px rgba(249,115,22,0.12); }
   .chip.disc:hover,.chip.disc.active { border-color: var(--purple); color: var(--purple); background: rgba(167,139,250,0.1); box-shadow: 0 0 14px rgba(167,139,250,0.15); }
+  .chip.seg:hover,.chip.seg.active { border-color: var(--teal); color: var(--teal); background: rgba(6,182,212,0.1); box-shadow: 0 0 14px rgba(6,182,212,0.15); }
+  .chip.prog:hover,.chip.prog.active { border-color: var(--green); color: var(--green); background: rgba(0,212,138,0.1); box-shadow: 0 0 14px rgba(0,212,138,0.15); }
 
   .live-divider { height: 1px; background: linear-gradient(90deg, transparent, rgba(255,255,255,0.08), transparent); margin: 6px 0; }
 
@@ -443,6 +445,7 @@
   <button class="mode-tab" id="tab-partner" onclick="setMode('partner')" style="border-bottom-color:var(--gold);">📊 Partner Health</button>
   <button class="mode-tab" id="tab-kb" onclick="setMode('kb')" style="border-bottom-color:var(--teal);">📦 Product Knowledge</button>
   <button class="mode-tab" id="tab-news" onclick="setMode('news')" style="border-bottom-color:#10B981;">📰 Weekly Briefing</button>
+  <button class="mode-tab" id="tab-journey" onclick="setMode('journey')" style="border-bottom-color:#A78BFA;">🗓 Partner Journey</button>
 </div>
 
 <div class="layout" id="layout">
@@ -562,6 +565,37 @@
         </div>
       </div>
 
+      <div class="live-divider"></div>
+
+      <!-- SEGMENT PLAYBOOKS -->
+      <div class="live-section">
+        <div class="live-heading"><span class="live-heading-icon">🎯</span> Segment Playbooks</div>
+        <div class="live-subtext">Tap a vertical — get Geotab's strategic angle, products to lead with, and BD talking points for your partner.</div>
+        <div class="chips" id="seg-chips">
+          <div class="chip seg" onclick="handleSegment(this,'Transportation & Logistics')">Transportation & Logistics</div>
+          <div class="chip seg" onclick="handleSegment(this,'Construction & Vocational')">Construction & Vocational</div>
+          <div class="chip seg" onclick="handleSegment(this,'Field Service & Utilities')">Field Service & Utilities</div>
+          <div class="chip seg" onclick="handleSegment(this,'Government & Public Sector')">Government & Public Sector</div>
+          <div class="chip seg" onclick="handleSegment(this,'Healthcare & EMS')">Healthcare & EMS</div>
+          <div class="chip seg" onclick="handleSegment(this,'People Transportation & Transit')">People Transportation & Transit</div>
+        </div>
+      </div>
+
+      <div class="live-divider"></div>
+
+      <!-- PARTNER PROGRAM STRATEGY -->
+      <div class="live-section">
+        <div class="live-heading"><span class="live-heading-icon">🚀</span> Partner Program Strategy</div>
+        <div class="live-subtext">Tap a program — get a partner-facing explanation + why it matters for their business development.</div>
+        <div class="chips" id="prog-chips">
+          <div class="chip prog" onclick="handleProgram(this,'Excelerator Program')">Excelerator Program</div>
+          <div class="chip prog" onclick="handleProgram(this,'Deal Registration')">Deal Registration</div>
+          <div class="chip prog" onclick="handleProgram(this,'Order Now / Marketplace')">Order Now / Marketplace</div>
+          <div class="chip prog" onclick="handleProgram(this,'Geotab Academy Training')">Geotab Academy</div>
+          <div class="chip prog" onclick="handleProgram(this,'Partner Portal & Resources')">Partner Portal</div>
+        </div>
+      </div>
+
       <div class="err" id="live-err"></div>
     </div>
 
@@ -618,6 +652,40 @@
       <button class="main-btn" id="news-btn" onclick="loadNews()" style="background:#10B981;color:#080C14;">
         <div class="spin" style="border-top-color:#080C14;"></div>
         <span class="btn-label">📰 Get Weekly Briefing</span>
+      </button>
+    </div>
+
+    <!-- ── PARTNER JOURNEY ── -->
+    <div id="pane-journey" style="display:none;flex-direction:column;gap:16px;">
+      <div class="panel-title">Partner <span style="color:var(--purple);">Journey</span></div>
+      <div class="panel-hint">Select onboarding month — get exactly what to focus on, what milestones to check, and how to have the right conversation.</div>
+      <input class="big-input" type="text" id="journey-partner" placeholder="Partner name (optional)" />
+      <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:8px;">
+        <button class="kb-chip" id="jm-1" onclick="setJourneyMonth(1,this)">Month 1<span style="display:block;font-size:10px;color:var(--muted);margin-top:2px;">Foundation</span></button>
+        <button class="kb-chip" id="jm-2" onclick="setJourneyMonth(2,this)">Month 2<span style="display:block;font-size:10px;color:var(--muted);margin-top:2px;">First Demo</span></button>
+        <button class="kb-chip" id="jm-3" onclick="setJourneyMonth(3,this)">Month 3<span style="display:block;font-size:10px;color:var(--muted);margin-top:2px;">First Sale</span></button>
+        <button class="kb-chip" id="jm-4" onclick="setJourneyMonth(4,this)">Month 4<span style="display:block;font-size:10px;color:var(--muted);margin-top:2px;">Momentum</span></button>
+        <button class="kb-chip" id="jm-5" onclick="setJourneyMonth(5,this)">Month 5<span style="display:block;font-size:10px;color:var(--muted);margin-top:2px;">Pipeline Push</span></button>
+        <button class="kb-chip" id="jm-6" onclick="setJourneyMonth(6,this)">Month 6<span style="display:block;font-size:10px;color:var(--muted);margin-top:2px;">Graduation</span></button>
+      </div>
+      <select class="big-input" id="journey-vertical" style="font-size:13px;">
+        <option value="">Partner's primary vertical (optional)</option>
+        <option>Fleet / Transportation</option>
+        <option>Construction / Vocational</option>
+        <option>Oil & Gas / Energy</option>
+        <option>Government / Public Sector</option>
+        <option>Healthcare / Medical</option>
+        <option>Utilities / Field Service</option>
+        <option>Food & Beverage / Distribution</option>
+        <option>People Transportation / Transit</option>
+        <option>IT / Technology VAR</option>
+        <option>Mixed / General</option>
+      </select>
+      <textarea class="big-input" id="journey-context" style="min-height:80px;" placeholder="Any context? (optional) — e.g. they haven't done their first demo yet, missed training deadline, had a bad customer experience..."></textarea>
+      <div class="err" id="journey-err"></div>
+      <button class="main-btn" id="journey-btn" onclick="runJourney()" style="background:var(--purple);color:#080C14;">
+        <div class="spin" style="border-top-color:#080C14;"></div>
+        <span class="btn-label">🗓 Get Month Playbook</span>
       </button>
     </div>
 
@@ -690,8 +758,16 @@
       <div class="empty-hint">Click "Get Weekly Briefing" to fetch</div>
     </div>
 
+    <div class="empty" id="empty-journey" style="display:none;">
+      <div class="empty-icon">🗓</div>
+      <div class="empty-text">Select a month and hit Get Month Playbook — your coaching brief will appear here.</div>
+    </div>
+
     <!-- NEWS RESULT -->
     <div id="news-result" style="display:none;flex-direction:column;gap:16px;overflow-y:auto;max-height:calc(100vh - 140px);"></div>
+
+    <!-- JOURNEY RESULT -->
+    <div id="journey-result" style="display:none;flex-direction:column;gap:16px;overflow-y:auto;max-height:calc(100vh - 140px);"></div>
 
     <!-- KB RESULT -->
     <div id="kb-result" style="display:none;flex-direction:column;gap:16px;">
@@ -850,7 +926,7 @@ async function aiRaw(sys, usr, tokens) {
 // ── MODE SWITCHING ────────────────────────────────────────────
 function setMode(m) {
   mode = m;
-  ['pre','live','post','partner','kb','news'].forEach(x => {
+  ['pre','live','post','partner','kb','news','journey'].forEach(x => {
     document.getElementById('tab-'+x).classList.toggle('active', x === m);
     document.getElementById('pane-'+x).style.display = x === m ? 'flex' : 'none';
     if (x === m) { document.getElementById('pane-'+x).style.flexDirection = 'column'; document.getElementById('pane-'+x).style.gap = '20px'; }
@@ -861,6 +937,7 @@ function setMode(m) {
   document.getElementById('empty-partner').style.display = m === 'partner' ? 'flex' : 'none';
   document.getElementById('empty-kb').style.display = m === 'kb' ? 'flex' : 'none';
   document.getElementById('empty-news').style.display = m === 'news' ? 'flex' : 'none';
+  document.getElementById('empty-journey').style.display = m === 'journey' ? 'flex' : 'none';
   if (m === 'news' && document.getElementById('news-result').style.display === 'none') { setTimeout(loadNews, 100); }
   if (['partner','kb','news'].includes(m)) checkServerStatus();
   document.getElementById('result').style.display = 'none';
@@ -868,6 +945,7 @@ function setMode(m) {
   document.getElementById('partner-result').style.display = 'none';
   document.getElementById('kb-result').style.display = 'none';
   document.getElementById('news-result').style.display = 'none';
+  document.getElementById('journey-result').style.display = 'none';
 }
 
 // ── CALL TYPE ─────────────────────────────────────────────────
@@ -946,23 +1024,24 @@ async function runPreCall() {
     onboarding: 'b-prospect', growth: 'b-existing', atrisk: 'b-live', qbr: 'b-partner'
   };
 
-  const sys = `You are GIA — an AI assistant for Geotab Partner Account Managers (PAMs). The PAM is about to call a Geotab reseller partner. Return a JSON array of brief cards. Each: {id, icon, title, color, body}. Colors: #2563EB blue, #00D48A green, #FBBF24 yellow, #F97316 orange, #F43F5E red, #A78BFA purple. Body: plain text, **bold** key phrases. Return ONLY the JSON array.`;
+  const sys = `You are GIA — an AI assistant for Geotab Partner Account Managers (PAMs). The PAM is about to call a Geotab reseller partner. Return a JSON array of brief cards. Each: {id, icon, title, color, body}. Colors: #2563EB blue, #00D48A green, #FBBF24 yellow, #F97316 orange, #F43F5E red, #A78BFA purple, #06B6D4 teal. Body: plain text, **bold** key phrases. Return ONLY the JSON array. Geotab strategic context: Geotab is the world's largest commercial telematics provider (4M+ devices, 45,000+ partners), with a strong push into AI dash cameras (GO Focus Plus at $25/month all-in), asset tracking (GO Anywhere), and high-value segments including T&L, construction, field service, government, and healthcare. Partners who specialize in a vertical and leverage segment-specific ROI messaging consistently outperform generalist partners.`;
 
   const callInstructions = {
     onboarding: `Cards needed:
 1. id:"snapshot" — PARTNER SNAPSHOT: What kind of business they are, their industry, their likely customer base, what telematics means to their business model.
-2. id:"journey" — WHERE THEY LIKELY ARE: What a new partner typically struggles with in months 1–6 (first demo nerves, product confidence, finding their first customer, internal buy-in).
-3. id:"objective" — CALL OBJECTIVE: The ONE thing this call needs to accomplish to move them forward (e.g., confirm first demo scheduled, unblock a stall, celebrate first activation).
-4. id:"questions" — 3 QUESTIONS TO ASK: Open-ended, relationship-building, about their progress and confidence — not pitching.
-5. id:"watchout" — WATCH OUT FOR: The most common reason new partners stall at this stage.
-6. id:"opener" — CALL OPENER: Exact first sentence in quotes — warm, not transactional.`,
+2. id:"segment_focus" — SEGMENT & BD FOCUS: For a new partner, 2 sentences on the highest-potential vertical for them to focus on in months 1–3 (based on their business type), and why that vertical + Geotab is a powerful combo right now.
+3. id:"journey" — WHERE THEY LIKELY ARE: What a new partner typically struggles with in months 1–6 (first demo nerves, product confidence, finding their first customer, internal buy-in). Mention Excelerator program as the framework for the 6-month journey.
+4. id:"objective" — CALL OBJECTIVE: The ONE thing this call needs to accomplish to move them forward (e.g., confirm first training date, lock in a pilot customer in their target vertical, clarify the Excelerator milestones).
+5. id:"questions" — 3 QUESTIONS TO ASK: Open-ended, relationship-building, about their industry focus, first target customer type, and what success looks like. Tie at least one to their segment.
+6. id:"watchout" — WATCH OUT FOR: The most common reason new partners stall at this stage.
+7. id:"opener" — CALL OPENER: Exact first sentence in quotes — warm, not transactional, welcoming them to the Excelerator program and 6-month journey.`,
     growth: `Cards needed:
-1. id:"snapshot" — PARTNER SNAPSHOT: Who they are, what they likely sell, their customer base.
-2. id:"opportunity" — GROWTH OPPORTUNITY: What an established partner at this stage typically has the most potential to expand (upsell to PRO Plus, cameras, new verticals, larger customers).
-3. id:"objective" — CALL OBJECTIVE: What this growth check-in should accomplish — pipeline review, identifying upsell targets, or planning a co-sell.
-4. id:"questions" — 3 QUESTIONS TO ASK: Open-ended, about pipeline health, what their customers are asking for, and what's holding back more deals.
-5. id:"watchout" — WATCH OUT FOR: The most common growth stall pattern for partners at this stage.
-6. id:"opener" — CALL OPENER: Exact first sentence in quotes — peer-to-peer, collegial tone.`,
+1. id:"snapshot" — PARTNER SNAPSHOT: Who they are, what they likely sell, their customer base and strongest verticals.
+2. id:"segment_bd" — SEGMENT BD OPPORTUNITY: 2–3 sentences on the highest-potential move for this partner's BD right now — which vertical or customer segment should they go deeper in, which Geotab product line (cameras, asset tracking, ELD, integrations) has the most upside for their existing customer base, and one specific Geotab program or tool they should be using more.
+3. id:"objective" — CALL OBJECTIVE: What this growth check-in should accomplish — pipeline review, identifying a new vertical to enter, co-sell planning, or a specific upsell target.
+4. id:"questions" — 3 QUESTIONS TO ASK: Open-ended — about their pipeline by vertical, what their customers are asking for, and where they see whitespace in their market.
+5. id:"watchout" — WATCH OUT FOR: The most common growth stall pattern for established partners.
+6. id:"opener" — CALL OPENER: Exact first sentence in quotes — peer-to-peer, collegial, focused on their business momentum.`,
     atrisk: `Cards needed:
 1. id:"snapshot" — PARTNER SNAPSHOT: What kind of business they are and what their at-risk status likely means.
 2. id:"diagnosis" — LIKELY ROOT CAUSE: The most common reasons partners stall or decline (loss of internal champion, competing priorities, poor first customer experience, lack of confidence). Be specific.
@@ -979,13 +1058,15 @@ async function runPreCall() {
 6. id:"opener" — CALL OPENER: Exact first sentence in quotes — confident, forward-looking, sets collaborative tone.`
   };
 
+  const segmentCard = vertical ? `\nADD this extra card at position 2 (after snapshot): id:"segment" icon:"🎯" title:"SEGMENT STRATEGY — ${vertical}" color:"#06B6D4" — 3 sentences: (1) Why ${vertical} is a high-priority segment for Geotab right now, (2) which Geotab products and features resonate most in this vertical, (3) one specific BD angle or talking point the PAM should use with this partner to deepen their focus in ${vertical}. Keep it punchy and sales-focused.` : '';
+
   const usr = `Partner name: ${company}
 Call type: ${callTypeLabels[type]}
 ${erp ? `ERP code: ${erp}` : ''}
 ${vertical ? `Primary vertical: ${vertical}` : ''}
 ${context ? `Additional context from PAM: ${context}` : ''}
 
-${callInstructions[type]}`;
+${callInstructions[type]}${segmentCard}`;
 
   try {
     const cards = await ai(sys, usr, 2000);
@@ -1085,6 +1166,147 @@ async function handleDisc(el, topic) {
     err('live-err', 'Could not get response. Please try again.');
   }
   clearChipLoading('disc-chips');
+}
+
+// ── LIVE: SEGMENT PLAYBOOKS ───────────────────────────────────
+async function handleSegment(el, vertical) {
+  setChipLoading('seg-chips', el);
+  noErr('live-err');
+
+  const sys = `You are GIA — Geotab's internal AI for Partner Account Managers. Return JSON: {strategy (Geotab's 2–3 sentence strategic priority in this vertical — why it's a big opportunity), lead_products (array of 3 strings: product name + one-line why it wins in this segment), roi_hooks (array of 3 strings: specific ROI talking points a partner can use with their customers in this vertical), bd_talking_points (array of 3 strings: what the PAM should say to their partner to motivate them to go deeper in this vertical), entry_question (1 question the PAM can ask the partner to open a BD conversation about this vertical)}. Focus on real Geotab strengths: open platform, GO9/GO Focus Plus cameras, asset trackers, ELD, driver safety, integration ecosystem. Return ONLY JSON.`;
+  const usr = `Vertical: ${vertical}\nContext: Geotab PAM coaching their reseller partner on how to sell into the ${vertical} segment. Partner is a technology reseller new to or growing in this vertical.`;
+
+  try {
+    const r = await ai(sys, usr, 900);
+    const cards = [];
+    if (r.strategy) cards.push(makeCard('🎯 Geotab\'s strategic angle', `<div class="card-body">${r.strategy.replace(/\*\*(.*?)\*\*/g,'<strong>$1</strong>')}</div>`, 'var(--teal)'));
+    if (r.lead_products?.length) {
+      const items = r.lead_products.map(p=>`<li><span class="win-check">→</span><span>${p}</span></li>`).join('');
+      cards.push(makeCard('📦 Lead with these products', `<ul class="wins-list">${items}</ul>`, 'var(--blue)'));
+    }
+    if (r.roi_hooks?.length) {
+      const items = r.roi_hooks.map(h=>`<li><span class="win-check">💰</span><span>${h}</span></li>`).join('');
+      cards.push(makeCard('💰 ROI hooks for the end customer', `<ul class="wins-list">${items}</ul>`, 'var(--green)'));
+    }
+    if (r.bd_talking_points?.length) {
+      const items = r.bd_talking_points.map(t=>`<li><span class="win-check">✓</span><span>${t}</span></li>`).join('');
+      cards.push(makeCard('🤝 What to say to your partner', `<ul class="wins-list">${items}</ul>`, 'var(--purple)'));
+    }
+    if (r.entry_question) cards.push(makeCard('🔓 Open the BD conversation', `<div class="card-green">"${r.entry_question}"</div>`, 'var(--teal)'));
+    showResult(vertical, 'SEGMENT PLAYBOOK', 'b-live', cards);
+  } catch(e) {
+    err('live-err', 'Could not get response. Please try again.');
+  }
+  clearChipLoading('seg-chips');
+}
+
+// ── LIVE: PARTNER PROGRAM STRATEGY ───────────────────────────
+async function handleProgram(el, program) {
+  setChipLoading('prog-chips', el);
+  noErr('live-err');
+
+  const sys = `You are GIA — Geotab's internal AI for Partner Account Managers. Return JSON: {what_it_is (2 sentences: plain-English explanation of this program/resource for a partner), partner_benefit (2–3 sentences: what's in it for the partner — their business outcome, not just features), how_to_explain (a 2–3 sentence script the PAM can say directly to their partner in plain language), call_to_action (1 specific next step the PAM should suggest to the partner right now), common_misconception (1 thing partners often misunderstand about this program)}. Return ONLY JSON.`;
+  const usr = `Program: ${program}\nContext: Geotab PAM explaining this program to a reseller partner to help them grow their Geotab business. Programs available: Excelerator (structured 6-month new partner acceleration with dedicated PAM support, weekly contact, milestones), Deal Registration (register a specific opportunity to protect margin and get PAM co-sell support), Order Now/Marketplace (instant online ordering for customers with faster activation), Geotab Academy (free training and certification platform), Partner Portal (resources, co-op funds, marketing materials, performance data).`;
+
+  try {
+    const r = await ai(sys, usr, 700);
+    const cards = [];
+    if (r.what_it_is) cards.push(makeCard(`📋 What is ${program}?`, `<div class="card-body">${r.what_it_is}</div>`, 'var(--blue)'));
+    if (r.partner_benefit) cards.push(makeCard('💼 What\'s in it for your partner', `<div class="card-teal">${r.partner_benefit.replace(/\*\*(.*?)\*\*/g,'<strong>$1</strong>')}</div>`, 'var(--green)'));
+    if (r.how_to_explain) cards.push(makeCard('💬 Say this to your partner', `<div class="card-quote">"${r.how_to_explain}"</div>`, 'var(--teal)'));
+    if (r.call_to_action) cards.push(makeCard('⚡ Next step', `<div class="card-green"><strong>${r.call_to_action}</strong></div>`, 'var(--yellow)'));
+    if (r.common_misconception) cards.push(makeCard('⚠ Common misconception', `<div class="card-body">${r.common_misconception}</div>`, 'var(--orange)'));
+    showResult(program, 'PROGRAM STRATEGY', 'b-live', cards);
+  } catch(e) {
+    err('live-err', 'Could not get response. Please try again.');
+  }
+  clearChipLoading('prog-chips');
+}
+
+// ── PARTNER JOURNEY ───────────────────────────────────────────
+let journeyMonth = 1;
+
+function setJourneyMonth(m, el) {
+  journeyMonth = m;
+  document.querySelectorAll('[id^="jm-"]').forEach(b => b.classList.remove('active'));
+  el.classList.add('active');
+}
+
+async function runJourney() {
+  noErr('journey-err');
+  loading('journey-btn', true);
+
+  const partner = document.getElementById('journey-partner').value.trim();
+  const vertical = document.getElementById('journey-vertical').value;
+  const context = document.getElementById('journey-context').value.trim();
+  const m = journeyMonth;
+
+  const monthNames = {1:'Foundation',2:'First Demo',3:'First Sale',4:'Momentum',5:'Pipeline Push',6:'Graduation'};
+  const monthFocus = {
+    1: 'Month 1 (Foundation): Partner just signed. They need: portal access, first training sessions, to understand the Excelerator program and what success looks like in months 1–6, and to identify their first target customer.',
+    2: 'Month 2 (First Demo): Partner should be running their first demos. Focus is on demo confidence, overcoming first objections, and locking in a specific prospect to bring to close.',
+    3: 'Month 3 (First Sale): Partner should be closing or close to closing their first deal. Focus is on unblocking that first activation, making sure the customer onboards smoothly, and building momentum for deal 2 and 3.',
+    4: 'Month 4 (Momentum): Partner has at least one activation. Focus is on replicating that win — identifying similar prospects, building a pipeline of 3–5 deals, and establishing a selling rhythm.',
+    5: 'Month 5 (Pipeline Push): Partner should have a real pipeline. Focus is on converting proposals to activations, identifying any stalls, and starting to think about expanding into new verticals or upselling cameras/add-ons.',
+    6: 'Month 6 (Graduation): The 6-month intensive is ending. Focus is on reviewing the journey — what milestones hit, what the partner learned, what the next 6 months look like, and locking in independence while keeping the relationship strong.'
+  };
+
+  const sys = `You are GIA — an AI coach for Geotab Partner Account Managers (PAMs). The PAM manages new reseller partners through a 6-month intensive onboarding program called Excelerator. Return a JSON array of coaching cards: [{id, icon, title, color, body}]. Colors: #2563EB blue, #00D48A green, #FBBF24 yellow, #F97316 orange, #F43F5E red, #A78BFA purple, #06B6D4 teal. Body uses **bold** for key phrases. Return ONLY the JSON array.`;
+
+  const usr = `${partner ? `Partner: ${partner}` : 'Generic new partner'}
+${vertical ? `Vertical: ${vertical}` : ''}
+${context ? `PAM context: ${context}` : ''}
+
+${monthFocus[m]}
+
+Generate exactly these 6 cards:
+1. id:"milestones" icon:"✅" — MILESTONE CHECKPOINTS: 4 specific things the partner should have accomplished BY now in their journey. Be concrete (e.g. "Completed GO9 certification on Geotab Academy", "Submitted at least 1 proposal"). Flag as RED if a partner hasn't hit these.
+2. id:"conversation" icon:"💬" — THE RIGHT CONVERSATION THIS MONTH: What topic should dominate this call. One clear sentence of what the PAM should be trying to accomplish, then 2–3 specific questions to ask.
+3. id:"what_they_need" icon:"🧠" — WHAT THE PARTNER NEEDS TO KNOW: The #1 product, program, or strategy concept this partner must understand by end of this month to be successful. Include HOW to teach it.
+4. id:"red_flags" icon:"🚨" — RED FLAGS TO WATCH FOR: 2–3 signs that this partner is at risk of stalling at this stage. What does early warning look like?
+5. id:"pam_focus" icon:"🎯" — PAM FOCUS: The 2–3 most important things the PAM should DO between now and next month to move this partner forward. Actions, not just advice.
+6. id:"energy_check" icon:"⚡" — ENERGY CHECK: One question to assess the partner's momentum and enthusiasm level right now — designed to uncover whether they're energized or quietly disengaged.`;
+
+  try {
+    const cards = await ai(sys, usr, 2000);
+    const partnerLabel = partner || `Month ${m} Partner`;
+    const els = cards.map(c => {
+      let body;
+      if (['milestones','pam_focus','red_flags','what_they_need'].includes(c.id)) {
+        const lines = (c.body||'').split('\n').filter(l=>l.trim());
+        const items = lines.map(l=>`<li><span class="win-check">${c.id==='red_flags'?'⚠':'→'}</span><span>${l.replace(/^[-•\d.]\s*/,'').replace(/\*\*(.*?)\*\*/g,'<strong>$1</strong>')}</span></li>`).join('');
+        body = `<ul class="wins-list">${items}</ul>`;
+      } else if (c.id === 'energy_check') {
+        body = `<div class="card-green">"${c.body.replace(/^["']|["']$/g,'')}"</div>`;
+      } else {
+        body = `<div class="card-body">${(c.body||'').replace(/\*\*(.*?)\*\*/g,'<strong>$1</strong>').replace(/\n/g,'<br>')}</div>`;
+      }
+      return makeCard(`${c.icon} ${c.title}`, body, c.color);
+    });
+
+    document.getElementById('empty-journey').style.display = 'none';
+    document.getElementById('journey-result').style.display = 'flex';
+    document.getElementById('journey-result').style.flexDirection = 'column';
+    document.getElementById('journey-result').style.gap = '14px';
+    document.getElementById('journey-result').innerHTML = `
+      <div class="result-hdr">
+        <div>
+          <div class="result-name">${partnerLabel}</div>
+          <div style="font-size:12px;color:var(--muted);margin-top:4px;">Month ${m} — ${monthNames[m]}</div>
+        </div>
+        <div class="result-time">${new Date().toLocaleTimeString([],{hour:'2-digit',minute:'2-digit'})}</div>
+      </div>
+    `;
+    els.forEach(el => document.getElementById('journey-result').appendChild(el));
+    const resetBtn = document.createElement('button');
+    resetBtn.className = 'btn-ghost';
+    resetBtn.textContent = '↩ Run Another Month';
+    resetBtn.onclick = () => { document.getElementById('journey-result').style.display='none'; document.getElementById('empty-journey').style.display='flex'; };
+    document.getElementById('journey-result').appendChild(resetBtn);
+  } catch(e) {
+    err('journey-err', 'Something went wrong. Please try again.');
+  }
+  loading('journey-btn', false);
 }
 
 // Chip loading states
