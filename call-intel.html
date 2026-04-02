@@ -500,18 +500,6 @@
 
       <!-- EXISTING CUSTOMER FIELDS -->
       <div id="pre-existing-fields">
-        <div style="font-size:10px;font-family:'DM Mono',monospace;color:var(--muted);letter-spacing:0.08em;text-transform:uppercase;margin-bottom:8px;">Purpose of call</div>
-        <div class="type-toggle" style="grid-template-columns:1fr 1fr 1fr;margin-bottom:12px;">
-          <button class="type-btn on-growth" id="t-growth" onclick="setCallType('growth')">
-            <span class="t-icon" style="font-size:16px;">📈</span>Growth<span class="t-sub">Healthy & expanding</span>
-          </button>
-          <button class="type-btn" id="t-atrisk" onclick="setCallType('atrisk')">
-            <span class="t-icon" style="font-size:16px;">🚨</span>At-Risk<span class="t-sub">Stalled / declining</span>
-          </button>
-          <button class="type-btn" id="t-qbr" onclick="setCallType('qbr')">
-            <span class="t-icon" style="font-size:16px;">📊</span>QBR<span class="t-sub">Quarterly review</span>
-          </button>
-        </div>
         <div style="font-size:10px;font-family:'DM Mono',monospace;color:var(--muted);letter-spacing:0.06em;text-transform:uppercase;margin-bottom:5px;">ERP Code — optional, for exact match</div>
         <input class="big-input" type="text" id="p-erp" placeholder="e.g. TELU01" style="font-size:12px;opacity:0.7;" />
       </div>
@@ -563,7 +551,7 @@
       <div class="err" id="pre-err"></div>
       <button class="main-btn" id="pre-btn" onclick="runPreCall()">
         <div class="spin"></div>
-        <span class="btn-label" id="pre-label">📈 Get Growth Brief</span>
+        <span class="btn-label" id="pre-label">⚡ Get Customer Brief</span>
       </button>
     </div>
 
@@ -899,7 +887,7 @@
 const GW = 'https://genai-us.geotab.com/api/v2/chat/completions';
 const GK = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6Im1haGFhZmFuYUBnZW90YWIuY29tIiwiZXhwIjoxODA2MDE5MjAwfQ.aR2hIVpYk0X61_ohHX4IcBgTaIkAoIP7cDcuIK43LGw';
 
-let mode = 'pre', callType = 'growth', custMode = 'existing';
+let mode = 'pre', custMode = 'existing';
 
 // ── GATEWAY CALL ─────────────────────────────────────────────
 async function ai(sys, usr, tokens) {
@@ -952,20 +940,6 @@ function setMode(m) {
   document.getElementById('journey-result').style.display = 'none';
 }
 
-// ── CALL TYPE ─────────────────────────────────────────────────
-function setCallType(t) {
-  callType = t;
-  ['growth','atrisk','qbr'].forEach(id => {
-    const el = document.getElementById('t-'+id);
-    if (el) el.className = 'type-btn' + (t === id ? ' on-'+id : '');
-  });
-  if (custMode !== 'prospect') {
-    const labels = {growth:'📈 Get Growth Brief', atrisk:'🚨 Get At-Risk Brief', qbr:'📊 Get QBR Brief'};
-    document.getElementById('pre-label').textContent = labels[t] || '⚡ Get Customer Brief';
-  }
-}
-// Legacy alias
-function setType(t) { setCallType('growth'); }
 
 function togglePreChip(el, group) {
   const container = group === 'comp' ? 'pre-comp-chips' : 'pre-disc-chips';
@@ -1004,8 +978,7 @@ function setCustMode(t) {
     if (emptyIcon) emptyIcon.textContent = '📊';
     if (emptyText) emptyText.textContent = 'Enter a customer name to pull live Geotab data and AI insights.';
     if (emptyHint) emptyHint.textContent = 'Live BigQuery data + upsell guidance + 7 insight cards';
-    const labels = {growth:'📈 Get Growth Brief', atrisk:'🚨 Get At-Risk Brief', qbr:'📊 Get QBR Brief'};
-    document.getElementById('pre-label').textContent = labels[callType] || '⚡ Get Customer Brief';
+    document.getElementById('pre-label').textContent = '⚡ Get Customer Brief';
   } else {
     if (companyLabel) companyLabel.textContent = 'Prospect Company Name';
     if (companyInput) companyInput.placeholder = 'e.g. Amazon Logistics, Pepsi Beverages, City of Austin...';
@@ -1142,9 +1115,6 @@ Generate exactly these ${cardCount} cards:
 
   // ── EXISTING CUSTOMER PATH ────────────────────────────────────
   const erp  = document.getElementById('p-erp')?.value.trim() || '';
-  const type = callType || 'growth';
-  const callTypeBadge     = { growth:'GROWTH CHECK-IN', atrisk:'AT-RISK CALL', qbr:'QBR' };
-  const callTypeBadgeClass = { growth:'b-existing', atrisk:'b-live', qbr:'b-partner' };
 
   // Step 1: Fetch customer snapshot + 6-month trend from BigQuery
   let customerData = null, trendData = null;
@@ -1214,24 +1184,12 @@ AT-RISK SIGNAL: ${trendData.at_risk ? `YES — ${trendData.declining_months} con
 
 Geotab products: GO9 telematics, GO Focus Plus AI dash cam ($25/month all-in, 3yr), GO Anywhere asset tracker, IOX accessories (temperature, hours, panic button). Plans: GO / PRO / PRO Plus. Camera upsell adds ~40% revenue per unit. Customers who stop growing are churn risks within 12 months.`;
 
-  const callTypeInstructions = {
-    growth:  'Call purpose: Growth Check-In — celebrate wins, identify expansion lanes, set next milestone.',
-    atrisk:  'Call purpose: At-Risk Intervention — customer is declining. Diagnose root cause: cancellations, competitor pressure, product gap, support issues. Focus on recovery.',
-    qbr:     'Call purpose: Quarterly Business Review — structured look back and look ahead. What improved, what stalled, what commitments for next quarter.'
-  };
-  const card5Map = {
-    growth: '5. id:"next" icon:"🚀" title:"Growth Roadmap" — What\'s working well (1 sentence from the data), the single best expansion opportunity for the next 90 days, and one specific upsell or activation target to propose on this call. color: #A78BFA',
-    atrisk: '5. id:"qbr" icon:"🔥" title:"Recovery Plan" — Root cause of the decline (hypothesis based on data), one specific recovery action to propose on this call, and what success looks like in 90 days. Be direct and actionable. color: #A78BFA',
-    qbr:    '5. id:"qbr" icon:"📋" title:"QBR Snapshot" — 3-part mini-QBR: (a) What went well, (b) What needs attention, (c) One commitment for next quarter. Grounded in the data. color: #A78BFA'
-  };
-
   const compCardExisting = competitor ? `\n${8}. id:"competitor" icon:"⚔️" title:"vs ${competitor}" — How to position Geotab against ${competitor} in the context of this specific customer's fleet and product mix. Top 2-3 Geotab wins for their situation, one trap question, the single strongest proof point. color: #F43F5E` : '';
   const discNoteExisting = discFocus ? `Focus card #6 (Questions to Ask) specifically on: ${discFocus}. Make all 3 questions directly surface this topic.` : 'At least one about expansion plans, one about any concerns or challenges.';
   const existingCardCount = competitor ? 8 : 7;
 
   const usr = `CUSTOMER: ${customerName}
 VERTICAL: ${vertical || 'Unknown'}
-CALL TYPE: ${type}
 RESELLER ERP: ${erp || 'Not provided'}
 ${competitor ? `COMPETITOR IN PLAY: ${competitor}` : ''}
 ${discFocus ? `DISCOVERY FOCUS: ${discFocus}` : ''}
@@ -1243,14 +1201,14 @@ ${trendContext}
 
 ${upsellContext}
 
-${callTypeInstructions[type]}
+CALL APPROACH INSTRUCTION: Analyze all data above and auto-determine the health state. If the customer shows consecutive months of subscription decline or high churn vs expansion, treat this as an at-risk situation and focus on diagnosing root cause and proposing recovery. If growing, celebrate and identify the best expansion lane. If stable with no cameras or plan upgrade, lead with upsell. Let the data drive — do not assume a call type.
 
 Generate exactly these ${existingCardCount} cards in order:
 1. id:"health" icon:"📊" title:"Customer Health" — Clear verdict: Growing / Stable / Declining / At-Risk. One sentence grounded in the live data. color: ${trendData?.at_risk ? '#F43F5E' : '#00D48A'}
 2. id:"trend" icon:"📈" title:"6-Month Trend" — Summarize MoM movement in plain English. Strongest month, any dips, overall trajectory. If no data, say so and infer. color: #06B6D4
 3. id:"risk" icon:"⚠️" title:"Risk Signals" — Top 2-3 warning signs from the data or vertical context. Include camera gap, churn trend, stalling. Be direct. color: #FBBF24
 4. id:"upsell" icon:"💡" title:"Upsell Opportunities" — Based on their current product mix, list the top 2-3 upsell moves with specific dollar/business impact. Format each as: **Product** → why it fits this customer → one-line pitch. Lead with cameras if they have none. Flag plan upgrade if applicable. color: #F97316
-${card5Map[type] || card5Map.growth}
+5. id:"approach" icon:"🧭" title:"Recommended Approach" — Based on the health data above, determine what this call should prioritize: if at-risk, give 2-3 recovery talking points; if growing, give 2-3 expansion talking points; if stable, give 2-3 upsell opening lines. Be specific and use the actual data. color: #A78BFA
 6. id:"questions" icon:"💬" title:"Questions to Ask" — 3 open-ended questions. ${discNoteExisting} color: #2563EB
 7. id:"opener" icon:"🗣️" title:"Call Opener" — Exact first sentence in quotes — warm, data-informed, reference the customer by name. color: #00D48A${compCardExisting}`;
 
@@ -1259,7 +1217,7 @@ ${card5Map[type] || card5Map.growth}
     const supersetLink = dbName
       ? `<a href="https://superset.geotab.com/superset/dashboard/2863/?native_filters_key=${dbNameForLink}" target="_blank" style="display:inline-flex;align-items:center;gap:6px;margin-top:10px;font-size:11px;color:var(--teal);text-decoration:none;font-family:'DM Mono',monospace;border:1px solid rgba(6,182,212,0.3);border-radius:8px;padding:5px 10px;background:rgba(6,182,212,0.06);" onmouseover="this.style.background='rgba(6,182,212,0.12)'" onmouseout="this.style.background='rgba(6,182,212,0.06)'">↗ Open in Superset — Customer Overview</a>`
       : '';
-    showResult(customerName, callTypeBadge[type] || 'CHECK-IN', callTypeBadgeClass[type] || 'b-existing', renderCards(cards, supersetLink));
+    showResult(customerName, 'CUSTOMER BRIEF', 'b-existing', renderCards(cards, supersetLink));
     // Prepend a warning banner if customer was not found in BigQuery
     if (!customerData?.found) {
       const warn = document.createElement('div');
