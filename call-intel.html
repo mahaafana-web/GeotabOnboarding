@@ -589,45 +589,11 @@
       <div class="live-section">
         <div class="live-heading"><span class="live-heading-icon">💡</span> Discovery Prompts</div>
         <div class="chips" id="disc-chips">
-          <div class="chip disc" data-handler="disc" data-value="Understanding the partner's target verticals and ideal customer profile" onclick="toggleLiveChip(this)">Target verticals</div>
-          <div class="chip disc" data-handler="disc" data-value="Sales team size, telematics confidence level, and current selling activity" onclick="toggleLiveChip(this)">Sales team readiness</div>
-          <div class="chip disc" data-handler="disc" data-value="Pipeline health — how many proposals submitted, demos run, deals in progress" onclick="toggleLiveChip(this)">Pipeline & proposals</div>
           <div class="chip disc" data-handler="disc" data-value="What is blocking them from closing their next deal or activating more accounts" onclick="toggleLiveChip(this)">Growth blockers</div>
-          <div class="chip disc" data-handler="disc" data-value="Training completion, product knowledge gaps, and what they need to feel confident selling" onclick="toggleLiveChip(this)">Training gaps</div>
+          <div class="chip disc" data-handler="disc" data-value="Pipeline health — how many proposals submitted, demos run, deals in progress" onclick="toggleLiveChip(this)">Pipeline & proposals</div>
+          <div class="chip disc" data-handler="disc" data-value="Sales team size, telematics confidence level, and current selling activity" onclick="toggleLiveChip(this)">Sales team readiness</div>
           <div class="chip disc" data-handler="disc" data-value="Customer retention — are their Geotab customers renewing, churning, or expanding" onclick="toggleLiveChip(this)">Customer retention</div>
-          <div class="chip disc" data-handler="disc" data-value="Revenue goals, commission motivation, and what success looks like for this partner" onclick="toggleLiveChip(this)">Revenue goals</div>
-          <div class="chip disc" data-handler="disc" data-value="Which Geotab products they are actively selling and which they are ignoring" onclick="toggleLiveChip(this)">Product mix</div>
-          <div class="chip disc" data-handler="disc" data-value="Whether they have hit their first sale milestone and what happened during that first deal" onclick="toggleLiveChip(this)">First sale milestone</div>
           <div class="chip disc" data-handler="disc" data-value="Co-selling opportunities — can we get on a call with their prospect together" onclick="toggleLiveChip(this)">Co-sell opportunity</div>
-        </div>
-      </div>
-
-      <div class="live-divider"></div>
-
-      <!-- SEGMENT PLAYBOOKS -->
-      <div class="live-section">
-        <div class="live-heading"><span class="live-heading-icon">🎯</span> Segment Playbooks</div>
-        <div class="chips" id="seg-chips">
-          <div class="chip seg" data-handler="seg" data-value="Transportation & Logistics" onclick="toggleLiveChip(this)">Transportation & Logistics</div>
-          <div class="chip seg" data-handler="seg" data-value="Construction & Vocational" onclick="toggleLiveChip(this)">Construction & Vocational</div>
-          <div class="chip seg" data-handler="seg" data-value="Field Service & Utilities" onclick="toggleLiveChip(this)">Field Service & Utilities</div>
-          <div class="chip seg" data-handler="seg" data-value="Government & Public Sector" onclick="toggleLiveChip(this)">Government & Public Sector</div>
-          <div class="chip seg" data-handler="seg" data-value="Healthcare & EMS" onclick="toggleLiveChip(this)">Healthcare & EMS</div>
-          <div class="chip seg" data-handler="seg" data-value="People Transportation & Transit" onclick="toggleLiveChip(this)">People Transportation & Transit</div>
-        </div>
-      </div>
-
-      <div class="live-divider"></div>
-
-      <!-- PARTNER PROGRAM STRATEGY -->
-      <div class="live-section">
-        <div class="live-heading"><span class="live-heading-icon">🚀</span> Partner Program Strategy</div>
-        <div class="chips" id="prog-chips">
-          <div class="chip prog" data-handler="prog" data-value="Excelerator Program" onclick="toggleLiveChip(this)">Excelerator Program</div>
-          <div class="chip prog" data-handler="prog" data-value="Deal Registration" onclick="toggleLiveChip(this)">Deal Registration</div>
-          <div class="chip prog" data-handler="prog" data-value="Order Now / Marketplace" onclick="toggleLiveChip(this)">Order Now / Marketplace</div>
-          <div class="chip prog" data-handler="prog" data-value="Geotab Academy Training" onclick="toggleLiveChip(this)">Geotab Academy</div>
-          <div class="chip prog" data-handler="prog" data-value="Partner Portal & Resources" onclick="toggleLiveChip(this)">Partner Portal</div>
         </div>
       </div>
 
@@ -1320,47 +1286,6 @@ async function getDiscCards(topic) {
   return cards;
 }
 
-async function getSegCards(vertical) {
-  const sys = `You are GIA — Geotab's internal AI for Partner Account Managers. Return JSON: {strategy (Geotab's 2–3 sentence strategic priority in this vertical — why it's a big opportunity), lead_products (array of 3 strings: product name + one-line why it wins in this segment), roi_hooks (array of 3 strings: specific ROI talking points a partner can use with their customers in this vertical), bd_talking_points (array of 3 strings: what the PAM should say to their partner to motivate them to go deeper in this vertical), entry_question (1 question the PAM can ask the partner to open a BD conversation about this vertical)}. Focus on real Geotab strengths: open platform, GO9/GO Focus Plus cameras, asset trackers, ELD, driver safety, integration ecosystem. Return ONLY JSON.`;
-  const usr = `Vertical: ${vertical}\nContext: Geotab PAM coaching their reseller partner on how to sell into the ${vertical} segment. Partner is a technology reseller new to or growing in this vertical.`;
-  const r = await ai(sys, usr, 900);
-  const cards = [];
-  const sep = document.createElement('div');
-  sep.style.cssText = 'font-family:"DM Mono",monospace;font-size:10px;letter-spacing:0.08em;color:var(--teal);text-transform:uppercase;padding:6px 0 2px;border-top:1px solid rgba(6,182,212,0.2);margin-top:4px;';
-  sep.textContent = `🎯 ${vertical}`;
-  cards.push(sep);
-  if (r.strategy) cards.push(makeCard('Geotab\'s angle', `<div class="card-body">${r.strategy.replace(/\*\*(.*?)\*\*/g,'<strong>$1</strong>')}</div>`, 'var(--teal)'));
-  if (r.lead_products?.length) {
-    const items = r.lead_products.map(p=>`<li><span class="win-check">→</span><span>${p}</span></li>`).join('');
-    cards.push(makeCard('📦 Lead products', `<ul class="wins-list">${items}</ul>`, 'var(--blue)'));
-  }
-  if (r.roi_hooks?.length) {
-    const items = r.roi_hooks.map(h=>`<li><span class="win-check">💰</span><span>${h}</span></li>`).join('');
-    cards.push(makeCard('ROI hooks', `<ul class="wins-list">${items}</ul>`, 'var(--green)'));
-  }
-  if (r.bd_talking_points?.length) {
-    const items = r.bd_talking_points.map(t=>`<li><span class="win-check">✓</span><span>${t}</span></li>`).join('');
-    cards.push(makeCard('🤝 Tell your partner', `<ul class="wins-list">${items}</ul>`, 'var(--purple)'));
-  }
-  if (r.entry_question) cards.push(makeCard('🔓 Open the conversation', `<div class="card-green">"${r.entry_question}"</div>`, 'var(--teal)'));
-  return cards;
-}
-
-async function getProgCards(program) {
-  const sys = `You are GIA — Geotab's internal AI for Partner Account Managers. Return JSON: {what_it_is (2 sentences: plain-English explanation of this program/resource for a partner), partner_benefit (2–3 sentences: what's in it for the partner — their business outcome, not just features), how_to_explain (a 2–3 sentence script the PAM can say directly to their partner in plain language), call_to_action (1 specific next step the PAM should suggest to the partner right now), common_misconception (1 thing partners often misunderstand about this program)}. Return ONLY JSON.`;
-  const usr = `Program: ${program}\nContext: Geotab PAM explaining this program to a reseller partner to help them grow their Geotab business. Programs available: Excelerator (structured 6-month new partner acceleration with dedicated PAM support, weekly contact, milestones), Deal Registration (register a specific opportunity to protect margin and get PAM co-sell support), Order Now/Marketplace (instant online ordering for customers with faster activation), Geotab Academy (free training and certification platform), Partner Portal (resources, co-op funds, marketing materials, performance data).`;
-  const r = await ai(sys, usr, 700);
-  const cards = [];
-  const sep = document.createElement('div');
-  sep.style.cssText = 'font-family:"DM Mono",monospace;font-size:10px;letter-spacing:0.08em;color:var(--green);text-transform:uppercase;padding:6px 0 2px;border-top:1px solid rgba(0,212,138,0.2);margin-top:4px;';
-  sep.textContent = `🚀 ${program}`;
-  cards.push(sep);
-  if (r.what_it_is) cards.push(makeCard(`What is it?`, `<div class="card-body">${r.what_it_is}</div>`, 'var(--blue)'));
-  if (r.partner_benefit) cards.push(makeCard('What\'s in it for them', `<div class="card-teal">${r.partner_benefit.replace(/\*\*(.*?)\*\*/g,'<strong>$1</strong>')}</div>`, 'var(--green)'));
-  if (r.how_to_explain) cards.push(makeCard('💬 Say this to your partner', `<div class="card-quote">"${r.how_to_explain}"</div>`, 'var(--teal)'));
-  if (r.call_to_action) cards.push(makeCard('⚡ Next step', `<div class="card-green"><strong>${r.call_to_action}</strong></div>`, 'var(--yellow)'));
-  return cards;
-}
 
 async function runLiveSelections() {
   const activeChips = [...document.querySelectorAll('#pane-live .chip.active')];
@@ -1374,8 +1299,6 @@ async function runLiveSelections() {
     if (h === 'obj') return getObjCards(v);
     if (h === 'comp') return getCompCards(v);
     if (h === 'disc') return getDiscCards(v);
-    if (h === 'seg') return getSegCards(v);
-    if (h === 'prog') return getProgCards(v);
     return Promise.resolve([]);
   });
 
