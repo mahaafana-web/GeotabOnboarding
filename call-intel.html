@@ -532,6 +532,31 @@
         </div>
       </div>
 
+      <!-- COMPETITOR IN PLAY (always visible) -->
+      <div>
+        <div style="font-size:10px;font-family:'DM Mono',monospace;color:var(--muted);letter-spacing:0.08em;text-transform:uppercase;margin-bottom:8px;">⚔️ Competitor in play? <span style="opacity:0.5;font-size:9px;letter-spacing:0;">(optional — tap to include battle card)</span></div>
+        <div class="chips" id="pre-comp-chips" style="gap:6px;">
+          <div class="chip comp" id="pc-samsara" onclick="togglePreChip(this,'comp')">Samsara</div>
+          <div class="chip comp" id="pc-verizon" onclick="togglePreChip(this,'comp')">Verizon Connect</div>
+          <div class="chip comp" id="pc-motive" onclick="togglePreChip(this,'comp')">Motive</div>
+          <div class="chip comp" id="pc-teletrac" onclick="togglePreChip(this,'comp')">Teletrac Navman</div>
+          <div class="chip comp" id="pc-lytx" onclick="togglePreChip(this,'comp')">Lytx</div>
+          <div class="chip comp" id="pc-fleetcomplete" onclick="togglePreChip(this,'comp')">Fleet Complete</div>
+        </div>
+      </div>
+
+      <!-- DISCOVERY FOCUS (always visible) -->
+      <div>
+        <div style="font-size:10px;font-family:'DM Mono',monospace;color:var(--muted);letter-spacing:0.08em;text-transform:uppercase;margin-bottom:8px;">💡 Discovery focus? <span style="opacity:0.5;font-size:9px;letter-spacing:0;">(optional — sharpens questions card)</span></div>
+        <div class="chips" id="pre-disc-chips" style="gap:6px;">
+          <div class="chip disc" onclick="togglePreChip(this,'disc')">Growth blockers</div>
+          <div class="chip disc" onclick="togglePreChip(this,'disc')">Pipeline & proposals</div>
+          <div class="chip disc" onclick="togglePreChip(this,'disc')">Sales team readiness</div>
+          <div class="chip disc" onclick="togglePreChip(this,'disc')">Customer retention</div>
+          <div class="chip disc" onclick="togglePreChip(this,'disc')">Co-sell opportunity</div>
+        </div>
+      </div>
+
       <!-- CONTEXT (always visible) -->
       <textarea class="big-input" id="context" placeholder="Any extra context? — what you know about them, last interaction, specific focus for this call..." style="min-height:68px;"></textarea>
 
@@ -543,7 +568,7 @@
     </div>
 
     <!-- ── LIVE ASSIST ── -->
-    <div id="pane-live" style="display:none;display:flex;flex-direction:column;gap:22px;">
+    <div id="pane-live" style="display:none;flex-direction:column;gap:22px;">
 
       <div class="live-section">
         <div class="live-subtext" style="color:var(--muted);font-size:12px;padding:8px 12px;background:rgba(37,99,235,0.07);border:1px solid rgba(37,99,235,0.2);border-radius:10px;">
@@ -681,7 +706,7 @@
     </div>
 
     <!-- ── POST-CALL ── -->
-    <div id="pane-post" style="display:none;display:flex;flex-direction:column;gap:16px;">
+    <div id="pane-post" style="display:none;flex-direction:column;gap:16px;">
       <div class="panel-title">Post-Call <span class="g">Summary</span></div>
       <div class="panel-hint">Paste meeting notes — GIA extracts action items, writes your follow-up email, and logs the SFDC note.</div>
       <input class="big-input" type="text" id="post-co" placeholder="Partner name..." />
@@ -942,6 +967,18 @@ function setCallType(t) {
 // Legacy alias
 function setType(t) { setCallType('growth'); }
 
+function togglePreChip(el, group) {
+  const container = group === 'comp' ? 'pre-comp-chips' : 'pre-disc-chips';
+  const already = el.classList.contains('active');
+  document.querySelectorAll('#' + container + ' .chip').forEach(c => c.classList.remove('active'));
+  if (!already) el.classList.add('active');
+}
+
+function getPreChip(containerId) {
+  const active = document.querySelector('#' + containerId + ' .chip.active');
+  return active ? active.textContent.trim() : '';
+}
+
 function setCustMode(t) {
   custMode = t;
   ['existing','prospect'].forEach(id => {
@@ -1063,8 +1100,10 @@ async function runPreCall() {
   document.getElementById('r-time').textContent = '';
   document.getElementById('r-cards').innerHTML = '<div style="text-align:center;padding:40px 20px;color:var(--muted);font-size:13px;line-height:1.8;"><div style="font-size:28px;margin-bottom:14px;animation:pulse 1.5s infinite;">⏳</div>' + (custMode === 'prospect' ? 'Researching company profile, pain points, and Geotab fit...' : 'Fetching BigQuery data and building your AI brief...') + '</div>';
 
-  const vertical = document.getElementById('p-vertical')?.value || '';
-  const context  = document.getElementById('context').value.trim();
+  const vertical    = document.getElementById('p-vertical')?.value || '';
+  const context     = document.getElementById('context').value.trim();
+  const competitor  = getPreChip('pre-comp-chips');
+  const discFocus   = getPreChip('pre-disc-chips');
 
   // ── NEW PROSPECT PATH ─────────────────────────────────────────
   if (custMode === 'prospect') {
@@ -1072,20 +1111,26 @@ async function runPreCall() {
 
 Geotab portfolio (for recommendations): GO9 telematics device, GO Focus Plus AI dash cam ($25/month all-in, 3-year), GO Anywhere asset tracker, IOX accessories (temperature, hours, panic button), MyGeotab fleet analytics platform, ELD compliance module, driver safety scoring, open SDK with 200+ integrations. Plans: GO / PRO / PRO Plus.`;
 
+    const compCard = competitor ? `\n${discFocus ? '7' : '7'}. id:"competitor" icon:"⚔️" title:"vs ${competitor}" — Top 3 reasons Geotab wins vs ${competitor} for this type of prospect, one trap question the PAM can use to surface ${competitor}'s weakness, and the single strongest proof point. color: #F43F5E` : '';
+    const discNote = discFocus ? `\nFocus the discovery questions specifically on: ${discFocus}. Make all 3 questions directly uncover this topic.` : '';
+    const cardCount = competitor ? 7 : 6;
+
     const usr = `PROSPECT COMPANY: ${customerName}
 VERTICAL / INDUSTRY: ${vertical || 'Unknown — infer from company name if possible'}
+${competitor ? `COMPETITOR IN PLAY: ${competitor}` : ''}
+${discFocus ? `DISCOVERY FOCUS: ${discFocus}` : ''}
 PAM NOTES: ${context || 'None'}
 
-Generate exactly these 6 cards:
+Generate exactly these ${cardCount} cards:
 1. id:"company" icon:"🏢" title:"Company Profile" — What this company does, estimated fleet size, industry position, key operational context a PAM should know before the call. If uncertain, give best reasonable estimate based on name/vertical. color: #2563EB
-2. id:"pain" icon:"🎯" title:"Likely Pain Points" — Top 3 operational challenges common in their vertical that Geotab directly solves (e.g. visibility, compliance, safety, cost, theft). Be specific to their industry. color: #FBBF24
-3. id:"pitch" icon:"⚡" title:"How to Position Geotab" — 2-3 sentences tailored value proposition for this prospect. Lead with outcomes (not features). Reference their vertical specifically. color: #00D48A
+2. id:"pain" icon:"🎯" title:"Likely Pain Points" — Top 3 operational challenges common in their vertical that Geotab directly solves. Be specific to their industry. color: #FBBF24
+3. id:"pitch" icon:"⚡" title:"How to Position Geotab" — 2-3 sentences tailored value proposition for this prospect. Lead with outcomes, not features. Reference their vertical specifically. color: #00D48A
 4. id:"upsell" icon:"📦" title:"Products to Lead With" — Top 3 Geotab products to recommend based on their vertical and fleet type. Format each as: **Product name** — why it fits this specific customer. color: #F97316
-5. id:"questions" icon:"💬" title:"Discovery Questions" — 3 open-ended questions to uncover their current telematics situation, fleet pain points, and buying readiness. Start with What / How / Tell me. color: #A78BFA
-6. id:"opener" icon:"🗣️" title:"Call Opener" — Exact first sentence in quotes — warm, specific to their industry, opens curiosity without being salesy. color: #06B6D4`;
+5. id:"questions" icon:"💬" title:"Discovery Questions" — 3 open-ended questions to uncover their telematics situation, fleet pain points, and buying readiness.${discNote} Start with What / How / Tell me. color: #A78BFA
+6. id:"opener" icon:"🗣️" title:"Call Opener" — Exact first sentence in quotes — warm, specific to their industry, opens curiosity without being salesy. color: #06B6D4${compCard}`;
 
     try {
-      const cards = await ai(sys, usr, 2200);
+      const cards = await ai(sys, usr, 2800);
       showResult(customerName, 'NEW PROSPECT', 'b-prospect', renderCards(cards, ''));
     } catch(e) {
       err('pre-err', 'AI call failed. Check your connection and try again.');
@@ -1180,10 +1225,16 @@ Geotab products: GO9 telematics, GO Focus Plus AI dash cam ($25/month all-in, 3y
     qbr:    '5. id:"qbr" icon:"📋" title:"QBR Snapshot" — 3-part mini-QBR: (a) What went well, (b) What needs attention, (c) One commitment for next quarter. Grounded in the data. color: #A78BFA'
   };
 
+  const compCardExisting = competitor ? `\n${8}. id:"competitor" icon:"⚔️" title:"vs ${competitor}" — How to position Geotab against ${competitor} in the context of this specific customer's fleet and product mix. Top 2-3 Geotab wins for their situation, one trap question, the single strongest proof point. color: #F43F5E` : '';
+  const discNoteExisting = discFocus ? `Focus card #6 (Questions to Ask) specifically on: ${discFocus}. Make all 3 questions directly surface this topic.` : 'At least one about expansion plans, one about any concerns or challenges.';
+  const existingCardCount = competitor ? 8 : 7;
+
   const usr = `CUSTOMER: ${customerName}
 VERTICAL: ${vertical || 'Unknown'}
 CALL TYPE: ${type}
 RESELLER ERP: ${erp || 'Not provided'}
+${competitor ? `COMPETITOR IN PLAY: ${competitor}` : ''}
+${discFocus ? `DISCOVERY FOCUS: ${discFocus}` : ''}
 PAM NOTES: ${context || 'None'}
 
 ${customerContext}
@@ -1194,17 +1245,17 @@ ${upsellContext}
 
 ${callTypeInstructions[type]}
 
-Generate exactly these 7 cards in order:
+Generate exactly these ${existingCardCount} cards in order:
 1. id:"health" icon:"📊" title:"Customer Health" — Clear verdict: Growing / Stable / Declining / At-Risk. One sentence grounded in the live data. color: ${trendData?.at_risk ? '#F43F5E' : '#00D48A'}
 2. id:"trend" icon:"📈" title:"6-Month Trend" — Summarize MoM movement in plain English. Strongest month, any dips, overall trajectory. If no data, say so and infer. color: #06B6D4
 3. id:"risk" icon:"⚠️" title:"Risk Signals" — Top 2-3 warning signs from the data or vertical context. Include camera gap, churn trend, stalling. Be direct. color: #FBBF24
 4. id:"upsell" icon:"💡" title:"Upsell Opportunities" — Based on their current product mix, list the top 2-3 upsell moves with specific dollar/business impact. Format each as: **Product** → why it fits this customer → one-line pitch. Lead with cameras if they have none. Flag plan upgrade if applicable. color: #F97316
 ${card5Map[type] || card5Map.growth}
-6. id:"questions" icon:"💬" title:"Questions to Ask" — 3 open-ended questions. At least one about expansion plans, one about any concerns or challenges. color: #2563EB
-7. id:"opener" icon:"🗣️" title:"Call Opener" — Exact first sentence in quotes — warm, data-informed, reference the customer by name. color: #00D48A`;
+6. id:"questions" icon:"💬" title:"Questions to Ask" — 3 open-ended questions. ${discNoteExisting} color: #2563EB
+7. id:"opener" icon:"🗣️" title:"Call Opener" — Exact first sentence in quotes — warm, data-informed, reference the customer by name. color: #00D48A${compCardExisting}`;
 
   try {
-    const cards = await ai(sys, usr, 2400);
+    const cards = await ai(sys, usr, 2800);
     const supersetLink = dbName
       ? `<a href="https://superset.geotab.com/superset/dashboard/2863/?native_filters_key=${dbNameForLink}" target="_blank" style="display:inline-flex;align-items:center;gap:6px;margin-top:10px;font-size:11px;color:var(--teal);text-decoration:none;font-family:'DM Mono',monospace;border:1px solid rgba(6,182,212,0.3);border-radius:8px;padding:5px 10px;background:rgba(6,182,212,0.06);" onmouseover="this.style.background='rgba(6,182,212,0.12)'" onmouseout="this.style.background='rgba(6,182,212,0.06)'">↗ Open in Superset — Customer Overview</a>`
       : '';
