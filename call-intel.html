@@ -1785,8 +1785,7 @@ async function runKb() {
   loading('kb-btn', true);
 
   try {
-    const kbUrl = `${PARTNER_API}/kb?key=${PARTNER_KEY}&category=${kbCategory}`;
-    console.log('KB fetch URL:', kbUrl);
+    const kbUrl = `${PARTNER_API}/kb?key=${PARTNER_KEY}&category=${kbCategory}&q=${encodeURIComponent(q)}`;
     const kbResp = await fetch(kbUrl);
     const kbData = await kbResp.json();
     if (kbData.error) { err('kb-err', kbData.error); loading('kb-btn', false); return; }
@@ -1799,8 +1798,8 @@ async function runKb() {
       ? `The PAM needs to EXPLAIN this to their reseller partner or the partner's salesperson — use plain language, a real-world analogy if helpful, and frame it in terms of what it means for their business or their customers. Avoid technical jargon.`
       : `Answer concisely and directly for the PAM — sales-focused, not technical. Include the key fact, why it matters in a sales context, and any relevant pricing or compatibility note.`;
 
-    const sys = `You are GIA, Geotab's internal AI sales assistant. Answer STRICTLY from the provided documentation. ${modeInstruction} If the answer is not in the docs, say: "I don't have that in the approved docs — contact your Geotab SME." Never guess or make up product details.`;
-    const usr = `APPROVED GEOTAB DOCUMENTATION — ${KB_LABELS[kbCategory]}:\n\n${docContent}\n\n---\n\nQUESTION: ${q}`;
+    const sys = `You are GIA, Geotab's internal AI sales assistant. Answer from the provided content which is pulled live from Geotab's support site, community forums, and internal Drive docs. ${modeInstruction} Synthesize across all sources — if multiple sources say the same thing, state it confidently. If the answer is genuinely not in the content, say: "I couldn't find a clear answer in the docs — check support.geotab.com or contact your Geotab SME." Never make up product specs, pricing, or compatibility details.`;
+    const usr = `GEOTAB CONTENT (live from support site, community, and internal docs) — ${KB_LABELS[kbCategory]}:\n\n${docContent}\n\n---\n\nQUESTION: ${q}`;
 
     const answer = await aiRaw(sys, usr, 600);
     renderKbResult(q, answer, kbSources);
