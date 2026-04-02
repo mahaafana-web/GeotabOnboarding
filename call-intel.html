@@ -551,23 +551,6 @@
         </div>
       </div>
 
-      <!-- PARTNER OBJECTION HANDLER -->
-      <div class="live-section">
-        <div class="live-heading"><span class="live-heading-icon">🛡</span> Partner Pushback</div>
-        <div class="chips" id="obj-chips">
-          <div class="chip obj" data-handler="obj" data-value="We can't make enough margin reselling Geotab" onclick="toggleLiveChip(this)">Can't make margin</div>
-          <div class="chip obj" data-handler="obj" data-value="Our sales team doesn't understand telematics well enough to sell it" onclick="toggleLiveChip(this)">Team not confident</div>
-          <div class="chip obj" data-handler="obj" data-value="Our customers are specifically asking for Samsara or another competitor" onclick="toggleLiveChip(this)">Customers want competitor</div>
-          <div class="chip obj" data-handler="obj" data-value="We had a bad support or onboarding experience with Geotab" onclick="toggleLiveChip(this)">Bad experience</div>
-          <div class="chip obj" data-handler="obj" data-value="The platform is too complex for our team to demo and support" onclick="toggleLiveChip(this)">Too complex to support</div>
-          <div class="chip obj" data-handler="obj" data-value="We already have a telematics partnership with another vendor" onclick="toggleLiveChip(this)">Already partnered elsewhere</div>
-          <div class="chip obj" data-handler="obj" data-value="We activated accounts 6 months ago but growth has completely stalled" onclick="toggleLiveChip(this)">Growth stalled</div>
-          <div class="chip obj" data-handler="obj" data-value="Our salespeople aren't selling it — they don't feel confident enough" onclick="toggleLiveChip(this)">Reps not selling</div>
-        </div>
-      </div>
-
-      <div class="live-divider"></div>
-
       <!-- COMPETITOR PARTNER PROGRAM -->
       <div class="live-section">
         <div class="live-heading"><span class="live-heading-icon">⚔️</span> Competitor Battle Cards</div>
@@ -620,6 +603,21 @@
       <div style="display:flex;align-items:center;justify-content:space-between;font-size:11px;">
         <span id="ph-api-status" style="color:var(--muted);" class="ph-api-status-init"></span>
         <button onclick="configurePartnerApi()" style="background:none;border:none;color:var(--muted);font-size:11px;cursor:pointer;text-decoration:underline;padding:0;">⚙ Configure API URL</button>
+      </div>
+
+      <!-- PARTNER PUSHBACK -->
+      <div style="border-top:1px solid var(--border);padding-top:16px;">
+        <div style="font-size:10px;font-family:'DM Mono',monospace;color:var(--muted);letter-spacing:0.08em;text-transform:uppercase;margin-bottom:10px;">🛡 Partner Pushback — tap to get instant response</div>
+        <div class="chips">
+          <div class="chip obj" onclick="handlePushback(this,'We can\'t make enough margin reselling Geotab')">Can't make margin</div>
+          <div class="chip obj" onclick="handlePushback(this,'Our sales team doesn\'t understand telematics well enough to sell it')">Team not confident</div>
+          <div class="chip obj" onclick="handlePushback(this,'Our customers are specifically asking for Samsara or another competitor')">Customers want competitor</div>
+          <div class="chip obj" onclick="handlePushback(this,'We had a bad support or onboarding experience with Geotab')">Bad experience</div>
+          <div class="chip obj" onclick="handlePushback(this,'The platform is too complex for our team to demo and support')">Too complex to support</div>
+          <div class="chip obj" onclick="handlePushback(this,'We already have a telematics partnership with another vendor')">Already partnered elsewhere</div>
+          <div class="chip obj" onclick="handlePushback(this,'We activated accounts 6 months ago but growth has completely stalled')">Growth stalled</div>
+          <div class="chip obj" onclick="handlePushback(this,'Our salespeople aren\'t selling it — they don\'t feel confident enough')">Reps not selling</div>
+        </div>
       </div>
     </div>
 
@@ -1250,6 +1248,27 @@ async function getObjCards(objection) {
   return cards;
 }
 
+async function handlePushback(el, objection) {
+  document.querySelectorAll('#pane-partner .chip.obj').forEach(c => c.classList.remove('active'));
+  el.classList.add('active');
+  document.getElementById('partner-result').style.display = 'none';
+  document.getElementById('empty-partner').style.display = 'none';
+  document.getElementById('result').style.display = 'block';
+  document.getElementById('r-name').textContent = el.textContent.trim();
+  document.getElementById('r-badge').textContent = 'OBJECTION HANDLER';
+  document.getElementById('r-badge').className = 'result-badge b-live';
+  document.getElementById('r-time').textContent = '';
+  document.getElementById('r-cards').innerHTML = '<div style="text-align:center;padding:40px 20px;color:var(--muted);font-size:13px;"><div style="font-size:28px;margin-bottom:14px;animation:pulse 1.5s infinite;">⏳</div>Building response...</div>';
+  try {
+    const cards = await getObjCards(objection);
+    showResult(el.textContent.trim(), 'OBJECTION HANDLER', 'b-live', cards);
+  } catch(e) {
+    document.getElementById('result').style.display = 'none';
+    document.getElementById('empty-partner').style.display = 'flex';
+  }
+  document.querySelectorAll('#pane-partner .chip.obj').forEach(c => c.classList.remove('active'));
+}
+
 async function getCompCards(competitor) {
   const sys = `You are GIA — Geotab's competitive expert for Partner Account Managers. The PAM's partner is facing customer pressure from this competitor OR is considering partnering with them instead. Return JSON: {summary, geotab_wins (array of 3 — why Geotab beats them for partners AND their end customers), partner_program_advantage (1-2 sentences on why the Geotab partner program is stronger than this competitor's reseller program), arm_your_partner (2-3 sentences the partner's salesperson can say to their customer who mentioned this competitor), trap_question (1 question the partner can ask their customer that surfaces this competitor's weakness), competitor_strengths (array of 2 — honest acknowledgment)}. Be specific, factual, sharp. Return ONLY JSON.`;
   const usr = `Competitor: ${competitor}\nContext: Geotab PAM helping a reseller partner respond to customer interest in ${competitor} OR evaluating whether to stay in the Geotab partner program. Geotab: world's largest commercial telematics, 4M+ devices, open platform 200+ integrations, Go Focus Plus camera $25/month all-in, strong partner program with dedicated PAM, Geotab Academy, SDK for custom development, 30,000+ partners globally.`;
@@ -1296,7 +1315,6 @@ async function runLiveSelections() {
   const labels = activeChips.map(c => c.textContent.trim());
   const promises = activeChips.map(c => {
     const h = c.dataset.handler, v = c.dataset.value;
-    if (h === 'obj') return getObjCards(v);
     if (h === 'comp') return getCompCards(v);
     if (h === 'disc') return getDiscCards(v);
     return Promise.resolve([]);
