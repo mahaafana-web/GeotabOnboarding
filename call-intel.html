@@ -120,6 +120,12 @@
   .mode-tab:hover { color: #B8C8E0; background: rgba(255,255,255,0.03); }
   .mode-tab.active { color: var(--text); border-bottom-color: var(--blue); background: rgba(37,99,235,0.06); }
   .mode-tab.active.live-tab { border-bottom-color: var(--teal); color: var(--teal); background: rgba(6,182,212,0.06); }
+  .mode-tab.tab-gold { }
+  .mode-tab.tab-gold.active { border-bottom-color: var(--gold); color: var(--gold); background: rgba(245,158,11,0.06); }
+  .mode-tab.tab-teal { }
+  .mode-tab.tab-teal.active { border-bottom-color: var(--teal); color: var(--teal); background: rgba(6,182,212,0.06); }
+  .mode-tab.tab-purple { }
+  .mode-tab.tab-purple.active { border-bottom-color: var(--purple); color: var(--purple); background: rgba(167,139,250,0.06); }
 
   /* ── MAIN LAYOUT ── */
   .layout {
@@ -323,7 +329,7 @@
   .result-time { font-family: 'DM Mono', monospace; font-size: 11px; color: var(--muted); white-space: nowrap; }
 
   /* Cards */
-  .cards { display: flex; flex-direction: column; gap: 14px; }
+  .cards { display: flex; flex-direction: column; gap: 16px; }
   .card {
     background: linear-gradient(135deg, #1A2848 0%, #141E38 100%);
     border: 1px solid rgba(255,255,255,0.09);
@@ -441,13 +447,12 @@
 
 <!-- MODE TABS -->
 <div class="mode-bar">
-  <button class="mode-tab active" id="tab-pre" onclick="setMode('pre')">⚡ Pre-Call</button>
+  <button class="mode-tab active" id="tab-pre" onclick="setMode('pre')">📊 Customer Check-In</button>
   <button class="mode-tab live-tab" id="tab-live" onclick="setMode('live')">🛡 Live Assist</button>
   <button class="mode-tab" id="tab-post" onclick="setMode('post')">📋 Post-Call</button>
-  <button class="mode-tab" id="tab-partner" onclick="setMode('partner')" style="border-bottom-color:var(--gold);">📊 Partner Health</button>
-  <button class="mode-tab" id="tab-kb" onclick="setMode('kb')" style="border-bottom-color:var(--teal);">📦 Product Knowledge</button>
-  <button class="mode-tab" id="tab-news" onclick="setMode('news')" style="border-bottom-color:#10B981;">📰 Weekly Briefing</button>
-  <button class="mode-tab" id="tab-journey" onclick="setMode('journey')" style="border-bottom-color:#A78BFA;">🗓 Partner Journey</button>
+  <button class="mode-tab tab-gold" id="tab-partner" onclick="setMode('partner')">📊 Partner Health</button>
+  <button class="mode-tab tab-teal" id="tab-kb" onclick="setMode('kb')">📦 Product Knowledge</button>
+  <button class="mode-tab tab-purple" id="tab-journey" onclick="setMode('journey')">🗓 Partner Journey</button>
 </div>
 
 <div class="layout" id="layout">
@@ -455,48 +460,32 @@
   <!-- ═══════════════════ LEFT PANEL ═══════════════════ -->
   <div class="left-panel" id="left">
 
-    <!-- ── PRE-CALL ── -->
-    <div id="pane-pre" style="display:flex;flex-direction:column;gap:14px;">
-      <div class="panel-title">Pre-Call <span>Intelligence</span></div>
-
-      <!-- RESELLER SECTION -->
-      <div style="font-size:10px;font-family:'DM Mono',monospace;color:var(--gold);letter-spacing:0.08em;text-transform:uppercase;">Reseller / Partner</div>
-      <div style="position:relative;">
-        <input class="big-input" type="text" id="p-erp" placeholder="Partner ERP code — e.g. TELU01" style="padding-right:80px;" />
-        <span style="position:absolute;right:12px;top:50%;transform:translateY(-50%);font-size:10px;font-family:'DM Mono',monospace;color:var(--red);letter-spacing:0.05em;">REQUIRED</span>
-      </div>
-
-      <!-- CALL TYPE -->
-      <div class="type-toggle" style="grid-template-columns:1fr 1fr 1fr;">
-        <button class="type-btn on-growth" id="t-growth" onclick="setCallType('growth')">
-          <span class="t-icon">📈</span>Growth Check-In<span class="t-sub">Established</span>
-        </button>
-        <button class="type-btn" id="t-atrisk" onclick="setCallType('atrisk')">
-          <span class="t-icon">🚨</span>At-Risk<span class="t-sub">Stalled / declining</span>
-        </button>
-        <button class="type-btn" id="t-qbr" onclick="setCallType('qbr')">
-          <span class="t-icon">📊</span>QBR<span class="t-sub">Quarterly review</span>
-        </button>
-      </div>
-
-      <div style="height:1px;background:rgba(255,255,255,0.07);"></div>
-
-      <!-- CUSTOMER SECTION -->
-      <div style="font-size:10px;font-family:'DM Mono',monospace;color:var(--teal);letter-spacing:0.08em;text-transform:uppercase;">End Customer</div>
-      <input class="big-input" type="text" id="company" placeholder="Customer / prospect name — e.g. Rush Transport" />
+    <!-- ── PRE-CALL / CUSTOMER CHECK-IN ── -->
+    <div id="pane-pre" style="display:flex;flex-direction:column;gap:16px;">
+      <div class="panel-title">Customer <span>Check-In</span></div>
 
       <!-- CUSTOMER TYPE TOGGLE -->
-      <div class="type-toggle" style="grid-template-columns:1fr 1fr;">
-        <button class="type-btn on-existing" id="ct-existing" onclick="setCustType('existing')">
-          <span class="t-icon">✅</span>Existing Geotab<span class="t-sub">Already a customer</span>
-        </button>
-        <button class="type-btn" id="ct-new" onclick="setCustType('new')">
-          <span class="t-icon">🔍</span>New Prospect<span class="t-sub">Research needed</span>
-        </button>
+      <div>
+        <div style="font-size:10px;font-family:'DM Mono',monospace;color:var(--muted);letter-spacing:0.08em;text-transform:uppercase;margin-bottom:8px;">Who are you calling?</div>
+        <div class="type-toggle" style="grid-template-columns:1fr 1fr;">
+          <button class="type-btn on-existing" id="cm-existing" onclick="setCustMode('existing')">
+            <span class="t-icon" style="font-size:18px;">🏢</span>Existing Customer<span class="t-sub">Pull live Geotab data</span>
+          </button>
+          <button class="type-btn" id="cm-prospect" onclick="setCustMode('prospect')">
+            <span class="t-icon" style="font-size:18px;">🔍</span>New Prospect<span class="t-sub">Research online</span>
+          </button>
+        </div>
       </div>
 
+      <!-- COMPANY NAME (always visible) -->
+      <div>
+        <div style="font-size:10px;font-family:'DM Mono',monospace;color:var(--teal);letter-spacing:0.08em;text-transform:uppercase;margin-bottom:6px;" id="company-label">Customer / Account Name</div>
+        <input class="big-input" type="text" id="company" placeholder="e.g. Rush Transport, Waste Connections..." />
+      </div>
+
+      <!-- VERTICAL (always visible) -->
       <select class="big-input" id="p-vertical" style="font-size:13px;">
-        <option value="">Customer's primary vertical (optional)</option>
+        <option value="">Primary vertical (optional)</option>
         <option>Fleet / Transportation</option>
         <option>Construction / Vocational</option>
         <option>Oil & Gas / Energy</option>
@@ -509,12 +498,37 @@
         <option>Mixed / General</option>
       </select>
 
-      <textarea class="big-input" id="context" placeholder="Any extra context? — last conversation, known challenges, size, what the partner told you..." style="min-height:70px;"></textarea>
+      <!-- EXISTING CUSTOMER FIELDS -->
+      <div id="pre-existing-fields">
+        <div style="font-size:10px;font-family:'DM Mono',monospace;color:var(--muted);letter-spacing:0.08em;text-transform:uppercase;margin-bottom:8px;">Purpose of call</div>
+        <div class="type-toggle" style="grid-template-columns:1fr 1fr 1fr;margin-bottom:12px;">
+          <button class="type-btn on-growth" id="t-growth" onclick="setCallType('growth')">
+            <span class="t-icon" style="font-size:16px;">📈</span>Growth<span class="t-sub">Healthy & expanding</span>
+          </button>
+          <button class="type-btn" id="t-atrisk" onclick="setCallType('atrisk')">
+            <span class="t-icon" style="font-size:16px;">🚨</span>At-Risk<span class="t-sub">Stalled / declining</span>
+          </button>
+          <button class="type-btn" id="t-qbr" onclick="setCallType('qbr')">
+            <span class="t-icon" style="font-size:16px;">📊</span>QBR<span class="t-sub">Quarterly review</span>
+          </button>
+        </div>
+        <input class="big-input" type="text" id="p-erp" placeholder="Reseller ERP code (optional) — e.g. TELU01" style="font-size:12px;opacity:0.65;" />
+      </div>
+
+      <!-- PROSPECT FIELDS -->
+      <div id="pre-prospect-fields" style="display:none;">
+        <div style="font-size:11px;color:var(--muted);line-height:1.6;padding:10px 14px;background:rgba(249,115,22,0.06);border:1px solid rgba(249,115,22,0.2);border-radius:10px;">
+          GIA will research this company using its training knowledge — company profile, fleet context, pain points, recommended products, and questions to ask.
+        </div>
+      </div>
+
+      <!-- CONTEXT (always visible) -->
+      <textarea class="big-input" id="context" placeholder="Any extra context? — what you know about them, last interaction, specific focus for this call..." style="min-height:68px;"></textarea>
 
       <div class="err" id="pre-err"></div>
       <button class="main-btn" id="pre-btn" onclick="runPreCall()">
         <div class="spin"></div>
-        <span class="btn-label" id="pre-label">⚡ Get Full Brief</span>
+        <span class="btn-label" id="pre-label">📈 Get Growth Brief</span>
       </button>
     </div>
 
@@ -658,18 +672,6 @@
       </button>
     </div>
 
-    <!-- ── WEEKLY BRIEFING ── -->
-    <div id="pane-news" style="display:none;flex-direction:column;gap:18px;">
-      <div class="panel-title">Weekly <span style="color:#10B981;">Product Briefing</span></div>
-      <div class="panel-hint">Latest Geotab product updates and top SME Q&As — pull anytime for a fresh briefing.</div>
-      <div id="news-status" style="font-size:12px;color:var(--muted);line-height:1.6;"></div>
-      <div class="err" id="news-err"></div>
-      <button class="main-btn" id="news-btn" onclick="loadNews()" style="background:#10B981;color:#080C14;">
-        <div class="spin" style="border-top-color:#080C14;"></div>
-        <span class="btn-label">📰 Get Weekly Briefing</span>
-      </button>
-    </div>
-
     <!-- ── PARTNER JOURNEY ── -->
     <div id="pane-journey" style="display:none;flex-direction:column;gap:16px;">
       <div class="panel-title">Partner <span style="color:var(--purple);">Journey</span></div>
@@ -738,9 +740,9 @@
 
     <!-- EMPTY STATES -->
     <div class="empty" id="empty-pre">
-      <div class="empty-icon">📞</div>
-      <div class="empty-text">Your brief will appear here — ready before the phone rings.</div>
-      <div class="empty-hint">Fill in the company name and hit Get My Brief</div>
+      <div class="empty-icon">📊</div>
+      <div class="empty-text">Enter a customer name to pull live Geotab data and AI insights — or switch to New Prospect to research a company before your call.</div>
+      <div class="empty-hint">Existing customer → live BigQuery data + upsell guidance</div>
     </div>
 
     <div class="empty" id="empty-live" style="display:none;">
@@ -767,19 +769,10 @@
       <div class="empty-hint">Ctrl+Enter to submit</div>
     </div>
 
-    <div class="empty" id="empty-news" style="display:none;">
-      <div class="empty-icon">📰</div>
-      <div class="empty-text">Your weekly Geotab product briefing — latest product updates and top SME Q&As, ready whenever you need it.</div>
-      <div class="empty-hint">Click "Get Weekly Briefing" to fetch</div>
-    </div>
-
     <div class="empty" id="empty-journey" style="display:none;">
       <div class="empty-icon">🗓</div>
       <div class="empty-text">Select a month and hit Get Month Playbook — your coaching brief will appear here.</div>
     </div>
-
-    <!-- NEWS RESULT -->
-    <div id="news-result" style="display:none;flex-direction:column;gap:16px;overflow-y:auto;max-height:calc(100vh - 140px);"></div>
 
     <!-- JOURNEY RESULT -->
     <div id="journey-result" style="display:none;flex-direction:column;gap:16px;overflow-y:auto;max-height:calc(100vh - 140px);"></div>
@@ -907,7 +900,7 @@
 const GW = 'https://genai-us.geotab.com/api/v2/chat/completions';
 const GK = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6Im1haGFhZmFuYUBnZW90YWIuY29tIiwiZXhwIjoxODA2MDE5MjAwfQ.aR2hIVpYk0X61_ohHX4IcBgTaIkAoIP7cDcuIK43LGw';
 
-let mode = 'pre', callType = 'growth', custType = 'existing';
+let mode = 'pre', callType = 'growth', custMode = 'existing';
 
 // ── GATEWAY CALL ─────────────────────────────────────────────
 async function ai(sys, usr, tokens) {
@@ -941,7 +934,7 @@ async function aiRaw(sys, usr, tokens) {
 // ── MODE SWITCHING ────────────────────────────────────────────
 function setMode(m) {
   mode = m;
-  ['pre','live','post','partner','kb','news','journey'].forEach(x => {
+  ['pre','live','post','partner','kb','journey'].forEach(x => {
     document.getElementById('tab-'+x).classList.toggle('active', x === m);
     document.getElementById('pane-'+x).style.display = x === m ? 'flex' : 'none';
     if (x === m) { document.getElementById('pane-'+x).style.flexDirection = 'column'; document.getElementById('pane-'+x).style.gap = '20px'; }
@@ -951,15 +944,12 @@ function setMode(m) {
   document.getElementById('empty-post').style.display = m === 'post' ? 'flex' : 'none';
   document.getElementById('empty-partner').style.display = m === 'partner' ? 'flex' : 'none';
   document.getElementById('empty-kb').style.display = m === 'kb' ? 'flex' : 'none';
-  document.getElementById('empty-news').style.display = m === 'news' ? 'flex' : 'none';
   document.getElementById('empty-journey').style.display = m === 'journey' ? 'flex' : 'none';
-  if (m === 'news' && document.getElementById('news-result').style.display === 'none') { setTimeout(loadNews, 100); }
-  if (['partner','kb','news'].includes(m)) checkServerStatus();
+  if (['partner','kb'].includes(m)) checkServerStatus();
   document.getElementById('result').style.display = 'none';
   document.getElementById('post-result').style.display = 'none';
   document.getElementById('partner-result').style.display = 'none';
   document.getElementById('kb-result').style.display = 'none';
-  document.getElementById('news-result').style.display = 'none';
   document.getElementById('journey-result').style.display = 'none';
 }
 
@@ -967,20 +957,33 @@ function setMode(m) {
 function setCallType(t) {
   callType = t;
   ['growth','atrisk','qbr'].forEach(id => {
-    document.getElementById('t-'+id).className = 'type-btn' + (t === id ? ' on-'+id : '');
+    const el = document.getElementById('t-'+id);
+    if (el) el.className = 'type-btn' + (t === id ? ' on-'+id : '');
   });
-  const labels = {growth:'📈 Get Growth Brief', atrisk:'🚨 Get At-Risk Brief', qbr:'📊 Get QBR Brief'};
-  document.getElementById('pre-label').textContent = labels[t] || '⚡ Get Partner Brief';
+  if (custMode !== 'prospect') {
+    const labels = {growth:'📈 Get Growth Brief', atrisk:'🚨 Get At-Risk Brief', qbr:'📊 Get QBR Brief'};
+    document.getElementById('pre-label').textContent = labels[t] || '⚡ Get Customer Brief';
+  }
 }
 // Legacy alias
 function setType(t) { setCallType('growth'); }
 
-function setCustType(t) {
-  custType = t;
-  ['existing','new'].forEach(id => {
-    document.getElementById('ct-'+id).className = 'type-btn' + (t === id ? ' on-'+id : '');
+function setCustMode(t) {
+  custMode = t;
+  ['existing','prospect'].forEach(id => {
+    const btn = document.getElementById('cm-'+id);
+    if (btn) btn.className = 'type-btn' + (t === id ? (id==='existing' ? ' on-existing' : ' on-new') : '');
   });
-  document.getElementById('pre-label').textContent = t === 'existing' ? '⚡ Get Existing Customer Brief' : '🔍 Research & Get Brief';
+  const existingFields = document.getElementById('pre-existing-fields');
+  const prospectFields = document.getElementById('pre-prospect-fields');
+  if (existingFields) existingFields.style.display = t === 'existing' ? 'block' : 'none';
+  if (prospectFields) prospectFields.style.display = t === 'prospect' ? 'block' : 'none';
+  if (t === 'existing') {
+    const labels = {growth:'📈 Get Growth Brief', atrisk:'🚨 Get At-Risk Brief', qbr:'📊 Get QBR Brief'};
+    document.getElementById('pre-label').textContent = labels[callType] || '⚡ Get Customer Brief';
+  } else {
+    document.getElementById('pre-label').textContent = '🔍 Research This Prospect';
+  }
 }
 
 // ── HELPERS ───────────────────────────────────────────────────
@@ -1026,152 +1029,178 @@ function resetResult() {
   if (btn) { btn.disabled = true; btn.style.opacity = '0.4'; document.getElementById('live-display-label').textContent = '⚡ Display Results'; }
 }
 
-// ── PRE-CALL ──────────────────────────────────────────────────
+// ── CUSTOMER CHECK-IN ─────────────────────────────────────────
+// ── SHARED CARD RENDERER ──────────────────────────────────────
+function renderCards(cards, supersetLink) {
+  return cards.map(c => {
+    let body;
+    if (c.id === 'opener') {
+      body = `<div class="card-quote">"${c.body}"</div>`;
+    } else if (c.id === 'questions') {
+      const lines = (c.body||'').split('\n').filter(l=>l.trim());
+      const items = lines.map((l,i)=>`<li><span class="q-num">${i+1}.</span><span class="q-text">${l.replace(/^\d+\.\s*/,'').replace(/\*\*(.*?)\*\*/g,'<strong>$1</strong>')}</span></li>`).join('');
+      body = `<ul class="q-list">${items}</ul>`;
+    } else if (c.id === 'qbr') {
+      const lines = (c.body||'').split('\n').filter(l=>l.trim());
+      const items = lines.map(l=>`<li><span class="win-check">→</span><span>${l.replace(/^[a-c]\)\s*/i,'').replace(/^[-•]\s*/,'').replace(/\*\*(.*?)\*\*/g,'<strong>$1</strong>')}</span></li>`).join('');
+      body = (items ? `<ul class="wins-list">${items}</ul>` : `<div class="card-body">${(c.body||'').replace(/\*\*(.*?)\*\*/g,'<strong>$1</strong>')}</div>`) + (supersetLink || '');
+    } else if (c.id === 'upsell' || c.id === 'pitch' || c.id === 'pain' || c.id === 'risk') {
+      const lines = (c.body||'').split('\n').filter(l=>l.trim());
+      const items = lines.map(l=>`<li><span class="win-check">→</span><span>${l.replace(/^[-•]\s*/,'').replace(/^\d+\.\s*/,'').replace(/\*\*(.*?)\*\*/g,'<strong>$1</strong>')}</span></li>`).join('');
+      body = items ? `<ul class="wins-list">${items}</ul>` : `<div class="card-body">${(c.body||'').replace(/\*\*(.*?)\*\*/g,'<strong>$1</strong>')}</div>`;
+    } else {
+      body = `<div class="card-body">${(c.body||'').replace(/\*\*(.*?)\*\*/g,'<strong>$1</strong>').replace(/\n/g,'<br>')}</div>`;
+    }
+    return makeCard(`${c.icon} ${c.title}`, body, c.color);
+  });
+}
+
 async function runPreCall() {
   noErr('pre-err');
-  const erp = document.getElementById('p-erp').value.trim();
-  if (!erp) { err('pre-err', 'Partner ERP code is required.'); document.getElementById('p-erp').focus(); return; }
   const customerName = document.getElementById('company').value.trim();
+  if (!customerName) { err('pre-err', custMode === 'prospect' ? 'Enter the prospect company name.' : 'Enter a customer name to continue.'); document.getElementById('company').focus(); return; }
   loading('pre-btn', true);
 
-  const context = document.getElementById('context').value.trim();
   const vertical = document.getElementById('p-vertical')?.value || '';
-  const type = callType || 'growth';
-  const isExisting = custType === 'existing';
+  const context  = document.getElementById('context').value.trim();
 
-  const callTypeBadge = { growth:'GROWTH CHECK-IN', atrisk:'AT-RISK CALL', qbr:'QBR' };
+  // ── NEW PROSPECT PATH ─────────────────────────────────────────
+  if (custMode === 'prospect') {
+    const sys = `You are GIA — Geotab's AI for Partner Account Managers preparing to call a new prospect (not yet a Geotab customer). Use your training knowledge to generate a pre-call intelligence brief. Return a JSON array of 6 cards: [{id, icon, title, color, body}]. Colors: #2563EB blue, #00D48A green, #FBBF24 yellow, #F97316 orange, #F43F5E red, #A78BFA purple, #06B6D4 teal. Body uses **bold** for key terms. Keep each card focused and actionable. Return ONLY the JSON array.
+
+Geotab portfolio (for recommendations): GO9 telematics device, GO Focus Plus AI dash cam ($25/month all-in, 3-year), GO Anywhere asset tracker, IOX accessories (temperature, hours, panic button), MyGeotab fleet analytics platform, ELD compliance module, driver safety scoring, open SDK with 200+ integrations. Plans: GO / PRO / PRO Plus.`;
+
+    const usr = `PROSPECT COMPANY: ${customerName}
+VERTICAL / INDUSTRY: ${vertical || 'Unknown — infer from company name if possible'}
+PAM NOTES: ${context || 'None'}
+
+Generate exactly these 6 cards:
+1. id:"company" icon:"🏢" title:"Company Profile" — What this company does, estimated fleet size, industry position, key operational context a PAM should know before the call. If uncertain, give best reasonable estimate based on name/vertical. color: #2563EB
+2. id:"pain" icon:"🎯" title:"Likely Pain Points" — Top 3 operational challenges common in their vertical that Geotab directly solves (e.g. visibility, compliance, safety, cost, theft). Be specific to their industry. color: #FBBF24
+3. id:"pitch" icon:"⚡" title:"How to Position Geotab" — 2-3 sentences tailored value proposition for this prospect. Lead with outcomes (not features). Reference their vertical specifically. color: #00D48A
+4. id:"upsell" icon:"📦" title:"Products to Lead With" — Top 3 Geotab products to recommend based on their vertical and fleet type. Format each as: **Product name** — why it fits this specific customer. color: #F97316
+5. id:"questions" icon:"💬" title:"Discovery Questions" — 3 open-ended questions to uncover their current telematics situation, fleet pain points, and buying readiness. Start with What / How / Tell me. color: #A78BFA
+6. id:"opener" icon:"🗣️" title:"Call Opener" — Exact first sentence in quotes — warm, specific to their industry, opens curiosity without being salesy. color: #06B6D4`;
+
+    try {
+      const cards = await ai(sys, usr, 2200);
+      showResult(customerName, 'NEW PROSPECT', 'b-prospect', renderCards(cards, ''));
+    } catch(e) {
+      err('pre-err', 'AI call failed. Check your connection and try again.');
+    }
+    loading('pre-btn', false);
+    return;
+  }
+
+  // ── EXISTING CUSTOMER PATH ────────────────────────────────────
+  const erp  = document.getElementById('p-erp')?.value.trim() || '';
+  const type = callType || 'growth';
+  const callTypeBadge     = { growth:'GROWTH CHECK-IN', atrisk:'AT-RISK CALL', qbr:'QBR' };
   const callTypeBadgeClass = { growth:'b-existing', atrisk:'b-live', qbr:'b-partner' };
 
-  // ── Step 1: Fetch reseller health + customer data in parallel ──
-  let resellerData = null, customerData = null, webData = null;
-
-  const fetches = [];
+  // Step 1: Fetch customer snapshot + 6-month trend from BigQuery
+  let customerData = null, trendData = null;
   if (PARTNER_API) {
-    // Reseller health
-    fetches.push(
-      fetch(`${PARTNER_API}/partner?q=${encodeURIComponent(erp)}&key=${PARTNER_KEY}`)
-        .then(r => r.json()).then(d => { resellerData = d; }).catch(() => {})
-    );
-    // Customer data
-    if (customerName) {
-      if (isExisting) {
-        fetches.push(
-          fetch(`${PARTNER_API}/customer?name=${encodeURIComponent(customerName)}&erp=${encodeURIComponent(erp)}&key=${PARTNER_KEY}`)
-            .then(r => r.json()).then(d => { customerData = d; }).catch(() => {})
-        );
-      } else {
-        fetches.push(
-          fetch(`${PARTNER_API}/websearch?company=${encodeURIComponent(customerName)}&vertical=${encodeURIComponent(vertical)}&key=${PARTNER_KEY}`)
-            .then(r => r.json()).then(d => { webData = d; }).catch(() => {})
-        );
-      }
+    try {
+      const r = await fetch(`${PARTNER_API}/customer?name=${encodeURIComponent(customerName)}&erp=${encodeURIComponent(erp)}&key=${PARTNER_KEY}`);
+      customerData = await r.json();
+    } catch(e) { customerData = null; }
+
+    const dbLookup = customerData?.customer?.db_name || customerData?.all_matches?.[0]?.db_name || '';
+    if (dbLookup) {
+      try {
+        const r2 = await fetch(`${PARTNER_API}/customer-qbr?db=${encodeURIComponent(dbLookup)}&key=${PARTNER_KEY}`);
+        trendData = await r2.json();
+      } catch(e) { trendData = null; }
     }
   }
-  await Promise.all(fetches);
 
-  // ── Step 2: Build context blocks for AI ──
-  let resellerContext = '';
-  if (resellerData && !resellerData.error && resellerData.partner) {
-    const s = resellerData.snapshot || {};
-    const y = resellerData.yoy || {};
-    resellerContext = `RESELLER DATA FROM GEOTAB BIGQUERY:
-Partner: ${resellerData.partner.name} (ERP: ${resellerData.partner.erp})
-Current month: ${s.subs || 'N/A'} subscriptions, $${s.revenue || 'N/A'} revenue
-YoY sub growth: ${y.subs_growth !== undefined ? y.subs_growth + '%' : 'N/A'} | YoY revenue growth: ${y.revenue_growth !== undefined ? y.revenue_growth + '%' : 'N/A'}
-Momentum: ${resellerData.momentum || 'unknown'}
-Top customers: ${(resellerData.top_customers || []).slice(0,4).map(c => `${c.name} (${c.subs} subs)`).join(', ') || 'N/A'}`;
-  } else if (resellerData?.error) {
-    resellerContext = `RESELLER LOOKUP: ${resellerData.error}`;
+  // Step 2: Build context strings for AI
+  let customerContext = '', trendContext = '', upsellContext = '', dbName = '', dbNameForLink = '';
+
+  if (customerData?.found && customerData.customer) {
+    const c = customerData.customer;
+    dbName = c.db_name || '';
+    dbNameForLink = encodeURIComponent(dbName);
+    const ratePlans = customerData.rate_plans || [];
+    const plans = ratePlans.map(r => `${r.plan} (${r.subs} subs)`).join(', ');
+    const hasGO = ratePlans.some(r => r.plan?.toLowerCase().includes('go') && !r.plan?.toLowerCase().includes('pro'));
+    const hasPRO = ratePlans.some(r => r.plan?.toLowerCase() === 'pro');
+    const hasPROPlus = ratePlans.some(r => r.plan?.toLowerCase().includes('pro plus') || r.plan?.toLowerCase().includes('proplus'));
+    const totalSubs = c.total_subs || 0;
+    const cameraSubs = customerData.camera_subs || 0;
+    const camPct = totalSubs > 0 ? Math.round(cameraSubs / totalSubs * 100) : 0;
+
+    customerContext = `CUSTOMER DATA FROM GEOTAB BIGQUERY (live):
+Customer: ${c.name} | Database: ${dbName}
+Current subscriptions: ${totalSubs || 'N/A'} | Monthly revenue: $${c.revenue || 'N/A'}
+Cameras: ${customerData.has_cameras ? `YES — ${cameraSubs} camera subs (${camPct}% of fleet)` : 'NO — 0 cameras in fleet'}
+Rate plans: ${plans || 'N/A'}
+Expansion this month: $${c.expansion || 0} | Churn this month: $${c.churn || 0}`;
+
+    upsellContext = `PRODUCT MIX & UPSELL SIGNALS:
+Cameras: ${customerData.has_cameras ? `${cameraSubs} subs (${camPct}% penetration) — ${camPct < 50 ? `only ${camPct}% of fleet covered, ${totalSubs - cameraSubs} vehicles without cameras` : 'good coverage'}` : 'ZERO cameras — #1 upsell priority (GO Focus Plus AI dash cam = $25/month all-in, adds ~40% revenue uplift per unit)'}
+Rate plan upgrade: ${hasPROPlus ? 'Already on PRO Plus (top tier)' : hasPRO ? 'On PRO — eligible for PRO Plus upgrade (advanced analytics + API access)' : hasGO ? 'On GO plan — eligible for PRO upgrade (reporting, alerts, driver safety scoring)' : 'Review current plan tier'}
+Asset trackers: Not tracked in DB — ask if they have trailers, equipment, or non-powered assets
+IOX accessories: Unknown — ask about temperature monitoring, hours tracking, or panic button needs`;
+  } else if (customerData?.found === false) {
+    customerContext = `CUSTOMER LOOKUP: ${customerData.message || 'Not found in Geotab data.'}`;
+    upsellContext = 'UPSELL SIGNALS: Customer not found in Geotab DB — unable to assess product mix. Ask about their current setup during the call.';
+  } else {
+    customerContext = 'CUSTOMER LOOKUP: Data unavailable (server may be offline — run start.bat).';
+    upsellContext = 'UPSELL SIGNALS: Server offline — unable to retrieve product data.';
   }
 
-  let customerContext = '';
-  if (isExisting && customerData) {
-    if (customerData.found && customerData.customer) {
-      const c = customerData.customer;
-      const plans = (customerData.rate_plans || []).map(r => `${r.plan} (${r.subs})`).join(', ');
-      customerContext = `EXISTING CUSTOMER DATA FROM GEOTAB BIGQUERY:
-Customer: ${c.name}
-Total subscriptions: ${c.total_subs || 'N/A'} | Monthly revenue: $${c.revenue || 'N/A'}
-Has cameras: ${customerData.has_cameras ? 'YES — ' + customerData.camera_subs + ' camera subs' : 'NO — CAMERA UPSELL OPPORTUNITY'}
-Rate plans in use: ${plans || 'N/A'}
-Expansion revenue this month: $${c.expansion || 0} | Churn: $${c.churn || 0}`;
-    } else {
-      customerContext = `CUSTOMER LOOKUP: ${customerData.message || 'Not found in Geotab data.'}`;
-    }
-  } else if (!isExisting && webData) {
-    const snippets = (webData.snippets || []).filter(s => s).join('\n');
-    const abstract = webData.abstract || '';
-    customerContext = `WEB RESEARCH ON ${customerName}:
-${abstract ? 'Overview: ' + abstract : ''}
-${snippets ? 'Search snippets:\n' + snippets : ''}
-${(!abstract && !snippets) ? 'No web results found — use industry knowledge for this company type.' : ''}`.trim();
+  if (trendData?.trend?.length > 0) {
+    const t = trendData.trend;
+    const trendRows = t.map(m => `  ${m.month}: ${m.subs} subs | $${m.revenue} rev | +$${m.expansion} expansion | -$${Math.abs(m.churn)} churn`).join('\n');
+    trendContext = `6-MONTH SUBSCRIPTION TREND (Geotab BigQuery):
+${trendRows}
+Summary: ${trendData.subs_pct_6m > 0 ? '+' : ''}${trendData.subs_pct_6m}% sub change over 6 months (${trendData.subs_change_6m > 0 ? '+' : ''}${trendData.subs_change_6m} subs)
+Total expansion 6m: $${trendData.total_expansion_6m} | Total churn 6m: $${trendData.total_churn_6m}
+AT-RISK SIGNAL: ${trendData.at_risk ? `YES — ${trendData.declining_months} consecutive months of declining subscriptions` : 'No — subs stable or growing'}`;
   }
 
-  // ── Step 3: Build AI prompt ──
-  const sys = `You are GIA — Geotab's AI for Partner Account Managers. Return a JSON array of brief cards: [{id, icon, title, color, body}]. Colors: #2563EB blue, #00D48A green, #FBBF24 yellow, #F97316 orange, #F43F5E red, #A78BFA purple, #06B6D4 teal. Body uses **bold** for key phrases. Return ONLY the JSON array.
+  // Step 3: AI prompt — 7 cards for existing customers
+  const sys = `You are GIA — Geotab's AI for Partner Account Managers doing a customer check-in call. Return a JSON array of exactly 7 insight cards: [{id, icon, title, color, body}]. Colors: #2563EB blue, #00D48A green, #FBBF24 yellow, #F97316 orange, #F43F5E red, #A78BFA purple, #06B6D4 teal. Body uses **bold** for key terms. Be specific, use the data. Return ONLY the JSON array.
 
-Geotab context: world's largest commercial telematics (4M+ devices, 45,000+ partners). Key products: GO9 device, GO Focus Plus AI dash cam ($25/month all-in, 3yr commit), GO Anywhere asset tracker, IOX accessories. Plans: GO / PRO / PRO Plus. Strong segments: T&L, construction, field service, government, healthcare. Camera expansion is a top priority — partners who add cameras to existing fleets see 40%+ revenue uplift per unit.`;
+Geotab products: GO9 telematics, GO Focus Plus AI dash cam ($25/month all-in, 3yr), GO Anywhere asset tracker, IOX accessories (temperature, hours, panic button). Plans: GO / PRO / PRO Plus. Camera upsell adds ~40% revenue per unit. Customers who stop growing are churn risks within 12 months.`;
 
   const callTypeInstructions = {
-    growth: 'Call type: Growth Check-In with the reseller partner — focus on pipeline, upsell opportunities, and BD acceleration.',
-    atrisk: 'Call type: At-Risk Intervention — partner is stalling or declining. Focus on listening, diagnosing root cause, and recovery.',
-    qbr: 'Call type: Quarterly Business Review — structured review, joint commitments, forward-looking goals.'
+    growth:  'Call purpose: Growth Check-In — celebrate wins, identify expansion lanes, set next milestone.',
+    atrisk:  'Call purpose: At-Risk Intervention — customer is declining. Diagnose root cause: cancellations, competitor pressure, product gap, support issues. Focus on recovery.',
+    qbr:     'Call purpose: Quarterly Business Review — structured look back and look ahead. What improved, what stalled, what commitments for next quarter.'
   };
 
-  const existingCustCards = customerData?.found ? `
-5. id:"upsell" icon:"💰" — UPSELL OPPORTUNITIES (based on the live Geotab data): Specific upsell angles for this customer. If no cameras, make that the #1 priority — explain the GO Focus Plus value prop and the $25/month all-in pricing. If they have low sub count relative to fleet size, expansion. Include 2-3 concrete next steps the reseller should take with this customer. color: #00D48A
-6. id:"risk_flags" icon:"⚠️" — RISK & RETENTION: Based on churn/expansion data, is this customer at risk of leaving or growing? What should the reseller watch for? color: #FBBF24` : `
-5. id:"upsell" icon:"💰" — UPSELL PITCH: What Geotab products and plans make the most sense for this customer's business type and vertical. Lead with cameras (GO Focus Plus) if they likely have a fleet. color: #00D48A`;
-
-  const newCustCards = `
-5. id:"prospect_intel" icon:"🔍" — PROSPECT INTELLIGENCE: Based on the web research and company type, what do we know about their fleet, operations, and likely telematics needs? How big is their fleet likely to be? What pain points does telematics solve for them specifically? color: #F97316
-6. id:"first_impression" icon:"🎤" — HOW TO POSITION GEOTAB: 2-3 sentences the reseller should say to position Geotab specifically for this prospect's business. Tie to their vertical and operations. color: #2563EB`;
-
-  const usr = `RESELLER ERP: ${erp}
-CALL TYPE: ${type}
-CUSTOMER: ${customerName || 'Not specified'}
-CUSTOMER TYPE: ${isExisting ? 'Existing Geotab customer' : 'New prospect / not yet with Geotab'}
+  const usr = `CUSTOMER: ${customerName}
 VERTICAL: ${vertical || 'Unknown'}
-PAM CONTEXT: ${context || 'None provided'}
-
-${resellerContext}
+CALL TYPE: ${type}
+RESELLER ERP: ${erp || 'Not provided'}
+PAM NOTES: ${context || 'None'}
 
 ${customerContext}
 
-${callTypeInstructions[type] || ''}
+${trendContext}
 
-Generate these cards in order:
-1. id:"reseller_profile" icon:"🤝" — RESELLER PROFILE: Based on the BigQuery data, summarize: total subs, momentum (growing/stable/declining), YoY growth, their strongest customers, and what they are good at selling. If data is missing, note it and provide general profile for this reseller type. color: #F59E0B
-2. id:"customer_snapshot" icon:"${isExisting ? '✅' : '🔍'}" — CUSTOMER SNAPSHOT: ${isExisting ? 'Based on the Geotab live data: subscription count, rate plans, revenue, camera status (HAS CAMERAS or NO CAMERAS). Flag clearly if they have NO CAMERAS.' : 'Based on web research: what this company does, estimated fleet size, operational context, what telematics means for their business.'} color: ${isExisting ? '#06B6D4' : '#F97316'}
-3. id:"segment" icon:"🎯" — SEGMENT STRATEGY${vertical ? ` — ${vertical}` : ''}: Geotab's strategic angle in this customer's segment, top 2-3 products that resonate, key ROI hooks for this vertical. color: #06B6D4
-4. id:"call_objective" icon:"⚡" — CALL OBJECTIVE: The ONE most important thing to accomplish on this call with the reseller, given the customer context and call type. Be specific. color: #2563EB
-${isExisting ? existingCustCards : newCustCards}
-7. id:"questions" icon:"💬" — 3 QUESTIONS TO ASK THE RESELLER: Open-ended, insight-uncovering. At least one about this specific customer and one about their pipeline in this segment. color: #A78BFA
-8. id:"opener" icon:"🗣️" — CALL OPENER: Exact first sentence in quotes — reference the customer by name if possible. color: #2563EB`;
+${upsellContext}
+
+${callTypeInstructions[type]}
+
+Generate exactly these 7 cards in order:
+1. id:"health" icon:"📊" title:"Customer Health" — Clear verdict: Growing / Stable / Declining / At-Risk. One sentence grounded in the live data. color: ${trendData?.at_risk ? '#F43F5E' : '#00D48A'}
+2. id:"trend" icon:"📈" title:"6-Month Trend" — Summarize MoM movement in plain English. Strongest month, any dips, overall trajectory. If no data, say so and infer. color: #06B6D4
+3. id:"risk" icon:"⚠️" title:"Risk Signals" — Top 2-3 warning signs from the data or vertical context. Include camera gap, churn trend, stalling. Be direct. color: #FBBF24
+4. id:"upsell" icon:"💡" title:"Upsell Opportunities" — Based on their current product mix, list the top 2-3 upsell moves with specific dollar/business impact. Format each as: **Product** → why it fits this customer → one-line pitch. Lead with cameras if they have none. Flag plan upgrade if applicable. color: #F97316
+5. id:"qbr" icon:"📋" title:"QBR Snapshot" — 3-part mini-QBR: (a) What went well, (b) What needs attention, (c) One commitment for next quarter. Grounded in the data. color: #A78BFA
+6. id:"questions" icon:"💬" title:"Questions to Ask" — 3 open-ended questions. At least one about expansion plans, one about any concerns or challenges. color: #2563EB
+7. id:"opener" icon:"🗣️" title:"Call Opener" — Exact first sentence in quotes — warm, data-informed, reference the customer by name. color: #00D48A`;
 
   try {
-    const cards = await ai(sys, usr, 2500);
-    const els = cards.map(c => {
-      let body;
-      if (c.id === 'opener') {
-        body = `<div class="card-quote">"${c.body}"</div>`;
-      } else if (c.id === 'questions') {
-        const lines = (c.body||'').split('\n').filter(l=>l.trim());
-        const items = lines.map((l,i)=>`<li><span class="q-num">${i+1}.</span><span class="q-text">${l.replace(/^\d+\.\s*/,'').replace(/\*\*(.*?)\*\*/g,'<strong>$1</strong>')}</span></li>`).join('');
-        body = `<ul class="q-list">${items}</ul>`;
-      } else if (['upsell','risk_flags','reseller_profile'].includes(c.id)) {
-        const lines = (c.body||'').split('\n').filter(l=>l.trim());
-        const items = lines.map(l=>`<li><span class="win-check">→</span><span>${l.replace(/^[-•]\s*/,'').replace(/\*\*(.*?)\*\*/g,'<strong>$1</strong>')}</span></li>`).join('');
-        body = items ? `<ul class="wins-list">${items}</ul>` : `<div class="card-body">${(c.body||'').replace(/\*\*(.*?)\*\*/g,'<strong>$1</strong>')}</div>`;
-      } else {
-        body = `<div class="card-body">${(c.body||'').replace(/\*\*(.*?)\*\*/g,'<strong>$1</strong>').replace(/\n/g,'<br>')}</div>`;
-      }
-      return makeCard(`${c.icon} ${c.title}`, body, c.color);
-    });
-    const badge = callTypeBadge[type] || 'BRIEF';
-    const badgeClass = callTypeBadgeClass[type] || 'b-existing';
-    const label = customerName ? `${customerName} via ${erp}` : erp;
-    showResult(label, badge, badgeClass, els);
+    const cards = await ai(sys, usr, 2400);
+    const supersetLink = dbName
+      ? `<a href="https://superset.geotab.com/superset/dashboard/2863/?native_filters_key=${dbNameForLink}" target="_blank" style="display:inline-flex;align-items:center;gap:6px;margin-top:10px;font-size:11px;color:var(--teal);text-decoration:none;font-family:'DM Mono',monospace;border:1px solid rgba(6,182,212,0.3);border-radius:8px;padding:5px 10px;background:rgba(6,182,212,0.06);" onmouseover="this.style.background='rgba(6,182,212,0.12)'" onmouseout="this.style.background='rgba(6,182,212,0.06)'">↗ Open in Superset — Customer Overview</a>`
+      : '';
+    showResult(customerName, callTypeBadge[type] || 'CHECK-IN', callTypeBadgeClass[type] || 'b-existing', renderCards(cards, supersetLink));
   } catch(e) {
     err('pre-err', 'Something went wrong. Check that start.bat is running and try again.');
   }
@@ -1566,8 +1595,10 @@ function fetchJsonp(url) {
   });
 }
 
-let PARTNER_API = localStorage.getItem('gia_partner_api') || '';
 const PARTNER_KEY = 'gia-geotab-2026';
+const _savedApi = (localStorage.getItem('gia_partner_api') || '').trim();
+let PARTNER_API = (_savedApi && _savedApi.startsWith('http')) ? _savedApi : 'http://localhost:8080';
+if (!_savedApi || !_savedApi.startsWith('http')) localStorage.setItem('gia_partner_api', PARTNER_API);
 
 function configurePartnerApi() {
   const current = localStorage.getItem('gia_partner_api') || 'http://localhost:8080';
@@ -1752,6 +1783,7 @@ async function runKb() {
 
   try {
     const kbUrl = `${PARTNER_API}/kb?key=${PARTNER_KEY}&category=${kbCategory}`;
+    console.log('KB fetch URL:', kbUrl);
     const kbResp = await fetch(kbUrl);
     const kbData = await kbResp.json();
     if (kbData.error) { err('kb-err', kbData.error); loading('kb-btn', false); return; }
@@ -1771,7 +1803,8 @@ async function runKb() {
     renderKbResult(q, answer, kbSources);
 
   } catch(e) {
-    err('kb-err', 'Could not load documentation. Make sure the local server is running (start.bat).');
+    err('kb-err', 'Error: ' + (e?.message || String(e)) + ' — Make sure start.bat is running.');
+    console.error('KB fetch error:', e, 'API URL:', PARTNER_API);
   }
   loading('kb-btn', false);
 }
@@ -1797,166 +1830,6 @@ function resetKb() {
   document.getElementById('kb-q').value = '';
 }
 
-// ── WEEKLY BRIEFING ──────────────────────────────────────────
-async function loadNews() {
-  noErr('news-err');
-  if (!PARTNER_API) { err('news-err', 'API not configured. Set up the local server first (start.bat).'); return; }
-  loading('news-btn', true);
-  document.getElementById('news-status').textContent = 'Fetching this week\'s briefing…';
-  try {
-    const resp = await fetch(`${PARTNER_API}/news?key=${PARTNER_KEY}`);
-    const data = await resp.json();
-    if (data.error) { err('news-err', data.error); loading('news-btn', false); return; }
-    const raw = (data.content || '').trim();
-    if (!raw || raw.startsWith('GIA Weekly Product Digest — auto-generated')) {
-      // No digest yet — generate locally from KB docs
-      document.getElementById('news-status').textContent = 'No digest found — generating now (takes ~30s)…';
-      await generateDigestLocally();
-    } else {
-      renderNews(raw, data.fetched_at);
-    }
-  } catch(e) {
-    err('news-err', 'Could not reach the server. Make sure start.bat is running.');
-  }
-  loading('news-btn', false);
-}
-
-async function generateDigestLocally() {
-  const cats = { cameras:'Cameras', asset_trackers:'Asset Trackers', go_devices:'GO Devices', iox:'IOX Accessories', rate_plans:'Rate Plans', partner_program:'Partner Program' };
-  let allDocs = '';
-  for (const [cat, label] of Object.entries(cats)) {
-    try {
-      const r = await fetch(`${PARTNER_API}/kb?key=${PARTNER_KEY}&category=${cat}`);
-      const d = await r.json();
-      if (d.content) allDocs += `\n\n=== ${label} ===\n${d.content.slice(0, 3000)}`;
-    } catch {}
-  }
-  const today = new Date().toLocaleDateString('en-US', {month:'long', day:'numeric', year:'numeric'});
-  const sys = `You are GIA, Geotab's internal AI briefing assistant for Partner Account Managers. Using ONLY the provided Geotab documentation, write the weekly briefing in this EXACT format with these EXACT section headers:
-
-# GIA Weekly Product Briefing — ${today}
-
-## 🔥 Top Asked Questions
-**Q: [question from the docs]**
-A: [concise, accurate answer from docs]
-(repeat for 6 of the most commonly asked or important questions — use real questions from the Q&A docs)
-
-## 📦 Product Highlights
-- [key product fact, spec, or differentiator PAMs should know — be specific]
-(5 bullets — include product names, pricing if known, real specs)
-
-## 🎯 What PAM Needs to Know
-- [sales coaching point, talking point, or strategy tip for the PAM]
-(5 bullets — frame as coaching for the PAM: what to say, what to watch for, how to position)
-
-## 🤝 What to Tell Your Partner
-- [simple, plain-English point the PAM can relay directly to their reseller partner]
-(5 bullets — frame as what the partner needs to understand to sell effectively)
-
-Keep all answers short, factual, and sales-focused. Never invent details not in the documentation.`;
-  const usr = `GEOTAB PRODUCT DOCUMENTATION:\n${allDocs}\n\nWrite the weekly briefing now.`;
-  const digest = await aiRaw(sys, usr, 2200);
-  renderNews(digest, null);
-  document.getElementById('news-status').textContent = '✓ Generated from latest approved docs';
-}
-
-function renderNews(content, fetchedAt) {
-  const updated = fetchedAt ? new Date(fetchedAt * 1000).toLocaleString('en-US', {weekday:'long', month:'long', day:'numeric', hour:'2-digit', minute:'2-digit'}) : '';
-
-  // Split into sections on ## headers
-  const sectionConfig = {
-    'Top Asked Questions':  { color: 'var(--orange)', icon: '🔥', qa: true },
-    'Product Highlights':   { color: 'var(--blue)',   icon: '📦', qa: false },
-    'What PAM Needs to Know':  { color: 'var(--purple)', icon: '🎯', qa: false },
-    'What to Tell Your Partner': { color: 'var(--teal)', icon: '🤝', qa: false },
-    // legacy fallbacks
-    'Top SME Q&As':         { color: 'var(--orange)', icon: '🔥', qa: true },
-    'Top Selling Points':   { color: 'var(--green)',  icon: '🏆', qa: false },
-  };
-
-  // Extract title (# line)
-  const titleMatch = content.match(/^#\s+(.+)/m);
-  const titleText = titleMatch ? titleMatch[1].replace(/[📰]/g,'').trim() : 'Weekly Product Briefing';
-
-  // Split raw content into sections
-  const rawSections = content.split(/\n##\s+/);
-  const parsedSections = rawSections.slice(1).map(block => {
-    const firstLine = block.split('\n')[0].trim();
-    const body = block.split('\n').slice(1).join('\n');
-    // find matching config by partial match
-    const key = Object.keys(sectionConfig).find(k => firstLine.toLowerCase().includes(k.toLowerCase().slice(0,12)));
-    const cfg = sectionConfig[key] || { color: '#10B981', icon: '📋', qa: false };
-    return { title: firstLine.replace(/[🔥📦🎯🤝💬📰🏆]/g,'').trim(), body, ...cfg };
-  });
-
-  function renderSectionBody(body, isQA) {
-    const lines = body.split('\n');
-    let html = '';
-    if (isQA) {
-      let inQ = false;
-      for (const line of lines) {
-        const t = line.trim();
-        if (!t) continue;
-        if (t.startsWith('**Q:') || t.startsWith('Q:')) {
-          const q = t.replace(/^\*\*Q:\*\*|^\*\*Q:|^Q:/,'').replace(/\*\*/g,'').trim();
-          html += `<div style="font-weight:600;color:var(--text);font-size:13px;margin-top:12px;padding-top:10px;border-top:1px solid rgba(255,255,255,0.06);">Q: ${q}</div>`;
-          inQ = true;
-        } else if (t.startsWith('A:') || (inQ && !t.startsWith('-'))) {
-          const a = t.replace(/^A:/,'').trim();
-          html += `<div style="color:var(--muted);font-size:12.5px;margin-top:3px;padding-left:14px;line-height:1.6;">${a.replace(/\*\*(.+?)\*\*/g,'<strong style="color:var(--text)">$1</strong>')}</div>`;
-          inQ = false;
-        }
-      }
-    } else {
-      for (const line of lines) {
-        const t = line.trim();
-        if (!t) continue;
-        if (t.startsWith('- ') || t.startsWith('• ')) {
-          const txt = t.slice(2).replace(/\*\*(.+?)\*\*/g,'<strong>$1</strong>');
-          html += `<div style="display:flex;gap:8px;padding:5px 0;font-size:13px;line-height:1.55;border-bottom:1px solid rgba(255,255,255,0.04);"><span style="color:var(--green);flex-shrink:0;margin-top:1px;">•</span><span>${txt}</span></div>`;
-        } else if (t.match(/^\d+\./)) {
-          const txt = t.replace(/^\d+\.\s*/,'').replace(/\*\*(.+?)\*\*/g,'<strong>$1</strong>');
-          html += `<div style="display:flex;gap:8px;padding:5px 0;font-size:13px;line-height:1.55;border-bottom:1px solid rgba(255,255,255,0.04);"><span style="color:var(--green);flex-shrink:0;margin-top:1px;">•</span><span>${txt}</span></div>`;
-        }
-      }
-    }
-    return html || `<div style="color:var(--muted);font-size:13px;">${body.trim().slice(0,300)}</div>`;
-  }
-
-  // Build section cards HTML
-  let cardsHtml = '';
-  for (const sec of parsedSections) {
-    const bodyHtml = renderSectionBody(sec.body, sec.qa);
-    cardsHtml += `
-      <div class="card" style="--c:${sec.color};">
-        <div class="card-label" style="color:${sec.color};">${sec.icon} ${sec.title}</div>
-        <div>${bodyHtml}</div>
-      </div>`;
-  }
-
-  // If no sections parsed, fall back to raw text in one card
-  if (!parsedSections.length) {
-    cardsHtml = `<div class="card" style="--c:#10B981;"><div style="font-size:13px;line-height:1.8;white-space:pre-wrap;color:var(--text);">${content.replace(/</g,'&lt;')}</div></div>`;
-  }
-
-  document.getElementById('news-result').innerHTML = `
-    <div class="result-hdr">
-      <div>
-        <div class="result-name">📰 Weekly Briefing</div>
-        <div style="font-size:12px;color:var(--muted);margin-top:4px;">${updated ? 'Updated ' + updated : 'Generated ' + new Date().toLocaleTimeString([],{hour:'2-digit',minute:'2-digit'})}</div>
-      </div>
-    </div>
-    ${cardsHtml}
-    <div style="font-size:11px;color:var(--muted);padding:10px 12px;background:var(--surface);border-radius:8px;border:1px solid var(--border);">
-      🔒 Generated from Geotab internal Q&As and approved product documentation only.
-    </div>
-    <button class="btn-ghost" onclick="loadNews()">🔄 Refresh Briefing</button>`;
-
-  document.getElementById('empty-news').style.display = 'none';
-  document.getElementById('news-result').style.display = 'flex';
-  if (updated) document.getElementById('news-status').textContent = `✓ Last updated ${updated}`;
-}
-
 // ── SERVER STATUS ─────────────────────────────────────────────
 async function checkServerStatus() {
   if (!PARTNER_API) return;
@@ -1964,7 +1837,7 @@ async function checkServerStatus() {
   const txt = document.getElementById('status-text');
   dot.className = 'dot checking'; txt.textContent = 'Checking…';
   try {
-    const r = await fetch(`${PARTNER_API}/news?key=${PARTNER_KEY}`, { signal: AbortSignal.timeout(4000) });
+    const r = await fetch(`${PARTNER_API}/kb?category=cameras&key=${PARTNER_KEY}`, { signal: AbortSignal.timeout(4000) });
     if (r.ok) { dot.className = 'dot'; txt.textContent = 'Server online'; }
     else { dot.className = 'dot offline'; txt.textContent = 'Server error'; }
   } catch {
