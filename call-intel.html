@@ -448,7 +448,7 @@
 <!-- MODE TABS -->
 <div class="mode-bar">
   <button class="mode-tab active" id="tab-pre" onclick="setMode('pre')">📊 Customer Check-In</button>
-  <button class="mode-tab live-tab" id="tab-live" onclick="setMode('live')">🛡 Live Assist</button>
+  <button class="mode-tab live-tab" id="tab-live" onclick="setMode('live')">🛡 Live — Partner Calls</button>
   <button class="mode-tab" id="tab-post" onclick="setMode('post')">📋 Post-Call</button>
   <button class="mode-tab tab-gold" id="tab-partner" onclick="setMode('partner')">📊 Partner Health</button>
   <button class="mode-tab tab-teal" id="tab-kb" onclick="setMode('kb')">📦 Product Knowledge</button>
@@ -564,7 +564,37 @@
         </div>
       </div>
 
-      <!-- COMPETITOR PARTNER PROGRAM -->
+      <!-- GEOTAB UPDATES -->
+      <div class="live-section">
+        <div class="live-heading"><span class="live-heading-icon">📢</span> Geotab Updates</div>
+        <div class="live-subtext" style="color:var(--muted);font-size:11.5px;margin-bottom:8px;">What's new — share the latest with your partner on this call</div>
+        <div class="chips" id="update-chips">
+          <div class="chip seg" data-handler="update" data-value="cameras" onclick="toggleLiveChip(this)">📷 Cameras & Dash Cam</div>
+          <div class="chip seg" data-handler="update" data-value="partner_program" onclick="toggleLiveChip(this)">🤝 Partner Program</div>
+          <div class="chip seg" data-handler="update" data-value="platform" onclick="toggleLiveChip(this)">⚙️ Platform & MyGeotab</div>
+          <div class="chip seg" data-handler="update" data-value="pricing" onclick="toggleLiveChip(this)">💰 Pricing & Promos</div>
+          <div class="chip seg" data-handler="update" data-value="market" onclick="toggleLiveChip(this)">📈 Market & Industry</div>
+        </div>
+      </div>
+
+      <div class="live-divider"></div>
+
+      <!-- SITUATIONAL PLAYS -->
+      <div class="live-section">
+        <div class="live-heading"><span class="live-heading-icon">🎯</span> Situational Plays</div>
+        <div class="live-subtext" style="color:var(--muted);font-size:11.5px;margin-bottom:8px;">Structured playbook for the exact situation you're in right now</div>
+        <div class="chips" id="play-chips">
+          <div class="chip prog" data-handler="play" data-value="help_partner_demo_cameras" onclick="toggleLiveChip(this)">Demo Cameras</div>
+          <div class="chip prog" data-handler="play" data-value="activate_stalled_partner" onclick="toggleLiveChip(this)">Activate Stalled Partner</div>
+          <div class="chip prog" data-handler="play" data-value="upsell_cameras" onclick="toggleLiveChip(this)">Upsell Cameras</div>
+          <div class="chip prog" data-handler="play" data-value="close_first_deal" onclick="toggleLiveChip(this)">Close First Deal</div>
+          <div class="chip prog" data-handler="play" data-value="open_new_vertical" onclick="toggleLiveChip(this)">Open New Vertical</div>
+        </div>
+      </div>
+
+      <div class="live-divider"></div>
+
+      <!-- COMPETITOR BATTLE CARDS -->
       <div class="live-section">
         <div class="live-heading"><span class="live-heading-icon">⚔️</span> Competitor Battle Cards</div>
         <div class="chips" id="comp-chips">
@@ -1315,6 +1345,61 @@ async function getDiscCards(topic) {
 }
 
 
+async function getUpdateCards(topic) {
+  const topicLabels = {
+    cameras: 'Camera & Dash Cam — GO Focus Plus, GO Focus, AI video safety, pricing, availability',
+    partner_program: 'Partner Program — training, incentives, co-marketing, deal registration, PAM support',
+    platform: 'Platform & MyGeotab — new features, integrations, SDK, reporting, UI improvements',
+    pricing: 'Pricing & Promotions — current promos, competitive conversion pricing, rate plan updates',
+    market: 'Fleet telematics market — ELD mandates, AI dash cam adoption, safety regulations, competitive landscape'
+  };
+  const topicDesc = topicLabels[topic] || topic;
+  const sys = `You are GIA — Geotab's internal briefing AI for Partner Account Managers. Generate a concise partner update brief for a PAM to share on a live partner call. Return JSON: {headline (5-8 word news headline of the most relevant update), key_updates (array of 3, each under 20 words — what's new, changed, or worth knowing), talking_point (1-2 sentences the PAM can say verbatim to their partner right now), what_to_ask (1 discovery question to check if this update is relevant to their business)}. Use real Geotab product names. Be specific. Return ONLY JSON.`;
+  const usr = `Topic: ${topicDesc}\nGeotab context: GO Focus Plus AI dash cam ($25/month all-in, 3yr), GO Focus forward-facing safety sensor, GO9 telematics device, GO Anywhere asset tracker, Geotab Academy training, open platform 200+ integrations, 4M+ active devices, 30,000+ partners globally. Competitive vs Samsara, Motive, Verizon Connect.`;
+  const r = await ai(sys, usr, 500);
+  const cards = [];
+  const sep = document.createElement('div');
+  sep.style.cssText = 'font-family:"DM Mono",monospace;font-size:10px;letter-spacing:0.08em;color:var(--teal);text-transform:uppercase;padding:6px 0 2px;border-top:1px solid rgba(45,212,191,0.2);margin-top:4px;';
+  sep.textContent = `📢 ${topicDesc.split(' — ')[0]}`;
+  cards.push(sep);
+  if (r.headline) cards.push(makeCard('🆕 ' + r.headline, '', 'var(--teal)'));
+  if (r.key_updates?.length) {
+    const items = r.key_updates.map(u => `<li style="display:flex;gap:8px;align-items:flex-start;"><span style="color:var(--teal);flex-shrink:0;">▸</span><span>${u}</span></li>`).join('');
+    cards.push(makeCard('📋 Key updates', `<ul style="list-style:none;padding:0;margin:0;display:flex;flex-direction:column;gap:8px;">${items}</ul>`, 'var(--teal)'));
+  }
+  if (r.talking_point) cards.push(makeCard('💬 Say this to your partner', `<div class="card-quote">${r.talking_point}</div>`, 'var(--blue)'));
+  if (r.what_to_ask) cards.push(makeCard('❓ Then ask them', `<div class="card-green">"${r.what_to_ask}"</div>`, 'var(--green)'));
+  return cards;
+}
+
+async function getPlayCards(situation) {
+  const plays = {
+    help_partner_demo_cameras: 'Help a partner confidently demo Geotab cameras (GO Focus Plus) to their fleet customer — they may not be camera-confident yet',
+    activate_stalled_partner: 'Re-activate a stalled Geotab reseller partner who signed up but has not closed any deals in 60-90 days',
+    upsell_cameras: 'Upsell GO Focus Plus cameras to an existing Geotab partner who has zero camera subscriptions in their book of business',
+    close_first_deal: 'Help a new Geotab partner close their very first deal — they have a prospect ready but are nervous about the pitch',
+    open_new_vertical: 'Help a Geotab partner open a new industry vertical they have never sold into before (e.g. moving from trucking to construction or healthcare)'
+  };
+  const desc = plays[situation] || situation;
+  const label = situation.replace(/_/g, ' ').replace(/\b\w/g, l => l.toUpperCase());
+  const sys = `You are GIA — an AI sales playbook builder for Geotab Partner Account Managers. Return JSON: {root_cause (what is usually really going on — 1 sentence), pam_goal (what success looks like for the PAM on this call — 1 sentence), steps (array of 4, each has: step_num, action (headline, max 6 words), say_this (exact words, 1 sentence)), commitment_close (exact phrasing to end the call with an agreed next action — 1 sentence)}. Use real Geotab product names. Be direct and specific. Return ONLY JSON.`;
+  const usr = `Situation: ${desc}\nGeotab context: GO Focus Plus $25/month all-in (3yr), GO9 telematics, GO Anywhere asset tracker, Geotab Academy training, dedicated PAM support, co-sell resources, deal registration, open platform 200+ integrations, 4M+ devices, 30,000+ partners globally.`;
+  const r = await ai(sys, usr, 700);
+  const cards = [];
+  const sep = document.createElement('div');
+  sep.style.cssText = 'font-family:"DM Mono",monospace;font-size:10px;letter-spacing:0.08em;color:var(--green);text-transform:uppercase;padding:6px 0 2px;border-top:1px solid rgba(74,222,128,0.2);margin-top:4px;';
+  sep.textContent = `🎯 ${label}`;
+  cards.push(sep);
+  if (r.root_cause) cards.push(makeCard('🔍 What\'s really happening', `<div class="card-body">${r.root_cause}</div>`, 'var(--yellow)'));
+  if (r.pam_goal) cards.push(makeCard('🏆 Your goal on this call', `<div class="card-body">${r.pam_goal}</div>`, 'var(--blue)'));
+  if (r.steps?.length) {
+    const items = r.steps.map(s => `<li style="margin-bottom:14px;"><div style="font-family:'DM Mono',monospace;font-size:10px;color:var(--green);margin-bottom:4px;letter-spacing:0.06em;">STEP ${s.step_num}</div><div style="font-weight:600;margin-bottom:5px;font-size:13px;">${s.action}</div><div style="color:var(--muted);font-size:12px;font-style:italic;">"${s.say_this}"</div></li>`).join('');
+    cards.push(makeCard('📋 The Play', `<ul style="list-style:none;padding:0;margin:0;">${items}</ul>`, 'var(--green)'));
+  }
+  if (r.commitment_close) cards.push(makeCard('✅ Close with commitment', `<div class="card-green">"${r.commitment_close}"</div>`, 'var(--teal)'));
+  return cards;
+}
+
 async function runLiveSelections() {
   const activeChips = [...document.querySelectorAll('#pane-live .chip.active')];
   if (!activeChips.length) { err('live-err', 'Select at least one chip first.'); return; }
@@ -1326,6 +1411,8 @@ async function runLiveSelections() {
     const h = c.dataset.handler, v = c.dataset.value;
     if (h === 'comp') return getCompCards(v);
     if (h === 'disc') return getDiscCards(v);
+    if (h === 'update') return getUpdateCards(v);
+    if (h === 'play') return getPlayCards(v);
     return Promise.resolve([]);
   });
 
